@@ -1,7 +1,17 @@
+// Strip leading and trailing white-space
+String.prototype.trim = function() {
+	return this.replace(/^\s*|\s*$/g, "");
+}
+
+// Replace repeated spaces, newlines and tabs with a single space
+String.prototype.normalize_space = function() {
+	return this.replace(/^\s*|\s(?=\s)|\s*$/g, "");
+}
+
 // $ id function
 function $(id)
 {
-	if(typeof id == 'string')
+	if(typeof id == string)
 		return document.getElementById(id);
 	else
 		return id;
