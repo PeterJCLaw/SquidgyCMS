@@ -8,7 +8,7 @@ function TBpress(that)
 // gets called after a set delay after a key press on certain text boxes
 function TBrefresh(thing)
 {
-	that	= document.getElementById(thing);
+	that	= $(thing);
 	clearTimeout(that.countdown);
 	//do the refresh stuff
 }
@@ -16,7 +16,7 @@ function TBrefresh(thing)
 // Add a row of articles
 function add_article_row ()
 {
-	num_rows	= document.getElementById('num_rows').value;
+	num_rows	= $('num_rows').value;
 	ai_sel		= new Array()
 	curr_sel	= new Array()
 
@@ -27,32 +27,32 @@ function add_article_row ()
 	replace_1	= "article_id_" + num_rows_2;
 	replace_2	= "article_id_" + num_rows_3;
 
-	old_html	= document.getElementById('art_sel_p').innerHTML;
+	old_html	= $('art_sel_p').innerHTML;
 	new_html	= old_html.replace(/article_id_1/g, replace_1);	//change the ids
 	new_html	= new_html.replace(/article_id_2/g, replace_2);
 
 	for(i=1; i <= 2*num_rows; i++) {
 		art_id	= 'article_id_'+i;
-		ai_sel[i]	= document.getElementById(art_id).selectedIndex;
+		ai_sel[i]	= $(art_id).selectedIndex;
 	}
 
-	document.getElementById('article_select_div').innerHTML	+= "<p>" + new_html + "</p>";
-	document.getElementById('num_rows').value	= num_rows_1;
+	$('article_select_div').innerHTML	+= "<p>" + new_html + "</p>";
+	$('num_rows').value	= num_rows_1;
 
 	for(i=1; i <= 2*num_rows; i++) {
 		art_id	= 'article_id_'+i;
-		document.getElementById(art_id).options[ai_sel[i]].selected	= true;
+		$(art_id).options[ai_sel[i]].selected	= true;
 	}
 
-	num_opts	= document.getElementById('article_id_1').length-1;
-	curr_sel[1]	= document.getElementById('article_id_1').selectedIndex;
-	curr_sel[2]	= document.getElementById('article_id_2').selectedIndex;
+	num_opts	= $('article_id_1').length-1;
+	curr_sel[1]	= $('article_id_1').selectedIndex;
+	curr_sel[2]	= $('article_id_2').selectedIndex;
 
 	for(i=num_rows_2, j=1; i <= 2*num_rows_1; i++, j++) {
 		art_id	= 'article_id_'+i;
 		cur_sel	= curr_sel[j];
-		document.getElementById(art_id).options[cur_sel].selected	= false;
-		document.getElementById(art_id).options[num_opts].selected	= true;
+		$(art_id).options[cur_sel].selected	= false;
+		$(art_id).options[num_opts].selected	= true;
 	}
 
 	return;
@@ -83,7 +83,7 @@ function group_tick(thing)
 // get a page or article
 function get(type, orig)
 {
-	that	= document.getElementById(type+"_select");
+	that	= $(type+"_select");
 	type_l	= type.toLowerCase();
 	req		= (type_l == "page" ? "page" : "art");
 	SI		= that.selectedIndex;
@@ -91,13 +91,13 @@ function get(type, orig)
 
 
 	if(that.value == orig && !window.AJAX_enabled) {	//if its unchanged
-		document.getElementById(type+'_form').reset();
+		$(type+'_form').reset();
 		return;
 	}
 	if(that.value == 'new') {	//if its a new one
-		document.getElementById(type_l+"_id").value	= 'new';
-		document.getElementById(type_l+'_title').value	= '';
-		document.getElementById(type+'_content').innerHTML	= '';
+		$(type_l+"_id").value	= 'new';
+		$(type_l+'_title').value	= '';
+		$(type+'_content').innerHTML	= '';
 		return;
 	}
 
@@ -105,9 +105,9 @@ function get(type, orig)
 		window.location = "Admin.php?" + req + "_req=" + that.value + "#" + type;
 	} else {
 		ajax('GET', window.DATA_root+'/'+escape(that.value)+'.'+type_l, 0, function(ajax_obj) {
-			document.getElementById(type+'_content').innerHTML	= ajax_obj.responseText;
-			document.getElementById(type_l+'_title').value	= unescape(that.value).substr(1+that.value.indexOf('-')).replace(/\+/g, ' ');
-			document.getElementById(type_l+'_id').value	= that.value;
+			$(type+'_content').innerHTML	= ajax_obj.responseText;
+			$(type_l+'_title').value	= unescape(that.value).substr(1+that.value.indexOf('-')).replace(/\+/g, ' ');
+			$(type_l+'_id').value	= that.value;
 		} );
 	}
 	return;
@@ -127,21 +127,21 @@ function switch_tabs(cur_div, mode)
 
 	if(mode == 0) {	//if the first call
 		for(i=0; i<divList.length; i++) {	//switch to the correct div
-			if(document.getElementById(divList[i].id+'_h3'))
-				document.getElementById(divList[i].id+'_h3').style.display	= 'none';
+			if($(divList[i].id+'_h3'))
+				$(divList[i].id+'_h3').style.display	= 'none';
 			if(divList[i].id != cur_div)
 			{
-				document.getElementById(divList[i].id).style.display		= 'none';
-				document.getElementById(divList[i].id+'_link').className	= '';
+				$(divList[i].id).style.display		= 'none';
+				$(divList[i].id+'_link').className	= '';
 			} else {
-				document.getElementById(divList[i].id).style.display		= '';
-				document.getElementById(divList[i].id+'_link').className	= 'got';
+				$(divList[i].id).style.display		= '';
+				$(divList[i].id+'_link').className	= 'got';
 			}
 		}
 
-		if(cur_div.toLowerCase() != "webmaster" && window.AJAX_enabled && document.getElementById(cur_div+'_h3')) {	//if we need to ajax stuff
+		if(cur_div.toLowerCase() != "webmaster" && window.AJAX_enabled && $(cur_div+'_h3')) {	//if we need to ajax stuff
 			ajax('GET', "ajax.php", "type=admin&class="+cur_div+'&page_req='+PAGE_req+'&art_req='+ART_req, function(ajax_obj) {
-				document.getElementById(cur_div).innerHTML	= ajax_obj.responseText;
+				$(cur_div).innerHTML	= ajax_obj.responseText;
 				switch_tabs(cur_div, 1);	//now go again, but skip the top stuff
 			} );
 			return;	//prevent the rest of the funciton running
@@ -160,10 +160,10 @@ function switch_tabs(cur_div, mode)
 	}
 
 	for(i=0; i<hideList.length; i++) {	//hide stuff
-		document.getElementById(hideList[i].id).style.display		= 'none';
+		$(hideList[i].id).style.display		= 'none';
 	}
 	for(i=0; i<showList.length; i++) {	//show stuff
-		document.getElementById(showList[i].id).style.display		= '';
+		$(showList[i].id).style.display		= '';
 	}
 
 	document.title	= window.TITLE+' - '+cur_div;
@@ -173,7 +173,7 @@ function switch_tabs(cur_div, mode)
 
 function pass_change(type)
 {
-	if(!document.getElementById('pass_0'))
+	if(!$('pass_0'))
 		return;
 	PASS_AR	= [ "old_pass", "new_pass", "confirm_pass" ];
 	if(type == "show")
@@ -186,17 +186,17 @@ function pass_change(type)
 	}
 	for(i=1; i<4; i++)
 	{
-		document.getElementById(PASS_AR[i-1]).value	= '';
-		document.getElementById('pass_'+i).style.display	= boxes;
+		$(PASS_AR[i-1]).value	= '';
+		$('pass_'+i).style.display	= boxes;
 	}
-	document.getElementById('pass_0').style.display	= link;
+	$('pass_0').style.display	= link;
 	return;
 }
 
 function show_change(type)
 {
-	document.getElementById(type+'_change').style.display	= 'none';
-	document.getElementById(type+'_sel_span').style.display	= '';
+	$(type+'_change').style.display	= 'none';
+	$(type+'_sel_span').style.display	= '';
 	return;
 }
 
@@ -206,8 +206,8 @@ function change_pic(value)
 		img_path	= 'comm_' + value + '.jpg';
 	else
 		img_path	= 'Unknown.jpg';
-	document.getElementById('pic_preview').src	= 'Thumbs/' + img_path;
-	document.getElementById('pic_preview_link').href	= 'Site_Images/' + img_path;
+	$('pic_preview').src	= 'Thumbs/' + img_path;
+	$('pic_preview_link').href	= 'Site_Images/' + img_path;
 	return;
 }
 
@@ -336,13 +336,13 @@ function Validate_On_Admin_Submit(FORM)
 			alert("Please enter a page title.");
 			return false;
 		}
-		if(document.getElementById('WYSIWYG_Page') != null) {
+		if($('WYSIWYG_Page') != null) {
 			not_none	= 0;
-			num_rows	= document.getElementById('num_rows').value;
+			num_rows	= $('num_rows').value;
 			for(i=1; i <= 2*num_rows; i++) {
 				d_down	= "article_id_" + i;
-				SI	= document.getElementById(d_down).selectedIndex;
-				len	= document.getElementById(d_down).length - 1;
+				SI	= $(d_down).selectedIndex;
+				len	= $(d_down).length - 1;
 				if(SI != len)
 					not_none	+= 1;
 			}
@@ -362,11 +362,11 @@ function Validate_On_Admin_Submit(FORM)
 	/* test for and check the content box */
 	content_id	= form_id + '_content';
 
-	if(document.getElementById(content_id) != null) {
+	if($(content_id) != null) {
 		if(typeof tinyMCE != 'undefined')
 			cont3nt	= tinyMCE.getContent(content_id);	//use the tinyMCE editor to get the content
 		else
-			cont3nt	= document.getElementById(content_id).value;	//grab it manually
+			cont3nt	= $(content_id).value;	//grab it manually
 		if(/(^$)|(^\s+$)/.test(cont3nt)) {	// null strings and spaces only strings not allowed
 			alert("Please enter some content.");
 			return false;
