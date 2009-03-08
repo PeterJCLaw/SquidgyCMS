@@ -1,0 +1,1 @@
+<?php echo "\n	</div><!-- end content div -->\n".SquidgyParser($template_file, '[[Block::Site-Content]]'); ?>

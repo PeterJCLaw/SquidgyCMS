@@ -1,0 +1,24 @@
+/* File System PHP CSS Document */
+p	{ margin: 0; }
+img	{ border: none; }
+table	{ border-collapse: collapse; }
+.left	{ text-align: left; }
+.center	{ text-align: center; }
+.right	{ text-align: right; }
+.f_left	{ float: left; }
+.f_right	{ float: right; }
+
+.PHPlist	{ display: table; width: 100%; }
+.PHPlist li	{ display: table-cell; float: left; width: 25%; }
+
+.PHPtable	{ border: none; width: 100%; }
+.PHPtable td	{ vertical-align: middle; text-align: center; }
+.large_icons td	{ padding-bottom: 0.8em; }
+.small_icons td	{ text-align: left; padding-bottom: 0.4em; }
+.small_icons td th	{ width: 64px; font-weight: normal; }
+.small_icons td td	{ padding-left: 2px; text-align: left; }
+#adapted	{ font-size: 0.8em; }
+#file_image_copy	{ font-size: 0.8em; margin: -10px 0 15px; }
+
+#large_icon_link	{ float: left; }
+#small_icon_link	{ float: right; }

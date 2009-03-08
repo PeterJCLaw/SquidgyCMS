@@ -1,0 +1,34 @@
+SquidgyCMS uses single file modules to build sites. Core modules are all stored in the Modules directory, and custom ones can be installed by simply adding their module file to the Sites/Custom_Modules directory. SquidgyCMS will automatically detect their presence, perform <strong>very</strong> basic functionality checks and add them to the list of available modeules.
+
+Modules <strong>must contain</strong> at least either a Block object or and Admin object, and may contain both and a small number of stand-alone functions, though this is discouraged.
+
+<h4>The Block object:</h4>
+This is a php4 compatible object which extends the main Block object, it is this that SquidgyCMS will instantiate then call against to generate blocks on the user pages.
+<h5>Naming</h5>
+It must be named Block<em>ModuleName</em> where <em>ModuleName</em> is the name of your module.
+<h5>Methods</h5>
+Your block object <strong>must</strong> have the following methods to be a valid module:
+<dl>
+	<dt>Block<em>ModuleName</em>()</dt>
+		<dd>This is the method called when the object is instantiated, and must contain a call to <code>parent::__construct()</code></dd>
+	<dt>printAdminForm()</dt>
+		<dd>This is the method called to generate the contents of the admin page form</dd>
+</dl>
+It is expecteed that your object will also contain other methods which match the calls made by users via the <a href="SquidgyML.htm"><abbr title="Squidgy CMS Markup Language">SquidgyML</abbr><a>.
+
+
+<h4>The Admin object:</h4>
+This is a php4 compatible object which extends the main Admin object, it is this that SquidgyCMS will instantiate then call against to generate the administration section for your module.
+<h5>Naming</h5>
+It must be named Admin<em>ModuleName</em> where <em>ModuleName</em> is the name of your module.
+<h5>Methods</h5>
+Your admin object <strong>must</strong> have the following methods to be a valid module:
+<dl>
+	<dt>Admin<em>ModuleName</em>()</dt>
+		<dd>This is the method called when the object is instantiated, and must contain a call to <code>parent::__construct()</code></dd>
+	<dt>printAdminForm()</dt>
+		<dd>This is the method called to generate the contents of the admin page form</dd>
+	<dt>submit()</dt>
+		<dd>This is the method called by the page handling the form submission</dd>
+</dl>
+

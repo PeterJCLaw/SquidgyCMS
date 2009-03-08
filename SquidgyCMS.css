@@ -1,0 +1,101 @@
+/* CSS Document */
+html	{ overflow-y: scroll; }
+
+a	{ text-decoration: none; color: blue; cursor: pointer; }
+a:visited	{ color: purple; }
+a:hover, a:visited:hover, a:active	{ color: red; }
+
+h2	{ margin: 0; font-weight: normal; font-size: 2.6em; }
+h3	{ font-weight: normal; margin: 0; }
+h4	{ margin-top: 0; margin-bottom: 0.5em; }
+p, form	{ margin: 0; }
+img	{ border: none; }
+table	{ border-collapse: collapse; text-align: left; }
+input	{ font-family: Verdana, Arial, Helvetica, sans-serif; }
+.left	{ text-align: left; }
+.center	{ text-align: center; }
+.right	{ text-align: right; }
+.f_left	{ float: left; }
+.f_right	{ float: right; }
+.bold	{ font-weight: bold; }
+.debug	{ border: 1px solid black; }
+.debug .debug	{ border: 1px solid blue; }
+.debug .debug .debug	{ border: 2px solid black; }
+.debug .debug .debug .debug	{ border: 2px solid blue; }
+
+/* Contact.php and Admin.php */
+#contact_tbl .text_in	{ width: 401px; font-family: Verdana, Arial, Helvetica, sans-serif; margin-left: 1px; }
+#contact_tbl .button	{ width: 238px; margin: 2px 0 0 3px; line-height: 1.6em; padding: 0; font-family: Tahoma, sans-serif; }
+
+ul.tick_list	{ width: 550px; margin-top: 8px; height: 95px; margin-bottom: 12px; display: block; }
+ul.tick_list li	{ vertical-align: middle; line-height: 1.5em; display: block; float: left; width: 170px; }
+.tick_list .tick	{ margin: 3px 6px; width: 13px; }
+
+/* Committee.php */
+#comm_tbl	{ width: 95%; }
+#comm_tbl td	{ vertical-align: top; }
+.comm_pic	{ width: 104px; }
+.comm_email	{ text-align: right; font-size: 0.8em; float: right; }
+.comm_txt	{ }
+.comm_name	{ float: left; }
+
+/* Login Pages */
+#login_fail	{ color: red; margin-bottom: 4px; }
+#login	{ margin: 0 auto; }
+#login th	{ font-weight: normal; text-align: right; padding-right: 7px; }
+#login td	{ text-align: center; }
+#login td input.text, #login_button	{ width: 200px; margin: 1px; }
+
+/* Admin.php */
+#admin_divs_holder	{ }/* margin-top: 1.8em; */
+#admin_divs_holder h3	{ margin: 0.6em 0 0.1em -0.3em; }
+
+.admin_div	{ }/* margin-top: 1em; */
+#admin_TOC	{ margin: 5px 25px 0; padding: 0; display: block; height: 1.2em; }
+#admin_TOC li	{ text-align: center; float: left; display: block; }
+#admin_TOC a:visited	{ color: blue; }
+#admin_TOC a:visited:hover	{ color: red; }
+#admin_TOC a.got, #admin_TOC a.got:hover	{ font-weight: bold; color: black !important; cursor: default; }
+
+.admin_head	{ height: 2.5em; vertical-align: middle; }
+.admin_form_head	{ margin: 6px 0 10px; }
+.admin_form	{ clear: none; }
+.admin_form h4	{ margin-top: 0.2em; }
+.admin_form table	{ margin-bottom: 4px; }
+.admin_form table th	{ width: 140px; font-size: 0.9em; text-align: right; padding-right: 10px; }
+.admin_form input.text	{ width: 230px; }
+#gender_male, #gender_female	{ width: 12px; margin-left: 3px; }
+#page_sel_td, #pass_0	td	{ height: 24px; }
+#pic_cell	{ padding-left: 13px; }
+#photo_change	{ font-size: 1em; }
+#new_name	{ width: 315px; }
+#event_title	{ width: 260px; }
+#gender_cell	{ }
+
+.admin_form table.admin_tbl	{ border: 2px solid #808080; }
+.admin_form table.admin_tbl th, .admin_form table.admin_tbl td	{ text-align: left; border: solid #808080; }
+.admin_form table.admin_tbl th	{ width: auto; font-size: 0.9em; padding: 3px; border-width: 2px 0; }
+.admin_form table.admin_tbl td	{ white-space: nowrap; padding: 3px 6px; border-width: 1px 0; }
+.admin_form table.admin_tbl .T	{ border-left-width: 0; text-align: center; }
+.admin_form table.admin_tbl .M	{ white-space: normal; }
+.admin_form table.admin_tbl .R	{ border-left-width: 1px; border-right-width: 2px; text-align: center; }
+.admin_form table.admin_tbl input.num	{ }
+.admin_form table.admin_tbl input.tick	{ margin: 3px 6px; }
+#admin_sect_tbl .L	{ padding-right: 16px; }
+#admin_sect_tbl .M	{ width: 350px; }
+#admin_sect_tbl .R	{ width: 80px; }
+#admin_manage_tbl .T	{ width: 75px; }
+#admin_manage_tbl .R	{ width: 65px; }
+#admin_links_tbl .T	{ text-align: left; padding-left: 0; }
+#admin_links_tbl .R	{ width: auto; padding-left: 6px; }
+
+#admin_article_tbl th	{ width: 70px; font-size: 0.9em; text-align: right; padding-right: 10px; }
+#admin_article_tbl th.L	{ width: 85px; }
+#article_title	{ width: 230px; }
+.Go	{ width: 40px; padding: 0; }
+
+#article_select_div select	{ margin: 0 20px 7px; }
+
+.admin_form_head .f_right input	{ text-align: center; width: 190px; font-size: 0.8em; }
+#success	{ font-weight: bold; color: green; border: 1px solid red; padding: 3px 5px; }
+#welcome	{ margin: 0.6em 0; }

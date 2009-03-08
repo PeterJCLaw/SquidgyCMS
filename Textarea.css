@@ -1,0 +1,19 @@
+body	{ font-size: 10pt; }
+
+a	{ text-decoration: none; color: blue; cursor: pointer; }
+a:visited	{ text-decoration: none; color: purple; }
+a:hover, a:visited:hover, a:active	{ text-decoration: none; color: red; }
+
+h2	{ margin: 0; }
+h3	{ font-weight: normal; margin: 0; }
+h4	{ margin-top: 0; margin-bottom: 0.5em; }
+p	{ margin: 0; }
+img	{ border: none; }
+table	{ border-collapse: collapse; }
+input	{ font-family: Verdana, Arial, Helvetica, sans-serif; }
+.left	{ text-align: left; }
+.center	{ text-align: center; }
+.right	{ text-align: right; }
+.f_left	{ float: left; }
+.f_right	{ float: right; }
+.bold	{ font-weight: bold; }
