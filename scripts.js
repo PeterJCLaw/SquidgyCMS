@@ -11,7 +11,7 @@ String.prototype.normalize_space = function() {
 // $ id function
 function $(id)
 {
-	if(typeof id == string)
+	if(typeof id == 'string')
 		return document.getElementById(id);
 	else
 		return id;
