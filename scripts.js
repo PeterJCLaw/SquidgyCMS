@@ -55,13 +55,13 @@ function validate_boxes(FORM)
 /* toggle the open or closed  status of the list heading including changing the icon */
 function toggle_FE(child_ul, parent_li)
 {
-	LI_Obj	= document.getElementById(parent_li);
-	UL_Obj	= document.getElementById(child_ul);
+	LI_Obj	= $(parent_li);
+	UL_Obj	= $(child_ul);
 	UL_stripped	= UL_Obj.innerHTML.toLowerCase().replace(/^\s*|\s*$/g,'');
 	UL_Obj_s	= UL_Obj.style;
 
 	if(UL_stripped == "<li>loading file tree...</li>" || UL_stripped == "<li>loading file tree... </li>")	//call the ajax function to load it
-		ajax('get', 'ajax.php', 'type=block&class=File&folder='+child_ul, function(ajaxobj) { document.getElementById(child_ul).innerHTML = ajaxobj.responseText; });
+		ajax('get', 'ajax.php', 'type=block&class=File&folder='+child_ul, function(ajaxobj) { $(child_ul).innerHTML = ajaxobj.responseText; });
 
 	if(LI_Obj.className	== 'collapsed')	//so that we toggle properly
 		LI_Obj.className	= 'expanded';	//change the icon and display status by changing the class
@@ -85,9 +85,9 @@ function group_tick_2(thing)
 				count++;
 		}
 		if(count == tick_list.length-1)
-			document.getElementById('_Whole').checked	= true;
+			$('_Whole').checked	= true;
 		else
-			document.getElementById('_Whole').checked	= false;
+			$('_Whole').checked	= false;
 		window.LOG	+= "\ncount = "+count+", length = "+tick_list.length;
 	}
 	return;
@@ -95,8 +95,8 @@ function group_tick_2(thing)
 
 function get_Sub_Class_Elements(container, search_class)
 {
-	if(container != '' && document.getElementById(container) != null)
-		BASE	= document.getElementById(container);
+	if(container != '' && $(container) != null)
+		BASE	= $(container);
 	else
 		BASE	= document;
 
