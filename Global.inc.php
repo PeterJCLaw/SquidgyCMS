@@ -2,6 +2,7 @@
 $debug_info	= "";
 $debug		= 0;
 $ajax		= 1;	//just to be sure
+$allow_logging	= true;
 
 if(!empty($_COOKIE))
 	extract($_COOKIE, EXTR_OVERWRITE);
@@ -25,6 +26,14 @@ require_once("functions_FSPHP.inc.php");	//contains the File System PHP Gallery 
 require_once("functions_login.inc.php");	//contains the login functions
 require_once("functions_General.inc.php");	//contains my general functions - the file system gallery ones are now separate
 require_once($site_root."/config.inc.php");			//these files are now included in all the cathsoc pages since I'm using lots of functions
+
+if($allow_logging)
+	require_once("Modules/Log.module.php");
+else {	//dummy functions to prevent errors
+	function log_error($text, $vars_arr = '') { }
+	function log_info($text, $vars_arr = '') { }
+	function show_log($type = 'all') { }
+}
 
 $news_file	= "$data_root/news.data";	//for the news block
 $event_file	= "$data_root/events.data";	//for the events block
