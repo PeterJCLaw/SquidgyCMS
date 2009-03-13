@@ -9,7 +9,7 @@ table	{ border-collapse: collapse; }
 .f_right	{ float: right; }
 
 .PHPlist	{ display: table; width: 100%; padding: 0; }
-.PHPlist li	{ display: table-cell; float: left; width: 25%; }
+.PHPlist li	{ display: table-cell; float: left; width: 25%; text-align: center; }
 
 .PHPtable	{ border: none; width: 100%; }
 .PHPtable td	{ vertical-align: middle; text-align: center; }
