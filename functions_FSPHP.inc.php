@@ -170,8 +170,8 @@ function make_file_listing($file, $icon_size, $directory, $request)
 			$image_stuff	= "FSPHP_Images/".(file_exists("FSPHP_Images/$ext.png") ? $ext : "UnknownFile").".png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
 			$alt			= "$ext File";
 			$title			= "Click to download this $ext file";
-			$image_stuff	= "\n					<img src=\"$image_stuff\" alt=\"$alt\" title=\"$title\" />";
 		}
+		$image_stuff	= "\n					<img src=\"$image_stuff\" alt=\"$alt\" title=\"$title\" />";
 	} else {
 		return "Item is not of a valid type";
 	}
