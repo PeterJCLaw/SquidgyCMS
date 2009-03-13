@@ -4,7 +4,7 @@ class News extends Block {
 		parent::__construct();
 	}
 	function block($args) {
-		global $news_file, $debug_info;
+		global $news_file;
 
 		if(!is_readable($news_file))
 			return '<span id="news" style="display: none;"> (The file was not readable)</span>';
@@ -28,6 +28,7 @@ class News extends Block {
 
 		multi2dSortAsc($news, $key);	//uses array_multisort
 
+		log_info('News Block, news = ', $news);
 		$news_out	= '';
 		foreach($news as $val) {
 			if($val['expires'] > time())
