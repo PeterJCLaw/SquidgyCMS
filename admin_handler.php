@@ -25,10 +25,10 @@ if($debug) {
 	print_r($_GET);
 }
 
-	require_once("Classes/Admin.class.php");
+	require_once("Modules/Admin.class.php");
 
-if(is_readable("Classes/$type.admin.class.php"))
-	require_once("Classes/$type.admin.class.php");
+if(is_readable("Modules/$type.admin.class.php"))
+	require_once("Modules/$type.admin.class.php");
 
 $class_name	= "Admin$type";
 
