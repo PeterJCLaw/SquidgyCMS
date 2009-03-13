@@ -38,18 +38,18 @@ class Newsletter extends Block {
 	/* This function generates the link to the latest newsletter in the folder */
 	function date($args)
 	{
-		global $debug_info, $NewsPath;
+		global $debug_info, $SitePath, $NewsPath;
 		list($when, $file_prefix, $file_postfix, $day)	= $args;
 
 		$stamp		= (!is_int($when) ? strtotime($when) : $when );
 		$date		= date('Y-m-d', $stamp);
 		$year		= date('Y', $stamp);
-		$folder		= "$NewsPath/$year";
+		$folder		= $SitePath."$NewsPath/$year";
 		$file		= $folder."/".$file_prefix.$date.$file_postfix;
 
 		$debug_info	.= "\n\$date=$date\n<br />\$when=$when\n<br />\$year=$year\n<br />\$file=$file\n<br />\$stamp=$stamp\n<br />\n";
 
-		if(!is_dir($NewsPath))
+		if(!is_dir($SitePath.$NewsPath))
 			return "None";
 
 		if(!file_exists($file))
