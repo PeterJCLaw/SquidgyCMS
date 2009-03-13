@@ -18,8 +18,7 @@
 */
 ?>
 <?php
-include_once("functions_FSPHP.inc.php");	//tweaked by Peter Law due to file name change, was functions.inc
-include_once("config.inc.php");
+include_once("Global.inc.php");	//tweaked by Peter Law due to move to a single global include
 
 /* This function appends a string passed to the filename given */
 function best_thumb($cache, $thumbX, $thumbY)
@@ -36,7 +35,7 @@ if (array_key_exists('file', $_REQUEST) && array_key_exists('width', $_REQUEST) 
 {
 	global $maxWidth, $maxHeight;
 
-	$request	= $_REQUEST['file']; $debug	= 0;
+	$request	= $SitePath.$_REQUEST['file']; $debug	= 0;	//Peter Law added the SitePAth variable
 	$debug	= $_REQUEST['debug'];
 
 	authoriseRequest($request);

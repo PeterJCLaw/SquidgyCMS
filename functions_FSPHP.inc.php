@@ -113,8 +113,9 @@ function file_explore($path, $tabs, $ajax)
 	return $retval;
 }
 /* This function makes the individual file listing for a file in the file explorer */
-function make_file_listing($file, $icon_size, $directory, $request)
+function make_file_listing($file, $icon_size, $directory, $request, $folder_icon)
 {
+	global $SitePath;
 	if($icon_size == 2) {	//if we want large icons
 		$size_class		= 'large_icons';
 		$icon_width		= $icon_height	= 128;
@@ -130,6 +131,7 @@ function make_file_listing($file, $icon_size, $directory, $request)
 	$fullpath = $directory . "/" . $file;
 	$item	= $request . "/" . $file;
 	$href	= str_replace(".//", "", $item);
+	$href	= substr($href, strlen($SitePath));
 
 	if(is_dir($item)) {
 		$image_stuff	= "FSPHP_Images/".($folder_icon == 1 ? whats_inside($item) : $folder_icon)."_folder$sm.png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
@@ -191,7 +193,7 @@ ret;
 /* This function prints the icons or images for the file or image browsing pages */
 function print_files($type = "file", $icon_size = 3, $return = FALSE)
 {
-	global $ImagePath, $NewsPath, $FilePath, $itemsPerPage, $itemsInRow, $numberOfRows, $adapted_from, 	$cacheDir, $maxWidth, $maxHeight;
+	global $SitePath, $ImagePath, $NewsPath, $FilePath, $itemsPerPage, $itemsInRow, $numberOfRows, $adapted_from, 	$cacheDir, $maxWidth, $maxHeight;
 	global $who_copyright, $website_name_short, $copy_email_text, $copy_recipient, $copy_recip_gender, $copy_follow_text, $copy_fol_txt_img;
 	global $nostalgic_images_footer, $n_i_f_link, $n_i_f_date_added;
 
@@ -219,9 +221,9 @@ function print_files($type = "file", $icon_size = 3, $return = FALSE)
 	}
 
 	if(array_key_exists('dir', $_REQUEST))
-		$request = $_REQUEST['dir'];
+		$request = $SitePath.$_REQUEST['dir'];
 	else	// no directory was specified so just show the default one from config.php
-		$request = $Path;
+		$request = $SitePath.$Path;
 
 	// found out if someone is trying to exploit it
 	authoriseRequest($request);
@@ -278,7 +280,7 @@ function print_files($type = "file", $icon_size = 3, $return = FALSE)
 	foreach($results as $file) {	//spit as many images as there are
 
 		$RET_VAL	.= '			<li>';
-		$RET_VAL	.= make_file_listing($file, $icon_size, $directory, $request);
+		$RET_VAL	.= make_file_listing($file, $icon_size, $directory, $request, $folder_icon);
 		$RET_VAL	.= "\n			</li>\n";
 
 /*		$count++;
