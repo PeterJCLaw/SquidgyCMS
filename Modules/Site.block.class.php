@@ -126,7 +126,7 @@ HeadOne;
 		if($debug) {
 			$JS_debug_button = "\n<br />\n<pre id=\"JS_debug\"><button onclick=\"this.parentNode.innerHTML = window.LOG\">Debug JS</button></pre>\n";
 			$debug_info = "\n<br />\n<div id=\"debug\">\n\$debug_info={\n<br />".(empty($debug_info) ? '' : $debug_info)."\n<br />}<br />\n</div>\n";
-			return "\n<br />\n<div id=\"error\">\n\$error='".(empty($error) ? '' : nl2br($error)."\n")."'</div>$JS_debug_button$debug_info";
+			return "\n<br />\n<div id=\"error\">\n\$error='".(empty($error) ? '' : nl2br($error)."\n")."'</div>$JS_debug_button$debug_info".show_log();
 		}
 	}
 }
