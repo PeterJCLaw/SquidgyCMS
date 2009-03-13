@@ -112,8 +112,14 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 
 				if(method_exists($block_obj, $method))
 					$block_html	= $block_obj->$method($block_args);
+				else
+					log_info("Module $block block has no method $method");
 			}
+			else
+				log_info("Module $block has no block $block");
 		}
+		else
+			log_info("Module $block does not exist");
 
 		$page	= str_replace("[[Block::$block_call]]", $block_html, $page);
 
