@@ -57,22 +57,22 @@ class Log {
 	}
 }
 
-function log_error($text)
+function log_error($text, $vars_arr = '')
 {
 	global $_Log;
 	if(is_object($_Log) && get_class($_Log) == 'Log')
-		$_Log->error($text);
+		$_Log->error($text.print_r($vars_arr, true));
 	else
 		$_Log	= new Log();
 }
 
-function log_info($text)
+function log_info($text, $vars_arr = '')
 {
 	if(empty($GLOBALS['debug']))
 		return;
 	global $_Log;
 	if(is_object($_Log) && get_class($_Log) == 'Log')
-		$_Log->info($text);
+		$_Log->info($text.print_r($vars_arr, true));
 	else
 		$_Log	= new Log();
 }
