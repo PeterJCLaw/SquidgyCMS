@@ -144,6 +144,24 @@ function get_file_assoc($path, $cols)
 	return $out;
 }
 
+/* add this PHP5 function if needed */
+if(!function_exists('array_combine')) {
+function array_combine($keys, $vals)
+{
+	if(is_array($keys) || is_array($vals) || empty($keys) || empty($vals) || count($keys) != count($vals))
+		return FALSE;
+	$r	= array();
+	reset($vals);
+	reset($keys);
+	$val = current($vals)
+	foreach($keys as $key) {
+		$r[print_r($key, true)] = $val;
+		$val = next($vals);
+	}
+	return $r;
+}
+}
+
 /* get the id number of a generated page from its fileid (ie without the extension) */
 function get_GEN_id($name)
 {
