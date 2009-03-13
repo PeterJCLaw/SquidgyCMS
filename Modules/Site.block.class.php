@@ -106,7 +106,7 @@ HeadOne;
 	<br />
 	Broken Links? Feedback? Please
 	<a href="Contact_Us.php?subject='.$website_name_short.'%20Website&amp;target=Webmaster" title="Send '.$gender.' an email using our contact form">email</a>
-	the <a href="Committee.php#Webmaster" title="Who the heck is '.($gender == 'him' ? 'he' : 'she').' anyway?">Webmaster</a>.
+	the <a href="Committee#Webmaster" title="Who the heck is '.($gender == 'him' ? 'he' : 'she').' anyway?">Webmaster</a>.
 	Valid <a href="http://validator.w3.org/check/referer" title="HTML Validation Page, External link">XHTML</a>
 	and <a href="http://jigsaw.w3.org/css-validator/check/referer" title="CSS Validation Page, External link">CSS</a>.
 	<br />
