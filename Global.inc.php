@@ -30,9 +30,9 @@ require_once($site_root."/config.inc.php");			//these files are now included in 
 if($allow_logging)
 	require_once("Modules/Log.module.php");
 else {	//dummy functions to prevent errors
-	function log_error($text, $vars_arr = '') { }
-	function log_info($text, $vars_arr = '') { }
-	function show_log($type = 'all') { }
+	function log_error($t, $v = '') { }
+	function log_info($t, $v = '') { }
+	function show_log($t = '') { }
 }
 
 $news_file	= "$data_root/news.data";	//for the news block
