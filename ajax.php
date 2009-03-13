@@ -2,14 +2,14 @@
 require_once('Global.inc.php');
 
 if($type == 'admin') {
-	require_once("Classes/Admin.class.php");
+	require_once("Modules/Admin.class.php");
 
-	if(!is_readable("Classes/$class.admin.class.php")) {
+	if(!is_readable("Modules/$class.admin.class.php")) {
 		print_Admin_Section(array('fail'));
 		exit();
 	}
 
-	require_once("Classes/$class.admin.class.php");
+	require_once("Modules/$class.admin.class.php");
 
 	$class_name	= "Admin$class";
 	if(class_exists($class_name)) {
@@ -21,14 +21,14 @@ if($type == 'admin') {
 		print_Admin_Section($host_arr);
 	}
 } elseif($type == 'block') {
-	require_once("Classes/Block.class.php");
+	require_once("Modules/Block.class.php");
 
-	if(!is_readable("Classes/$class.block.class.php")) {
+	if(!is_readable("Modules/$class.block.class.php")) {
 		print_Admin_Section(array('fail'));
 		exit();
 	}
 
-	require_once("Classes/$class.block.class.php");
+	require_once("Modules/$class.block.class.php");
 
 	if(class_exists($class) && method_exists($class, 'ajax')) {
 		$thisobj	= new $class;
