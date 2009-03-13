@@ -171,11 +171,10 @@ function make_file_listing($file, $icon_size, $directory, $request)
 			$alt			= "$ext File";
 			$title			= "Click to download this $ext file";
 		}
-		$image_stuff	= "\n					<img src=\"$image_stuff\" alt=\"$alt\" title=\"$title\" />";
 	} else {
 		return "Item is not of a valid type";
 	}
-
+	$image_stuff	= "\n					<img src=\"$image_stuff\" alt=\"$alt\" title=\"$title\" />";
 
 	if($icon_size == 2)	//if we want large icons
 		return "\n				<a href=\"$href\" title=\"$title\">$image_stuff\n					<br />$link_name\n				</a>";
