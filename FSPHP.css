@@ -8,7 +8,7 @@ table	{ border-collapse: collapse; }
 .f_left	{ float: left; }
 .f_right	{ float: right; }
 
-.PHPlist	{ display: table; width: 100%; }
+.PHPlist	{ display: table; width: 100%; padding: 0; }
 .PHPlist li	{ display: table-cell; float: left; width: 25%; }
 
 .PHPtable	{ border: none; width: 100%; }
