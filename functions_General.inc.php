@@ -149,7 +149,7 @@ function get_file_assoc($path, $cols)
 if(!function_exists('array_combine')) {
 function array_combine($keys, $vals)
 {
-	if(is_array($keys) || is_array($vals) || empty($keys) || empty($vals) || count($keys) != count($vals))
+	if(!is_array($keys) || !is_array($vals) || empty($keys) || empty($vals) || count($keys) != count($vals))
 		return FALSE;
 	$r	= array();
 	reset($vals);
