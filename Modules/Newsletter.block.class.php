@@ -43,9 +43,9 @@ class Newsletter extends Block {
 		
 		if(empty($when) || empty($prefix) || empty($postfix) || empty($day) || !is_dir($SitePath.$NewsPath)) {
 			if(!is_dir($SitePath.$NewsPath))
-				lof_info('Directory does not exist', $SitePath.$NewsPath);
+				log_info('Directory does not exist', $SitePath.$NewsPath);
 			else
-				lof_info('Insufficient information given to locate file', $args);
+				log_info('Insufficient information given to locate file', $args);
 			return "None";
 		}
 
