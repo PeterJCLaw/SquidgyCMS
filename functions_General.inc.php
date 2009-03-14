@@ -153,7 +153,7 @@ function array_combine($keys, $vals)
 	$r	= array();
 	reset($vals);
 	reset($keys);
-	$val = current($vals)
+	$val = current($vals);
 	foreach($keys as $key) {
 		$r[print_r($key, true)] = $val;
 		$val = next($vals);
