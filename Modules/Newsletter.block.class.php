@@ -41,9 +41,12 @@ class Newsletter extends Block {
 		global $debug_info, $SitePath, $NewsPath;
 		list($when, $prefix, $postfix, $day)	= $args;
 		
-		if(empty($when) || empty($prefix) || empty($postfix) || empty($day)) {
-			lof_info('Insufficient information given to locate file', $args)
-			return;
+		if(empty($when) || empty($prefix) || empty($postfix) || empty($day) || !is_dir($SitePath.$NewsPath)) {
+			if(!is_dir($SitePath.$NewsPath))
+				lof_info('Directory does not exist', $SitePath.$NewsPath);
+			else
+				lof_info('Insufficient information given to locate file', $args);
+			return "None";
 		}
 
 		$stamp		= (!is_int($when) ? strtotime($when) : $when );
@@ -53,9 +56,6 @@ class Newsletter extends Block {
 		$file		= $folder."/".$prefix.$date.$postfix;
 
 		$debug_info	.= "\n\$date=$date\n<br />\$when=$when\n<br />\$year=$year\n<br />\$file=$file\n<br />\$stamp=$stamp\n<br />\n";
-
-		if(!is_dir($SitePath.$NewsPath))
-			return "None";
 
 		if(!file_exists($file))
 		{
