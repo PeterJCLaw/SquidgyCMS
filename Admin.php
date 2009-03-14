@@ -49,9 +49,9 @@ if(!$logged_in) {
 	exit();
 }
 
-if(is_readable($admin_file))	//get the list of wanted ones
-	$toclist	= file($admin_file, FILE_IGNORE_NEW_LINES);
-else
+if(is_readable($admin_file)) {	//get the list of wanted ones
+	$toclist	= file_rtrim($admin_file);
+} else
 	$toclist	= array();
 
 $debug_info	.= "\$toclist = ".implode(", ", $toclist)."\n<br />\n";

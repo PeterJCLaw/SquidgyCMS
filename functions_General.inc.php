@@ -133,7 +133,7 @@ function get_file_assoc($path, $cols)
 {
 	if(!is_readable($path))	//if we can't read it then bail
 		return array();
-	$file	= file($path, FILE_IGNORE_NEW_LINES);	//read the info into an array, one element per line
+	$file	= file_rtrim($path);	//read the info into an array, one element per line
 	$out	= array();
 	foreach($file as $line) {
 		$line_data	= array_combine($cols, explode('|:|', $line));
@@ -143,6 +143,14 @@ function get_file_assoc($path, $cols)
 			log_info("Line ($line) is empty ($line_data)");
 	}
 	return $out;
+}
+
+/* get a file with no whitespace on the right, useful as PHP < 5 doesn't have FILE_IGNORE_NEW_LINES */
+function file_rtrim($path)
+{
+	if(floatval(phpversion()) >= 5)
+		return file($path, FILE_IGNORE_NEW_LINES);
+	return array_map('rtrim', file($path));
 }
 
 /* add this PHP5 function if needed */
