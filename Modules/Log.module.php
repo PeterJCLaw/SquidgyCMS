@@ -31,7 +31,7 @@ class log {
 	/* log an error */
 	function combine($text, $vars)
 	{
-		return $text." Vars: ".print_r($vars_arr, true);
+		return $text." Vars: {".print_r($vars_arr, true)."}";
 	}
 
 	/* show the log */
