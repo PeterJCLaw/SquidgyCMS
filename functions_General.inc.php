@@ -113,13 +113,13 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 				if(method_exists($block_obj, $method))
 					$block_html	= $block_obj->$method($block_args);
 				else
-					log_info("Module $block block has no method $method");
+					log_info("Module '$block' block has no method '$method'");
 			}
 			else
-				log_info("Module $block has no block $block");
+				log_info("Module '$block' has no block '$block'");
 		}
 		else
-			log_info("Module $block does not exist");
+			log_info("Module '$block' does not exist");
 
 		$page	= str_replace("[[Block::$block_call]]", $block_html, $page);
 
@@ -137,9 +137,10 @@ function get_file_assoc($path, $cols)
 	$out	= array();
 	foreach($file as $line) {
 		$line_data	= array_combine($cols, explode('|:|', $line));
-		if(!empty($line_data)) {
+		if(!empty($line_data))
 			array_push($out, $line_data);
-		}
+		else
+			log_info("Line ($line) is empty ($line_data)");
 	}
 	return $out;
 }
