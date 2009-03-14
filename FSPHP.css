@@ -1,22 +1,22 @@
 /* File System PHP CSS Document */
-p	{ margin: 0; }
-img	{ border: none; }
-table	{ border-collapse: collapse; }
-.left	{ text-align: left; }
-.center	{ text-align: center; }
-.right	{ text-align: right; }
-.f_left	{ float: left; }
-.f_right	{ float: right; }
+.PHPlist p	{ margin: 0; }
+.PHPlist img	{ border: none; }
+.PHPlist table	{ border-collapse: collapse; }
+.PHPlist .left	{ text-align: left; }
+.PHPlist .center	{ text-align: center; }
+.PHPlist .right	{ text-align: right; }
+.PHPlist .f_left	{ float: left; }
+.PHPlist .f_right	{ float: right; }
 
 .PHPlist	{ display: table; width: 100%; padding: 0; }
 .PHPlist li	{ display: table-cell; float: left; width: 25%; text-align: center; }
 
 .PHPtable	{ border: none; width: 100%; }
 .PHPtable td	{ vertical-align: middle; text-align: center; }
-.large_icons td	{ padding-bottom: 0.8em; }
-.small_icons td	{ text-align: left; padding-bottom: 0.4em; }
-.small_icons td th	{ width: 64px; font-weight: normal; }
-.small_icons td td	{ padding-left: 2px; text-align: left; }
+.PHPlist .large_icons td	{ padding-bottom: 0.8em; }
+.PHPlist .small_icons td	{ text-align: left; padding-bottom: 0.4em; }
+.PHPlist .small_icons td th	{ width: 64px; font-weight: normal; }
+.PHPlist .small_icons td td	{ padding-left: 2px; text-align: left; }
 #adapted	{ font-size: 0.8em; }
 #file_image_copy	{ font-size: 0.8em; margin: -10px 0 15px; }
 
