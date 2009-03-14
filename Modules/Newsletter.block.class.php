@@ -39,13 +39,18 @@ class Newsletter extends Block {
 	function date($args)
 	{
 		global $debug_info, $SitePath, $NewsPath;
-		list($when, $file_prefix, $file_postfix, $day)	= $args;
+		list($when, $prefix, $postfix, $day)	= $args;
+		
+		if(empty($when) || empty($prefix) || empty($postfix) || empty($day)) {
+			lof_info('Insufficient information given to locate file', $args)
+			return;
+		}
 
 		$stamp		= (!is_int($when) ? strtotime($when) : $when );
 		$date		= date('Y-m-d', $stamp);
 		$year		= date('Y', $stamp);
 		$folder		= $SitePath."$NewsPath/$year";
-		$file		= $folder."/".$file_prefix.$date.$file_postfix;
+		$file		= $folder."/".$prefix.$date.$postfix;
 
 		$debug_info	.= "\n\$date=$date\n<br />\$when=$when\n<br />\$year=$year\n<br />\$file=$file\n<br />\$stamp=$stamp\n<br />\n";
 
@@ -59,12 +64,12 @@ class Newsletter extends Block {
 				for($stamp = strtotime("-1 week", $stamp); $stamp >= $first_day; $stamp = strtotime("-1 week", $stamp))
 				{
 					$date	= date('Y-m-d', $stamp);
-					$file	= $folder."/".$file_prefix.$date.$file_postfix;
+					$file	= $folder."/".$prefix.$date.$postfix;
 					$debug_info	.= "\n\$file=$file\n<br />\$stamp=$stamp\n<br />\n";
 					if(file_exists($file))
 						return $file;
 				}
-			$file	= $this->date(array(strtotime("-1 week", $first_day), $file_prefix, $file_postfix, $day));
+			$file	= $this->date(array(strtotime("-1 week", $first_day), $prefix, $postfix, $day));
 		}
 
 		return $file;
