@@ -13,7 +13,7 @@ class Log {
 	}
 
 	function Log() {
-		__construct();
+		$this->__construct();
 	}
 
 	/* log an error */
