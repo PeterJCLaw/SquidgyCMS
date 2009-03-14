@@ -17,15 +17,21 @@ class log {
 	}
 
 	/* log an error */
-	function error($text)
+	function error($text, $vars)
 	{
-		array_push($this->error_log, $text);
+		array_push($this->error_log, $this->combine($text, $vars));
 	}
 
 	/* log an error */
-	function info($text)
+	function info($text, $vars)
 	{
-		array_push($this->info_log, $text);
+		array_push($this->info_log, $this->combine($text, $vars));
+	}
+
+	/* log an error */
+	function combine($text, $vars)
+	{
+		return $text." Vars: ".print_r($vars_arr, true);
 	}
 
 	/* show the log */
@@ -60,21 +66,19 @@ class log {
 function log_error($text, $vars_arr = '')
 {
 	global $_Log;
-	if(is_object($_Log) && get_class($_Log) == 'log')
-		$_Log->error($text.print_r($vars_arr, true));
-	else
+	if(!is_object($_Log) || get_class($_Log) != 'log')
 		$_Log	= new Log();
+	$_Log->error($text, $vars);
 }
 
-function log_info($text, $vars_arr = '')
+function log_info($text, $vars = '')
 {
 	if(empty($GLOBALS['debug']))
 		return;
 	global $_Log;
-	if(is_object($_Log) && get_class($_Log) == 'log')
-		$_Log->info($text.print_r($vars_arr, true));
-	else
+	if(!is_object($_Log) || get_class($_Log) != 'log')
 		$_Log	= new Log();
+	$_Log->info($text, $vars);
 }
 
 function show_log($type = 'all')
