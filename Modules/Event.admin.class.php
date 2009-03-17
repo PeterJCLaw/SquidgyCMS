@@ -34,7 +34,7 @@ class AdminEvent extends Admin {
 	function submit()
 	{
 		global $start_hour, $start_minute, $start_day, $start_month, $start_year, $finish_hour, $finish_minute, $finish_day, $finish_month, $finish_year;
-		global $content, $event_title, $event_file, $header_link, $debug_info, $mail_webmsater_on_event;
+		global $content, $event_title, $header_link, $debug_info, $mail_webmsater_on_event;
 
 		$error	= "";
 
@@ -50,10 +50,10 @@ class AdminEvent extends Admin {
 
 		$content	= addslashes(stripslashes($content));	//they get added when sent
 
-		if(!is_readable($event_file))
+		if(!is_readable($this->data_file))
 			return "\nEvent file not readable";
 
-		if(!is_writable($event_file))
+		if(!is_writable($this->data_file))
 			return "\nEvent file not writeable";
 
 		$content	= str_replace(array("\n", "\r"), '', nl2br(stripslashes($content)));	//fix the slashes and newlines
@@ -76,7 +76,7 @@ class AdminEvent extends Admin {
 		}
 
 		//now we output the stuff we just organised & return
-		return file_put_stuff($event_file, $output, 'a');
+		return file_put_stuff($this->data_file, $output, 'a');
 	}
 
 }

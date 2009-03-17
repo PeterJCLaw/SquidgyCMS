@@ -6,9 +6,9 @@ class Event extends Block {
 
 	function block($args)
 	{
-		global $event_file, $debug_info;
+		global $debug_info;
 
-		$events	= get_file_assoc($event_file, array('time', 'start', 'finish', 'title', 'content'));
+		$events	= get_file_assoc($this->data_file, array('time', 'start', 'finish', 'title', 'content'));
 
 		if(empty($events))
 			return '<div id="events" class="gen_txt">No Upcomoing Events<span style="display: none;"> (The file was not readable)</span>.</div>';
@@ -21,7 +21,7 @@ class Event extends Block {
 		multi2dSortAsc($events, 'start');	//uses array_multisort
 
 		$out	= '';
-		$debug_info	.= "args = $args, event_file = '$event_file', date_format = '$date_format'\n<br />\n";
+		$debug_info	.= "args = $args, event_file = '$this->data_file', date_format = '$date_format'\n<br />\n";
 
 		foreach($events as $val)
 		{

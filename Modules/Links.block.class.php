@@ -5,8 +5,7 @@ class Links extends Block {
 	}
 
 	function block($args) {
-		global $links_file;
-		$Links	= get_file_assoc($links_file, array('href', 'text', 'title'));
+		$Links	= get_file_assoc($this->data_file, array('href', 'text', 'title'));
 		
 		if(empty($Links))
 			return;

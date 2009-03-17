@@ -23,13 +23,13 @@ class AdminNews extends Admin {
 	}
 
 	function submit() {
-		global $debug_info, $content, $day, $month, $year, $news_file;
+		global $debug_info, $content, $day, $month, $year;
 
 		$content	= str_replace(array("\n", "\r"), '', nl2br(stripslashes($content)));	//fix the slashes and newlines
 		$timestamp	= mktime(0,0,0,$month, $day + 1, $year);
 		$output = "\n".time()."|:|$timestamp|:|$content";
 
-		return file_put_stuff($news_file, $output, 'a');
+		return file_put_stuff($this->data_file, $output, 'a');
 	}
 }
 ?>

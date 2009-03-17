@@ -4,12 +4,11 @@ class News extends Block {
 		parent::__construct();
 	}
 	function block($args) {
-		global $news_file;
 
-		if(!is_readable($news_file))
+		if(!is_readable($this->data_file))
 			return '<span id="news" style="display: none;"> (The file was not readable)</span>';
 
-		$news	= get_file_assoc($news_file, array('added', 'expires', 'content'));	//read the info into an array, one element per line
+		$news	= get_file_assoc($this->data_file, array('added', 'expires', 'content'));	//read the info into an array, one element per line
 
 		if(empty($news))
 			return FALSE;
