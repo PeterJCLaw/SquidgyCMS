@@ -5,10 +5,11 @@ class Module {
 		global $data_root, $site_root, $debug;
 		$this->site_root	= $site_root;
 		$this->data_root	= $data_root;
+		$this->data_file	= $this->data_root.'/'.strtolower($this->get_my_class()).'.data';
 		$this->debug	= $debug;
 	}
 
-	function Block() {
+	function Module() {
 		return $this->__construct();
 	}
 
@@ -32,6 +33,7 @@ class Admin extends Module {
 	protected $grouping;
 */
 	function __construct($sect_title_in, $grouping = 0, $weight = 0) {
+		parent::__construct();
 		if(!isset($this->no_submit))
 			$this->no_submit	= FALSE;
 		$this->sect_title	= $sect_title_in;
@@ -40,7 +42,7 @@ class Admin extends Module {
 		$this->section	= $this->get_my_class();
 		$this->section_human	= ucwords(str_replace("_", " ", $this->section));
 		if(!empty($this->debug) && $this->debug > 1) {
-			echo "DEBUG = $debug\n\$sect_title_in = '$sect_title_in'\n";
+			echo "DEBUG = $this->debug\n\$sect_title_in = '$sect_title_in'\n";
 			print_r($this);
 		}
 	}
@@ -62,6 +64,7 @@ class Admin extends Module {
 		$a['grouping']	= $this->grouping;
 		$a['weight']	= $this->weight;
 		$a['no_submit']	= $this->no_submit;
+		$a['data_file']	= $this->data_file;
 		$a['section']	= $this->section;
 		$a['section_human']	= $this->section_human;
 		$a['class']	= get_class($this);
