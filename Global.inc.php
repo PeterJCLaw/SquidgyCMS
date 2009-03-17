@@ -35,9 +35,6 @@ else {	//dummy functions to prevent errors
 	function show_log($t = '') { }
 }
 
-$news_file	= "$data_root/news.data";	//for the news block
-$event_file	= "$data_root/events.data";	//for the events block
-$links_file	= "$data_root/links.data";	//for the links block
 $admin_file	= "$data_root/admin.data";	//for the admin page - which sections to show
 $pages_file	= "$data_root/pages.data";	//for all pages - the main table of contents
 $template_file	= "Sites/Custom_Themes/$site.template";	//the site template
