@@ -407,7 +407,7 @@ function email_addr($job)
 /* This function prints an email to link */
 function email_link($text, $gender, $address, $subject, $cc, $bcc, $body)
 {
-	global $committee_email;
+	global $committee_email, $site_root;
 
 	if(!stristr($address,"@"))	//if they didn't specify an actual address assume the meant a committee member (dangerous, please fix)
 	{
@@ -452,7 +452,7 @@ function email_link($text, $gender, $address, $subject, $cc, $bcc, $body)
 
 	if($gender == "0" && isset($job))
 	{
-		include "Users_Info/".info_name($job).".inc.php";
+		include "$site_root/Users/".info_name($job).".comm.php";
 	}
 
 	$out_val	.=  "\" title=\"Send $gender an email\">$text</a>";
