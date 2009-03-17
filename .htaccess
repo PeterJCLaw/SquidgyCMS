@@ -1,12 +1,12 @@
-ErrorDocument 400 /pjcl106/SquidgyCMS_dev/Error.php?id=400
-ErrorDocument 401 /pjcl106/SquidgyCMS_dev/Error.php?id=401
-ErrorDocument 403 /pjcl106/SquidgyCMS_dev/Error.php?id=403
-ErrorDocument 404 /pjcl106/SquidgyCMS_dev/Error.php?id=404
-ErrorDocument 500 /pjcl106/SquidgyCMS_dev/Error.php?id=500
+ErrorDocument 400 /SquidgyCMS-trunk/index.php?id=400
+ErrorDocument 401 /SquidgyCMS-trunk/index.php?id=401
+ErrorDocument 403 /SquidgyCMS-trunk/index.php?id=403
+ErrorDocument 404 /SquidgyCMS-trunk/index.php?id=404
+ErrorDocument 500 /SquidgyCMS-trunk/index.php?id=500
 
 <IfModule mod_rewrite.c>
 	RewriteEngine on
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule ^(.*)$ /pjcl106/SquidgyCMS_dev/?page_req=$1 [L,QSA]
+	RewriteRule ^(.*)$ /SquidgyCMS-trunk/?page_req=$1 [L,QSA]
 </IfModule>
