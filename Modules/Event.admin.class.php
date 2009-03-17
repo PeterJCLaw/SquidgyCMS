@@ -52,8 +52,6 @@ class AdminEvent extends Admin {
 
 		if(!is_readable($event_file))
 			return "\nEvent file not readable";
-		else
-			require_once($event_file);
 
 		if(!is_writable($event_file))
 			return "\nEvent file not writeable";
