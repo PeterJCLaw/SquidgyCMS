@@ -5,19 +5,6 @@ $xml_mime	= 0;		//do you want the application/xhtml+xml mime type (assume not, s
 
 	require_once("Global.inc.php");		//contains Global stuff, including config and functions
 
-function get_page_basics() {
-	$SN_arr	= explode("/", $_SERVER['SCRIPT_NAME']);	//explode so I can deal with the bits individually
-	$RU_arr	= explode("/", $_SERVER['REQUEST_URI']);
-
-	$page	= $SN_arr[count($SN_arr)-1];	//get the name of this page from its path, then lose the extension
-	unset($SN_arr[count($SN_arr)-1]);	//unset the last value - that's the page name - as I don't want it in the absolute ref
-
-	if($SN_arr[1] == "~".$RU_arr[1])
-		$SN_arr[1] = $RU_arr[1];	//dump the tilde if we don't want it NB: check this on other systems
-
-	return array(implode("/", $SN_arr)."/", $page, returnFileName($page));
-}
-
 $Site_TOClist	= get_TOClist();
 multi2dSortAsc($Site_TOClist, 'weight');
 
