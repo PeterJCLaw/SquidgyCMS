@@ -17,10 +17,6 @@ foreach($perm_values as $key) {
 		setcookie($key, $GLOBALS[$key], time()+3600*24*100, $base_href);
 }
 
-if(stristr($page_n, "_dev")) {
-	$page_n	= str_replace("_dev", "", $page_n);		//remove the _dev tag if there is one
-	$_dev	= "Development Version";
-}
 $page_n		= str_replace("_", " ", $page_n);		//replace any underscores with spaces
 
 if($page_n == "Photos" && isset($dir))	//if its a page that uses the file systems functions
