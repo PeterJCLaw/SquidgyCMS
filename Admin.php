@@ -39,7 +39,7 @@ location.hash.onchange	= switch_tabs;
 </script>
 SCRIPTS;
 
-	require_once("Modules/Admin.class.php");
+	require_once("Modules/Module.php");
 	include 'Head.inc.php';
 
 /* This is the actual page below this point */

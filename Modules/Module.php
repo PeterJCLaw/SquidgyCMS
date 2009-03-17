@@ -1,5 +1,28 @@
 <?php
-class Admin {
+class Module {
+
+	function __construct() {
+		global $data_root, $site_root, $debug;
+		$this->site_root	= $site_root;
+		$this->data_root	= $data_root;
+		$this->debug	= $debug;
+	}
+
+	function Block() {
+		return $this->__construct();
+	}
+
+	function get_my_class() {
+		return substr(get_class($this), 5);
+	}
+
+	function get_info() {
+		$a['class']	= $this->get_my_class();
+		return $a;
+	}
+}
+
+class Admin extends Module {
 
 	var $section;	//php <5
 	var $sect_title;
@@ -9,9 +32,6 @@ class Admin {
 	protected $grouping;
 */
 	function __construct($sect_title_in, $grouping = 0, $weight = 0) {
-		global $debug, $data_root, $site_root;
-		$this->site_root	= $site_root;
-		$this->data_root	= $data_root;
 		if(!isset($this->no_submit))
 			$this->no_submit	= FALSE;
 		$this->sect_title	= $sect_title_in;
@@ -19,7 +39,7 @@ class Admin {
 		$this->weight	= $weight;
 		$this->section	= $this->get_my_class();
 		$this->section_human	= ucwords(str_replace("_", " ", $this->section));
-		if(!empty($debug) && $debug > 1) {
+		if(!empty($this->debug) && $this->debug > 1) {
 			echo "DEBUG = $debug\n\$sect_title_in = '$sect_title_in'\n";
 			print_r($this);
 		}
@@ -35,10 +55,6 @@ class Admin {
 
 	function get_grouping() {
 		return $this->grouping;
-	}
-
-	function get_my_class() {
-		return substr(get_class($this), 5);
 	}
 
 	function get_info() {
@@ -211,6 +227,17 @@ class Admin {
 		ChangeOptionDays(document.forms['$form_id'], '$prefix');
 		// -->
 	</script>\n";
+	}
+}
+
+class Block extends Module {
+
+	function __construct() {
+		return parent::__construct();
+	}
+
+	function Block() {
+		return $this->__construct();
 	}
 }
 ?>

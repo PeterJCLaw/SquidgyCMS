@@ -2,7 +2,7 @@
 require_once('Global.inc.php');
 
 if($type == 'admin') {
-	require_once("Modules/Admin.class.php");
+	require_once("Modules/Module.php");
 
 	if(!is_readable("Modules/$class.admin.class.php")) {
 		print_Admin_Section(array('fail'));

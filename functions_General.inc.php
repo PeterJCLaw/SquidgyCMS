@@ -51,8 +51,8 @@ function print_Admin_Section($val) {
 /* parses the squidgyCMS wiki-style pages and makes html */
 function SquidgyParser($page_file, $start = 0, $finish = 0) {
 	global $debug, $debug_info;
-	if(is_readable("Modules/Block.class.php"))
-		require_once("Modules/Block.class.php");
+	if(is_readable("Modules/Module.php"))
+		require_once("Modules/Module.php");
 	else
 		return FALSE;
 
