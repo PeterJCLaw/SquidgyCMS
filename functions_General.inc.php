@@ -13,12 +13,6 @@ function get_page_basics() {
 	return array(implode("/", $SN_arr)."/", $page, returnFileName($page));
 }
 
-/* This function converts a job title into an email add-in */
-function email($job)
-{
-	return str_replace(" ", ".", $job);
-}
-
 /* prints an admin section, if it exsists */
 function get_TOClist() {
 	global $pages_file;
@@ -394,6 +388,12 @@ function info_name($name)
 }
 
 /* This function converts a job title into an email add-in */
+function email($job)
+{
+	return str_replace(" ", ".", $job);
+}
+
+/* This function finds the email of a user */
 function email_addr($job)
 {
 	global 	$comm_email_prefix, $comm_email_postfix, $webmaster_email;
