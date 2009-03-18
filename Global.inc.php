@@ -67,7 +67,7 @@ if(function_exists('Filtered_Dir_List')) {
 	}
 
 	// make a list of committee members whose information is available
-	$job_list		= Filtered_Dir_List("$site_root/Users", ".comm.php");
+	$job_list		= Filtered_Dir_List("$site_root/Users", ".user.php");
 	array_push($job_list, "Committee");
 	foreach($job_list as $key => $value)
 		$job_list[$key]	= str_replace(".", " ", $value);
@@ -76,7 +76,7 @@ if(function_exists('Filtered_Dir_List')) {
 } else
 	$job_list	= array();
 
-$FSCMS_pages	= array('Contact_Us.php', 'Newsletters.php', 'Photos.php', 'Files.php', 'Error.php');	//the ones that the the system provides
+$FSCMS_pages	= array('Contact_Us.php', 'Newsletters.php', 'Photos.php', 'Files.php');	//the ones that the the system provides
 
 $logged_in	= FALSE;	//just in case
 
