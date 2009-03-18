@@ -393,7 +393,7 @@ function info_name($name)
 }
 
 /* This function returns the path to the user's data file */
-function user_path($n)
+function user_file($n)
 {
 	return "$site_root/Users/".info_name($n).".user.php";
 }
@@ -463,7 +463,7 @@ function email_link($text, $gender, $address, $subject, $cc, $bcc, $body)
 
 	if($gender == "0" && isset($job))
 	{
-		include user_path($job);
+		include user_file($job);
 	}
 
 	$out_val	.=  "\" title=\"Send $gender an email\">$text</a>";
