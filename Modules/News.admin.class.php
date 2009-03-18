@@ -25,7 +25,7 @@ class AdminNews extends Admin {
 	function submit() {
 		global $debug_info, $content, $day, $month, $year;
 
-		$content	= str_replace(array("\n", "\r"), '', nl2br(stripslashes($content)));	//fix the slashes and newlines
+		$content	= str_replace(array("\n", "\r"), '', nl2br($content));	//fix the slashes and newlines
 		$timestamp	= mktime(0,0,0,$month, $day + 1, $year);
 		$output = "\n".time()."|:|$timestamp|:|$content";
 

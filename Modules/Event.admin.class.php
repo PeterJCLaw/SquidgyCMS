@@ -48,8 +48,6 @@ class AdminEvent extends Admin {
 		if(!empty($error))	//if there's an error then bail
 			return $error;
 
-		$content	= addslashes(stripslashes($content));	//they get added when sent
-
 		if(!is_readable($this->data_file))
 			return "\nEvent file not readable";
 

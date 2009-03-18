@@ -77,7 +77,7 @@ class AdminProfile extends Admin {
 	{
 		global $new_name, $n_gender, $content, $username, $new_pass, $old_pass, $confirm_pass, $debug_info, $site_root;
 
-		$content	= addslashes(stripslashes($content));	//they get added when sent
+		$content	= addslashes($content);	//they get removed by the handler
 		$new_name	= addslashes(stripslashes($new_name));	//they get added when sent
 
 		$file = "$site_root/Users/".info_name($username).".comm.php";
