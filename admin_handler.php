@@ -25,7 +25,7 @@ if($debug) {
 	print_r($_GET);
 }
 
-	require_once("Modules/Admin.class.php");
+	require_once("Modules/Module.php");
 
 if(is_readable("Modules/$type.admin.class.php"))
 	require_once("Modules/$type.admin.class.php");
