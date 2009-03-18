@@ -94,40 +94,45 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 		$block_call	= substr($page, strpos($page, '[[Block::')+9, (strpos($page, ']]') - strpos($page, '[[Block::') - 9) );	//grab the call from the source
 
 		list($type)	= explode("::", $block_call);	//get the type
-		list($block, $method)	= explode("-", $type);
+		list($module, $method)	= explode("-", $type);
 
-		$block_args	= substr($block_call, strlen($type)+2);	//grab the arguments
-		if(!empty($block_args))
-			$block_args	= explode("||", $block_args);	//sort them into an array
+		$args	= substr($block_call, strlen($type)+2);	//grab the arguments
+		if(!empty($args))
+			$args	= explode("||", $args);	//sort them into an array
 		else
-			$block_args	= array();	//or make a blank array
+			$args	= array();	//or make a blank array
 
-		$debug_info	.= "block_call = '$block_call', i = '$i', type = '$type', block_args = '".implode(", ", $block_args)."'\n<br />\n";
+		$debug_info	.= "block_call = '$block_call', i = '$i', type = '$type', args = '".implode(", ", $args)."'\n<br />\n";
 		if($debug > 1) {
-			echo "block_args:\n<br />\n".print_r($block_args, true)."\n<br />\n";
+			echo "args:\n<br />\n".print_r($args, true)."\n<br />\n";
 		}
 
 		$block_html	= '';
 
-		if(is_readable("Modules/$block.block.class.php") || is_readable("Sites/Custom_Modules/$block.block.class.php")) {
-			if(is_readable("Modules/$block.block.class.php"))	//grab the class, try the standard place first, then the custom one
-				require_once("Modules/$block.block.class.php");
+		if(is_readable("Modules/$module.block.class.php") || is_readable("Sites/Custom_Modules/$module.block.class.php")) {
+			if(is_readable("Modules/$module.block.class.php"))	//grab the class, try the standard place first, then the custom one
+				require_once("Modules/$module.block.class.php");
 			else
-				require_once("Sites/Custom_Modules/$block.block.class.php");
+				require_once("Sites/Custom_Modules/$module.block.class.php");
+
+			$block	= "Block$module";
 
 			if(class_exists($block)) {
 				$block_obj	= new $block();
 
 				if(method_exists($block_obj, $method))
-					$block_html	= $block_obj->$method($block_args);
+					$block_html	= $block_obj->$method($args);
 				else
-					log_info("Module '$block' block has no method '$method'");
+					log_info("Block '$block' has no method '$method'");
+
+				if(empty($block_html))
+					log_info("Block method '${block}->$method' returned nothing");
 			}
 			else
-				log_info("Module '$block' has no block '$block'");
+				log_info("Module '$module' has no block '$block'");
 		}
 		else
-			log_info("Module '$block' does not exist");
+			log_info("Module '$module' does not exist");
 
 		$page	= str_replace("[[Block::$block_call]]", $block_html, $page);
 
