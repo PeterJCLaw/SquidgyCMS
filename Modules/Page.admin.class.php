@@ -36,7 +36,7 @@ class AdminPage extends Admin {
 
 		if(empty($content))
 			$error	.= "\nNo content provided";
-		if(!(stripos($content, '<?') === FALSE))
+		if(!(strpos($content, '<?') === FALSE))
 			$error	.= "\nInvalid content provided: PHP is not allowed";
 		if(empty($page_title))
 			$error	.= "\nNo title provided";
