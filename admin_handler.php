@@ -14,7 +14,7 @@ $type	= str_replace(" ", "_", ucwords($type));
 
 //strip slashes and convert php opening or closing tags to their html equivalents to prevent malicious code from running
 if(!empty($content))
-	$content	= str_replace(array('<?', '?>'), array('&lt;?', '?&gt;'), $content);
+	$content	= stripslashes(str_replace(array('<?', '?>'), array('&lt;?', '?&gt;'), $content));
 
 $debug_info .= @"\$type=$type\n<br />\$content='$content'\n<br />\n";
 
