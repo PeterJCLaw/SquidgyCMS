@@ -395,7 +395,7 @@ function info_name($name)
 /* This function returns the path to the user's data file */
 function user_file($n)
 {
-	return "$site_root/Users/".info_name($n).".user.php";
+	return $GLOBALS['site_root'].'/Users/'.info_name($n).'.user.php';
 }
 
 /* This function converts a job title into an email add-in */
