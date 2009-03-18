@@ -65,7 +65,7 @@ function check_pass($username, $login_pass)
 	global $debug_info, $site_root;
 	$debug_info	.= "(check_pass)\$username=$username\n<br />\n";
 
-	include "$site_root/Users/".info_name($username).".comm.php";
+	include user_file($username);
 
 	if($pass_hash == md5($login_pass))
 		return TRUE;

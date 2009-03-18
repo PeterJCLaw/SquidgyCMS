@@ -2,7 +2,7 @@
 	include 'Head.inc.php';
 ?>
 <?php
-include "$site_root/Users/Webmaster.comm.php";
+include user_file('Webmaster');
 $referrer    = array_shift(explode('?', basename($referrer)));
 
 if(empty($error))

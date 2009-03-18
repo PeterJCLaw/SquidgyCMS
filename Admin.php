@@ -56,7 +56,7 @@ if(is_readable($admin_file)) {	//get the list of wanted ones
 
 $debug_info	.= "\$toclist = ".implode(", ", $toclist)."\n<br />\n";
 
-include "$site_root/Users/".info_name($username).".comm.php";
+include user_file($username);
 
 $toc_list	= array();
 $module_list	= Filtered_Dir_List("Modules", ".admin.class.php");
