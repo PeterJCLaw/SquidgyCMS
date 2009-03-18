@@ -392,6 +392,12 @@ function info_name($name)
 	return email(ucwords(strtolower(str_replace(".", " ", $name))));	//email copes with webmaster and those with spaces in
 }
 
+/* This function returns the path to the user's data file */
+function user_path($n)
+{
+	return "$site_root/Users/".info_name($n).".user.php";
+}
+
 /* This function converts a job title into an email add-in */
 function email($job)
 {
@@ -420,7 +426,7 @@ function email_link($text, $gender, $address, $subject, $cc, $bcc, $body)
 		if(strpos($committee_email, "@"))	//if all via one email address
 		{
 			$subject	= "[FAO:$job] ".$subject;
-			$address	= "ACCF@soton.ac.uk";
+			$address	= $committee_email;
 		} else
 			$address	= email_addr($address);
 	}
@@ -457,7 +463,7 @@ function email_link($text, $gender, $address, $subject, $cc, $bcc, $body)
 
 	if($gender == "0" && isset($job))
 	{
-		include "$site_root/Users/".info_name($job).".comm.php";
+		include user_path($job);
 	}
 
 	$out_val	.=  "\" title=\"Send $gender an email\">$text</a>";
