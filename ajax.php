@@ -1,17 +1,17 @@
 <?php
 require_once('Global.inc.php');
+require_once("Modules/Module.php");
+
+if(!is_readable("Modules/$class.module.php")) {
+	print_Admin_Section(array('fail'));
+	exit();
+}
+
+require_once("Modules/$class.module.php");
+
+$class_name	= ucwords($type).$class;
 
 if($type == 'admin') {
-	require_once("Modules/Module.php");
-
-	if(!is_readable("Modules/$class.admin.class.php")) {
-		print_Admin_Section(array('fail'));
-		exit();
-	}
-
-	require_once("Modules/$class.admin.class.php");
-
-	$class_name	= "Admin$class";
 	if(class_exists($class_name)) {
 		$thisobj	= new $class_name();
 
@@ -21,20 +21,11 @@ if($type == 'admin') {
 		print_Admin_Section($host_arr);
 	}
 } elseif($type == 'block') {
-	require_once("Modules/Block.class.php");
-
-	if(!is_readable("Modules/$class.block.class.php")) {
-		print_Admin_Section(array('fail'));
-		exit();
-	}
-
-	require_once("Modules/$class.block.class.php");
-
-	if(class_exists($class) && method_exists($class, 'ajax')) {
-		$thisobj	= new $class;
+	if(class_exists($class_name) && method_exists($class_name, 'ajax')) {
+		$thisobj	= new $class_name();
 		echo $thisobj->ajax();
 	} else {
-		echo "Ajax method not defined in class $class.";
+		echo "Ajax method not defined in block '$class_name'.";
 	}
 	
 } elseif($type == 'preview') {
