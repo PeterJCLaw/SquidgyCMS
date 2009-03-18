@@ -1,6 +1,6 @@
 <?php
-class Links extends Block {
-	function Links() {
+class BlockLinks extends Block {
+	function BlockLinks() {
 		parent::__construct();
 	}
 

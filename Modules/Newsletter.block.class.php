@@ -1,6 +1,6 @@
 <?php
-class Newsletter extends Block {
-	function Newsletter() {
+class BlockNewsletter extends Block {
+	function BlockNewsletter() {
 		parent::__construct();
 	}
 

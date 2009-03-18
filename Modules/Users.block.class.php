@@ -1,6 +1,6 @@
 <?php
-class Users extends Block {
-	function Users() {
+class BlockUsers extends Block {
+	function BlockUsers() {
 		parent::__construct();
 	}
 

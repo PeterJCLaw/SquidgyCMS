@@ -1,6 +1,6 @@
 <?php
-class Article extends Block {
-	function Article() {
+class BlockArticle extends Block {
+	function BlockArticle() {
 		parent::__construct();
 	}
 

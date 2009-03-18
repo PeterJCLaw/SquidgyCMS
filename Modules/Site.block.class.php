@@ -1,6 +1,6 @@
 <?php
-class Site extends Block {
-	function Site() {
+class BlockSite extends Block {
+	function BlockSite() {
 		parent::__construct();
 	}
 

@@ -1,6 +1,6 @@
 <?php
-class File extends Block {
-	function File() {
+class BlockFile extends Block {
+	function BlockFile() {
 		parent::__construct();
 	}
 

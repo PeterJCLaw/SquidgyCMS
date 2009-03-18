@@ -1,6 +1,6 @@
 <?php
-class News extends Block {
-	function News() {
+class BlockNews extends Block {
+	function BlockNews() {
 		parent::__construct();
 	}
 	function block($args) {

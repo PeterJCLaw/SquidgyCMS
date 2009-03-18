@@ -1,6 +1,6 @@
 <?php
-class Event extends Block {
-	function Event() {
+class BlockEvent extends Block {
+	function BlockEvent() {
 		parent::__construct();
 	}
 
