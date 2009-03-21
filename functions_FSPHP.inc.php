@@ -15,24 +15,24 @@ function id_convert($tag)
  * by shrinking the current file to the same length as the passed file
  * then see if they're the same
  */
-function path_compare($p_p)
+function path_compare($path, $file)
 {
-	global $debug_info, $curr_file;
+	global $debug_info;
 
-	$p_p	= str_replace(".//", "", $p_p);
+	$path	= str_replace(".//", "", $path);
 
-	$debug_info .= "\$p_p=$p_p\n<br />\$curr_file=$curr_file\n<br />\n";
+	$debug_info .= "\$path=$path\n<br />\$file=$file\n<br />\n";
 
-	if($p_p == $curr_file || $p_p == "./")
+	if($path == $file || $path == "./")
 		return TRUE;
 
-	$length		= strlen($p_p);
+	$length		= strlen($path);
 
-	$curr_s		= substr($curr_file, 0, $length);
+	$curr_s		= substr($file, 0, $length);
 
 	$debug_info .= "\$curr_s=$curr_s\n<br />\$length=$length\n<br />\n";
 
-	return ($p_p == $curr_s);	//if they match then the folder gets expanded
+	return ($path == $curr_s);	//if they match then the folder gets expanded
 }
 
 /* recursive function to explore the file / folder structure beneath
