@@ -330,15 +330,6 @@ function send_mail($to, $subject, $message, $headers)
 	return mail($_to_, $subject, $message, $headers);
 }
 
-/* This function determines if the committee picture passed is valid, if it is it returns it, else returns a standin image */
-function comm_pic($image_path)
-{
-	if($image_path == "" || !is_readable("Site_Images/$image_path"))
-		$image_path	= "Unknown.jpg";
-
-	return $image_path;
-}
-
 /* This function prints the tickboxes */
 function print_tickboxes($item_list, $tick_side = '')
 {
