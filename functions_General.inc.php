@@ -14,6 +14,7 @@ function get_page_basics() {
 	$RU_arr	= explode("/", $_SERVER['REQUEST_URI']);
 
 	$page	= $SN_arr[count($SN_arr)-1];	//get the name of this page from its path, then lose the extension
+	$page	= basename($SN_arr);	//get the name of this page from its path, then lose the extension
 	unset($SN_arr[count($SN_arr)-1]);	//unset the last value - that's the page name - as I don't want it in the absolute ref
 
 	if($SN_arr[1] == "~".$RU_arr[1])
@@ -194,9 +195,16 @@ function get_module_info($module)
 		}
 		for($j = $key; $j < count($lines); $j++)
 			unset($lines[$j]);
-		return parse_ini_string(implode("\n", $lines));
-	} else
-		return @parse_ini_file($file);
+		$info	= parse_ini_string(implode("\n", $lines));
+		if(!empty($info['#dependencies']))
+			$info['#dependencies'] = str_getcsv($info['#dependencies']);
+	} else {
+		$info	= @parse_ini_file($file);
+		if(!empty($info['#dependencies']))
+			$info['#dependencies'] = explode(',', $info['#dependencies']);
+	}
+		
+	return $info;
 }
 
 /* get a file with no whitespace on the right, useful as PHP < 5 doesn't have FILE_IGNORE_NEW_LINES */
