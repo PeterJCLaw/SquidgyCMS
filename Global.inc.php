@@ -80,7 +80,7 @@ $FSCMS_pages	= array('Contact_Us.php', 'Newsletters.php', 'Photos.php', 'Files.p
 
 $logged_in	= FALSE;	//just in case
 
-if(isset($logout) && $logout)
+if(!empty($logout))
 	user_logout();
 
 $logged_in	= user_login();
