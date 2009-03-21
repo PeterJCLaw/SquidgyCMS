@@ -1,4 +1,13 @@
 <?php
+/* This function groups array elements by one property of those elements */
+function group_array_by_key($arr, $col) {
+	$out = array();
+	foreach($arr as $key => $val) {
+		$out[$val[$col]][] = $val;
+	}
+	return $out;
+}
+
 /* This function gets basic info abouot the current page */
 function get_page_basics() {
 	$SN_arr	= explode("/", $_SERVER['SCRIPT_NAME']);	//explode so I can deal with the bits individually
@@ -141,6 +150,17 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 	return $page;
 }
 
+/* read the first $n lines of file $f from $s onwards */
+function read_file_lines($f, $n, $s=0)
+{
+	$fh	= fopen($f, 'r');
+	for($i=$s; $i<$n; $i++) {
+		$file[$i]	= fgets($fh);
+	}
+	fclose($fh);
+	return $file;
+}
+
 /* grab a data file & convert it to a 2D array using the passed column names */
 function get_file_assoc($path, $cols)
 {
@@ -156,6 +176,27 @@ function get_file_assoc($path, $cols)
 			log_info("Line ($line) is empty ($line_data)");
 	}
 	return $out;
+}
+
+/* get a file with no whitespace on the right, useful as PHP < 5 doesn't have FILE_IGNORE_NEW_LINES */
+function get_module_info($module)
+{
+	$file = "Modules/$module.module.php";
+	if(!is_readable($file))
+		return FALSE;
+	if(floatval(phpversion()) >= 5.3) {
+		$i = 0;
+		while(!$key) {
+			$lines = read_file_lines($file, 10, 10*$i);
+			$key = array_search('###', $lines);
+			unset($lines[0]);	//remove the dud bits
+			$i++;
+		}
+		for($j = $key; $j < count($lines); $j++)
+			unset($lines[$j]);
+		return parse_ini_string(implode("\n", $lines));
+	} else
+		return @parse_ini_file($file);
 }
 
 /* get a file with no whitespace on the right, useful as PHP < 5 doesn't have FILE_IGNORE_NEW_LINES */
