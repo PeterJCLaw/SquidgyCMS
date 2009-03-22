@@ -31,13 +31,13 @@ ul.tick_list	{ width: 550px; margin-top: 8px; height: 95px; margin-bottom: 12px;
 ul.tick_list li	{ vertical-align: middle; line-height: 1.5em; display: block; float: left; width: 170px; }
 .tick_list .tick	{ margin: 3px 6px; width: 13px; }
 
-/* Committee.php */
-#comm_tbl	{ width: 95%; }
-#comm_tbl td	{ vertical-align: top; }
-.comm_pic	{ width: 104px; }
-.comm_email	{ text-align: right; font-size: 0.8em; float: right; }
-.comm_txt	{ }
-.comm_name	{ float: left; }
+/* Users-ListDiv */
+#user_tbl	{ width: 95%; }
+#user_tbl td	{ vertical-align: top; }
+.user_pic	{ width: 104px; }
+.user_email	{ text-align: right; font-size: 0.8em; float: right; }
+.user_txt	{ }
+.user_name	{ float: left; }
 
 /* Login Pages */
 #login_fail	{ color: red; margin-bottom: 4px; }
