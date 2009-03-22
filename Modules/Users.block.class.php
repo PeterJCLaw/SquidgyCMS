@@ -13,7 +13,7 @@ class BlockUsers extends Block {
 			if(in_array($job, array('Committee', 'Chaplain')))
 				continue;
 			$info_name = info_name($job);
-			include "$this->site_root/Users/$info_name.comm.php";
+			include "$this->site_root/Users/$info_name.user.php";
 			$firstname = first_name($name);
 			$ret	.= '<tr>
 		<td rowspan="2" class="comm_pic">
