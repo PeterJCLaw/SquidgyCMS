@@ -13,8 +13,7 @@ function get_page_basics() {
 	$SN_arr	= explode("/", $_SERVER['SCRIPT_NAME']);	//explode so I can deal with the bits individually
 	$RU_arr	= explode("/", $_SERVER['REQUEST_URI']);
 
-	$page	= $SN_arr[count($SN_arr)-1];	//get the name of this page from its path, then lose the extension
-	$page	= basename($SN_arr);	//get the name of this page from its path, then lose the extension
+	$page	= basename($_SERVER['SCRIPT_NAME']);	//get the name of this page from its path
 	unset($SN_arr[count($SN_arr)-1]);	//unset the last value - that's the page name - as I don't want it in the absolute ref
 
 	if($SN_arr[1] == "~".$RU_arr[1])
