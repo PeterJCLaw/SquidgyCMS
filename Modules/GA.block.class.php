@@ -6,7 +6,7 @@ class BlockGA extends Block {
 
 	function script($args) {
 		list($id) = $args;
-		if(!$GLOBAS['no_google'] && !empty($id))
+		if(!$GLOBALS['no_google'] && strtolower($GLOBALS['page_n']) != 'admin' && !empty($id))
 			return <<<SCR
 <script type="text/javascript">
 	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
