@@ -34,9 +34,9 @@ ul.tick_list li	{ vertical-align: middle; line-height: 1.5em; display: block; fl
 /* Users-ListDiv */
 #user_tbl	{ width: 95%; }
 #user_tbl td	{ vertical-align: top; }
-.user_pic	{ width: 104px; }
+.user_pic	{ width: 104px; text-align: center; vertical-align: top; padding-top: 5px; }
 .user_email	{ text-align: right; font-size: 0.8em; float: right; }
-.user_txt	{ }
+.user_txt p	{ margin: 2px 0 8px; }
 .user_name	{ float: left; }
 
 /* Login Pages */
