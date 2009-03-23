@@ -59,14 +59,14 @@ $debug_info	.= "\$toclist = ".implode(", ", $toclist)."\n<br />\n";
 include user_file($username);
 
 $toc_list	= array();
-$module_list	= Filtered_Dir_List("Modules", ".admin.class.php");
+$module_list	= Filtered_Dir_List("Modules", ".module.php");
 foreach($module_list as $section)	//grab all the sections and add their objects to the array
 {
 	if($section == "Admin")
 		continue;
 
-	if(is_readable("Modules/$section.admin.class.php"))
-		require_once("Modules/$section.admin.class.php");
+	if(is_readable("Modules/$section.module.php"))
+		require_once("Modules/$section.module.php");
 
 	$class_name	= "Admin$section";
 	if(class_exists($class_name)) {
@@ -132,8 +132,8 @@ foreach($_Admin_list as $section => $val)
 	<!--
 		window.AJAX_enabled	= <?php echo $ajax; ?>;
 		window.DATA_root	= '<?php echo $data_root; ?>';
-		window.PAGE_req	= '<?php echo empty($page_req) ? '' : $page_req; ?>';
-		window.ART_req	= '<?php echo empty($art_req) ? '' : $art_req; ?>';
+		window.PAGE	= '<?php echo empty($page_req) ? '' : $page_req; ?>';
+		window.ART	= '<?php echo empty($art_req) ? '' : $art_req; ?>';
 	//-->
 	</script>
 <?php

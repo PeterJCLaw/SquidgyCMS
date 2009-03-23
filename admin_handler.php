@@ -27,8 +27,8 @@ if($debug) {
 
 	require_once("Modules/Module.php");
 
-if(is_readable("Modules/$type.admin.class.php"))
-	require_once("Modules/$type.admin.class.php");
+if(is_readable("Modules/$type.module.php"))
+	require_once("Modules/$type.module.php");
 
 $class_name	= "Admin$type";
 

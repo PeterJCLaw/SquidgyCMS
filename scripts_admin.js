@@ -85,7 +85,7 @@ function get(type, orig)
 {
 	that	= $(type+"_select");
 	type_l	= type.toLowerCase();
-	req		= (type_l == "page" ? "page" : "art");
+	req		= (type_l == "page" ? "p" : "a");
 	SI		= that.selectedIndex;
 	SI_len	= that.length;
 
@@ -102,7 +102,7 @@ function get(type, orig)
 	}
 
 	if(!window.AJAX_enabled) {
-		window.location = "Admin.php?" + req + "_req=" + that.value + "#" + type;
+		window.location = "Admin.php?" + req + "=" + that.value + "#" + type;
 	} else {
 		ajax('GET', window.DATA_root+'/'+escape(that.value)+'.'+type_l, 0, function(ajax_obj) {
 			$(type+'_content').innerHTML	= ajax_obj.responseText;
@@ -140,7 +140,7 @@ function switch_tabs(cur_div, mode)
 		}
 
 		if(cur_div.toLowerCase() != "webmaster" && window.AJAX_enabled && $(cur_div+'_h3')) {	//if we need to ajax stuff
-			ajax('GET', "ajax.php", "type=admin&class="+cur_div+'&p='+PAGE_req+'&a='+ART_req, function(ajax_obj) {
+			ajax('GET', "ajax.php", "type=admin&module="+cur_div+'&p='+PAGE+'&a='+ART, function(ajax_obj) {
 				$(cur_div).innerHTML	= ajax_obj.responseText;
 				switch_tabs(cur_div, 1);	//now go again, but skip the top stuff
 			} );

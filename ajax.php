@@ -2,19 +2,19 @@
 require_once('Global.inc.php');
 require_once("Modules/Module.php");
 
-if(!is_readable("Modules/$class.module.php")) {
+if(!is_readable("Modules/$module.module.php")) {
 	print_Admin_Section(array('fail'));
 	exit();
 }
 
-require_once("Modules/$class.module.php");
+require_once("Modules/$module.module.php");
 
-$class_name	= ucwords($type).$class;
+$class	= ucwords($type).$module;
 
 switch($type) {
 	case 'admin':
-		if(class_exists($class_name)) {
-			$thisobj	= new $class_name();
+		if(class_exists($class)) {
+			$thisobj	= new $class();
 
 			$host_arr	= $thisobj->get_info();
 			$host_arr['obj']	= $thisobj;
@@ -25,11 +25,11 @@ switch($type) {
 		break;
 	
 	case 'block':
-		if(class_exists($class_name) && method_exists($class_name, 'ajax')) {
-			$thisobj	= new $class_name();
+		if(class_exists($class) && method_exists($class, 'ajax')) {
+			$thisobj	= new $class();
 			echo $thisobj->ajax();
 		} else
-			echo "Ajax method not defined in block '$class_name'.";
+			echo "Ajax method not defined in block '$class'.";
 		break;
 		
 	case 'preview':
