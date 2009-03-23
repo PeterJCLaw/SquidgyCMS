@@ -42,14 +42,14 @@ $template_file	= "Sites/Custom_Themes/$site.template";	//the site template
 $SquidgyCMS_version	= 0.01;
 
 //things we can expect to be passed, which always need fiddling
-if(empty($page_req))
-	unset($page_req);
+if(empty($p))
+	unset($p);
 else
-	$page_req	= urlencode($page_req);
-if(empty($art_req))
-	unset($art_req);
+	$page_req	= urlencode($p);
+if(empty($a))
+	unset($a);
 else
-	$art_req	= urlencode($art_req);
+	$art_req	= urlencode($a);
 
 //use cookies only to handle session stuff
 $debug_info		.="\n ini_set(\"session.use_only_cookies\", \"1\") = ".ini_set("session.use_only_cookies", "1")."\n<br />";
