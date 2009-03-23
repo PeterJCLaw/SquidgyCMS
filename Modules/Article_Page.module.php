@@ -68,7 +68,7 @@ class AdminArticle_Page extends Admin {
 					$OUT_P		= str_replace(">index<", ">Home<", $OUT_P);
 					echo $OUT_P."\n						<option".(!$page_req ? ' selected="selected"' : "").">New Page</option>\n					"; ?>
 					</select>
-					<input type="button" onclick="redir('<?php echo $section; ?>', <?php echo $page_num.", '$page_n'"; ?>);" value="Go" id="Go1" />
+					<input type="button" onclick="redir('<?php echo $section; ?>', <?php echo "$page_num, '$page_n'"; ?>);" value="Go" id="Go1" />
 					</span>
 				</td>
 			</tr><tr>
