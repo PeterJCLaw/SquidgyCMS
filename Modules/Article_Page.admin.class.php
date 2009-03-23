@@ -121,7 +121,7 @@ class AdminArticle_Page extends Admin {
 
 		$debug_info .= @"\$old_page_id = '$old_page_id', \$page_id = '$page_id'\n<br />\n";
 
-		$header_link	= "&page_req=$page_id";
+		$header_link	= "&p=$page_id";
 
 		return file_put_stuff("$this->data_root/".$page_id.".page", $content, 'w');
 	}

@@ -31,7 +31,7 @@ class AdminContent extends Admin {
 						$page_name	= get_GEN_title($Page);
 						$del_box_p	= $check.'del['.$Page.'.page]" />';
 					}
-					$page_link	= '<a href="?page_req='.$Page.'#Page" title="Edit the \''.$page_name.'\' page">'.$page_name.'</a>';
+					$page_link	= '<a href="?p='.$Page.'#Page" title="Edit the \''.$page_name.'\' page">'.$page_name.'</a>';
 				} else {
 					if($Page == 'Committee.php')
 						$page_link	= '<a href="#Profile" title="Edit your committee page profile">Committee</a>';
@@ -42,7 +42,7 @@ class AdminContent extends Admin {
 			if(!empty($Art)) {
 				$art_name	= get_GEN_title($Art);
 				$del_box_a	= $check.'del['.$Art.'.article]" />';
-				$art_href	= "?art_req=".$Art;
+				$art_href	= "?a=".$Art;
 				$art_link	= '<a href="'.$art_href.'#Article" title="Edit the \''.$art_name.'\' article">'.$art_name.'</a>';
 			}
 
@@ -67,8 +67,8 @@ class AdminContent extends Admin {
 
 		if(!empty($del)) {
 			foreach($del as $file => $val) {
-				$a	= $this->delete_file("$this->data_root/$file");	//checks the readability then deletes the file, or returns an error
-				$error	.= (!empty($a) ? "$a Links to ($file) have not been changed" : $this->change_something_in_all_pages($file, 'File Deleted'));	//change the links to the file, if it was deleted
+				$err	= $this->delete_file("$this->data_root/$file");	//checks the readability then deletes the file, or returns an error
+				$error	.= (!empty($err) ? "$err Links to ($file) have not been changed" : $this->change_something_in_all_pages($file, 'File Deleted'));	//change the links to the file, if it was deleted
 			}
 		}
 
@@ -86,7 +86,7 @@ class AdminContent extends Admin {
 					if(!is_readable($href))
 						continue;
 				} elseif(in_array($enable_key, $GEN_pages)) {
-					$href	= "?page_req=$enable_key";
+					$href	= "?p=$enable_key";
 					$title	= get_GEN_title($enable_key);
 					if(!is_readable("$this->data_root/$enable_key.page"))
 						continue;
