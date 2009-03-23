@@ -34,6 +34,10 @@ class Admin extends Module {
 */
 	function __construct($sect_title_in, $grouping = 0, $weight = 0) {
 		parent::__construct();
+		if(!$GLOBALS['logged_in']) {
+			print_logon_form();
+			exit();
+		}
 		if(!isset($this->no_submit))
 			$this->no_submit	= FALSE;
 		$this->sect_title	= $sect_title_in;
