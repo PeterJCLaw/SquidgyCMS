@@ -118,11 +118,11 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 
 		$block_html	= '';
 
-		if(is_readable("Modules/$module.block.class.php") || is_readable("Sites/Custom_Modules/$module.block.class.php")) {
-			if(is_readable("Modules/$module.block.class.php"))	//grab the class, try the standard place first, then the custom one
-				require_once("Modules/$module.block.class.php");
+		if(is_readable("Modules/$module.module.php") || is_readable("Sites/Custom_Modules/$module.module.php")) {
+			if(is_readable("Modules/$module.module.php"))	//grab the class, try the standard place first, then the custom one
+				require_once("Modules/$module.module.php");
 			else
-				require_once("Sites/Custom_Modules/$module.block.class.php");
+				require_once("Sites/Custom_Modules/$module.module.php");
 
 			$block	= "Block$module";
 
