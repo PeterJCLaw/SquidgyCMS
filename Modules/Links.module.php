@@ -11,8 +11,8 @@ class AdminLinks extends Admin {
 	}
 
 	function printFormAdmin() {
-		global	$debug, $debug_info, $links_file;
-		$Links	= get_file_assoc($links_file, array('href', 'text', 'title'));
+		global	$debug, $debug_info;
+		$Links	= get_file_assoc($this->data_file, array('href', 'text', 'title'));
 		multi2dSortAsc($Links, 'title');
 		?>
 			<table id="admin_links_tbl" class="admin_tbl"><tr>
@@ -50,7 +50,7 @@ class AdminLinks extends Admin {
 	}
 
 	function submit() {
-		global $debug_info, $text, $href, $title, $links_file;
+		global $debug_info, $text, $href, $title;
 
 		if(count($text) != count($href))
 			return "\nIncorrect parameter count";;
@@ -66,7 +66,7 @@ class AdminLinks extends Admin {
 
 			$debug_info	.= "\$this_href = '$this_href',	\$this_text	= '$this_text',	\$this_title	= '$this_title'\n<br />";
 		}
-		return file_put_stuff($links_file, implode("\n", $link_list), 'w');
+		return file_put_stuff($this->data_file, implode("\n", $link_list), 'w');
 	}//*/
 }
 
