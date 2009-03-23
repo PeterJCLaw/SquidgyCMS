@@ -1,4 +1,10 @@
 <?php
+#name = Webmaster
+#description = User and Module managment
+#package = Core - required
+#type = admin
+###
+
 class AdminWebmaster extends Admin {
 	function AdminWebmaster() {
 		parent::__construct('Reset committee passwords or make changes to the Admin area of the site', -1, 20);

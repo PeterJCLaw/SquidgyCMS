@@ -1,4 +1,10 @@
 <?php
+#name = Article
+#description = Enables the editing and display in pages of articles, which can be re-used in pages
+#package = Core - optional
+#type = content
+###
+
 class AdminArticle extends Admin {
 	function AdminArticle() {
 		parent::__construct('Create or change site articles');

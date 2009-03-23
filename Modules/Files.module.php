@@ -1,4 +1,10 @@
 <?php
+#name = Files
+#description = Allows access separate admin files
+#package = Core - optional
+#type = content
+###
+
 class AdminFiles extends Admin {
 	function AdminFiles() {
 		$this->no_submit	= TRUE;

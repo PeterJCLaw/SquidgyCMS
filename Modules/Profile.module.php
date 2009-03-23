@@ -1,4 +1,11 @@
 <?php
+#name = Profile
+#description = User profiles and public listing thereof
+#package = Core - optional
+#type = content
+#dependencies = Users
+###
+
 class AdminProfile extends Admin {
 	function AdminProfile() {
 		parent::__construct('Change your personal profile');

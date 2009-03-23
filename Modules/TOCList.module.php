@@ -1,4 +1,10 @@
 <?php
+#name = TOCList
+#description = The table of contents and page aliasing for the site
+#package = Core - optional
+#type = content
+###
+
 class AdminTOCList extends Admin {
 	function AdminTOCList() {
 		parent::__construct('Manage website pages and main page list', -1, -19);

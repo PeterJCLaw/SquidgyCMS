@@ -1,4 +1,10 @@
 <?php
+#name = Article Page
+#description = Enables the editing of structured pages via a gui
+#package = Core - optional
+#type = content
+###
+
 class AdminArticle_Page extends Admin {
 	function AdminArticle_Page() {
 		parent::__construct('Create or change pages made from articles');

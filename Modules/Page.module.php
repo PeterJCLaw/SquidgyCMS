@@ -1,4 +1,10 @@
 <?php
+#name = Page
+#description = Allows pages to be created and edited
+#package = Core - optional
+#type = content
+###
+
 class AdminPage extends Admin {
 	function AdminPage() {
 		parent::__construct('Create or change pages made from html and site blocks', -1);

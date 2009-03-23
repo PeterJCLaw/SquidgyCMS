@@ -1,4 +1,10 @@
 <?php
+#name = Newsletter
+#description = Generates a link to the most recent newsletter
+#package = Core - optional
+#type = content
+###
+
 class BlockNewsletter extends Block {
 	function BlockNewsletter() {
 		parent::__construct();

@@ -1,4 +1,10 @@
 <?php
+#name = Event
+#description = Enables the creation and display of events
+#package = Core - optional
+#type = content
+###
+
 class AdminEvent extends Admin {
 	function AdminEvent() {
 		parent::__construct('Add Events to the Events list');

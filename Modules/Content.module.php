@@ -1,4 +1,10 @@
 <?php
+#name = Content
+#description = Manages organisation of pages and atricles
+#package = Core - required
+#type = content
+###
+
 class AdminContent extends Admin {
 	function AdminContent() {
 		parent::__construct('Manage website content', -1, -20);

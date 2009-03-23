@@ -1,4 +1,10 @@
 <?php
+#name = News
+#description = Enables the creation of short items of news which have an expiry date
+#package = Core - optional
+#type = content
+###
+
 class AdminNews extends Admin {
 	function AdminNews() {
 		parent::__construct('Add News Article to the News section of the site');

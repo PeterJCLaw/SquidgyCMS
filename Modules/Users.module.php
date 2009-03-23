@@ -1,4 +1,10 @@
 <?php
+#name = Users
+#description = Display a neat list of users
+#package = Core - optional
+#type = content
+###
+
 class BlockUsers extends Block {
 	function BlockUsers() {
 		parent::__construct();

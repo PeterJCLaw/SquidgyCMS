@@ -1,4 +1,10 @@
 <?php
+#name = Module
+#description = Contains module templates for blocks and admin sections
+#package = Core - required
+#type = system
+###
+
 class Module {
 
 	function __construct() {

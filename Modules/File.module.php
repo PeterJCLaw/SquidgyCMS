@@ -1,4 +1,10 @@
 <?php
+#name = File
+#description = Handles the display of file trees and of file exploring pages
+#package = Core - optional
+#type = content
+###
+
 class BlockFile extends Block {
 	function BlockFile() {
 		parent::__construct();

@@ -1,4 +1,10 @@
 <?php
+#name = Links
+#description = Enables lists of links to be made
+#package = Core - optional
+#type = content
+###
+
 class AdminLinks extends Admin {
 	function AdminLinks() {
 		parent::__construct('Manage a list of links');

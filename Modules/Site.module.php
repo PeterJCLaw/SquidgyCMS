@@ -1,4 +1,10 @@
 <?php
+#name = Site
+#description = Links etc that are useful in the page template
+#package = Core - optional
+#type = content
+###
+
 class BlockSite extends Block {
 	function BlockSite() {
 		parent::__construct();

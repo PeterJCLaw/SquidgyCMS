@@ -6,7 +6,7 @@
 ###
 
 class log {
-	
+
 	function __construct() {
 		$this->error_log	= array();
 		$this->info_log	= array();

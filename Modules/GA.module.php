@@ -1,4 +1,10 @@
 <?php
+#name = Google Analytics
+#description = Handles the insertion of a Google Analytics script
+#package = Core - optional
+#type = content
+###
+
 class BlockGA extends Block {
 	function BlockGA() {
 		parent::__construct();
