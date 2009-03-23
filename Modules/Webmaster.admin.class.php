@@ -24,7 +24,7 @@ class AdminWebmaster extends Admin {
 			if(in_array($Person, array('Committee', 'Chaplain')))
 				continue;
 
-			include "$this->site_root/Users/".info_name($Person).".comm.php";
+			include user_file($Person);
 
 			$del_box	= '<input type="checkbox" class="tick" name="del['.$Person.'.comm.php]" />';
 			$weight_box	= '<input name="weight['.$Person.']"'.(empty($job_list[$Person]['weight']) ? '' : ' value="'.$job_list[$Person]['weight'].'"').' type="text" maxlength="2" size="2" class="num" />';
@@ -109,7 +109,7 @@ class AdminWebmaster extends Admin {
 	{
 		global $debug_info, $job_list, $error, $website_name_short, $webmaster_email;
 
-		$file	= "$this->site_root/Users/".info_name($who).".inc.php";	//convert to a filename type and include
+		$file	= user_file($who);	//convert to a filename type and include
 		include $file;
 		$error .= $this->change_commiittee_files($pass_hash, md5("password"), $file);
 		send_mail(email($who), "$who: $website_name_short Website Password Reset", "Dear ".$who
