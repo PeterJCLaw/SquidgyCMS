@@ -73,7 +73,7 @@ class AdminTOCList extends Admin {
 					if(!is_readable($href))
 						continue;
 				} elseif(in_array($enable_key, $GEN_pages)) {
-					$href	= "?page_req=$enable_key";
+					$href	= "?p=$enable_key";
 					$title	= get_GEN_title($enable_key);
 					if(!is_readable("$this->data_root/$enable_key.page"))
 						continue;

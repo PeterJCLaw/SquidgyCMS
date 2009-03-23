@@ -58,7 +58,7 @@ HeadOne;
 			if($page_n == "Committee")
 				$page_edit_link	.= "#Profile";
 			else {
-				$page_edit_link	.= "?page_req=";
+				$page_edit_link	.= "?p=";
 				if($page_n == "Home")
 					$page_edit_link	.= "1-Home#Page";
 				else
@@ -95,7 +95,7 @@ HeadOne;
 
 	function Footer($args) {
 		global $who_copyright, $website_name_short, $website_name_long, $SquidgyCMS_version;
-		include "$this->site_root/Users/Webmaster.comm.php";
+		include "$this->site_root/Users/Webmaster.user.php";
 		list($full)	= $args;
 		$out	= '';
 		if(!empty($full) && $full == 'full')
