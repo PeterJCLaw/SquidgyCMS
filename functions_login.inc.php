@@ -13,7 +13,7 @@ function print_logon_form()
 <form id="login_form" method="post" action="" onsubmit="document.getElementById('login_form').action = window.location.hash;return;">
 	<table id="login"><?php
 	if(!empty($username)) {	?>
-<caption><h3 id="login_fail">Username and Password do not match!</h3></caption>
+<caption><h3 id="login_fail">Invalid Username or Password!</h3></caption>
 <?php } ?>
 		<tr>
 			<th><label for="username">Username:</label></th>
