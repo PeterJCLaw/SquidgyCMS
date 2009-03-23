@@ -39,4 +39,14 @@ class BlockUsers extends Block {
 </table>';
 	}
 }
+
+/* This function determines if the committee picture passed is valid, if it is it returns it, else returns a standin image */
+function user_pic($pic)
+{
+	if($pic == "" || !is_readable("Site_Images/$pic"))
+		$pic	= "Unknown.jpg";
+
+	return $pic;
+}
+
 ?>
