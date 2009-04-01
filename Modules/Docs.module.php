@@ -69,7 +69,7 @@ class Docs {	//parent class for useful functions
 	function Full_Dir_List($dir)
 	{
 		$results = FileSystem::Full_Dir_List($dir);
-		usort($results, array("Docs", "PJCL_sort"));
+		usort($results, array("Docs", "tree_sort"));
 		reset($results);
 		return $results;
 	}
@@ -421,7 +421,7 @@ ret;
 	}
 
 	/* This function is used in conjunction with usort - it sorts based on whether a file is a folder, then by extension, then alphabetically */
-	function PJCL_sort($a, $b)
+	function tree_sort($a, $b)
 	{
 	//	global $debug_info, $this_dir;
 
