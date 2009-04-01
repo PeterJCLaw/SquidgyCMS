@@ -336,11 +336,7 @@ ret;
 				." at the old $website_name_short Photos index (it contains all the same pre-$n_i_f_date_added photos, just looks older).\n	<br />\n";
 
 		$RET_VAL	.= $adapted_from;
-		if($return)
-			return $RET_VAL;
-		else
-			echo $RET_VAL;
-		return;
+		return $RET_VAL;
 	}
 
 	/* This function returns the the type of files in the directory passed */
