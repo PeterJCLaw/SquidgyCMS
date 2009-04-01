@@ -32,40 +32,51 @@ class FileSystem {
 	}
 
 	/* This function reads ALL the items in a directory and returns an array with this information */
-	function Full_Dir_List($directory)
+	function Full_Dir_List($dir)
 	{
-		global $logged_in, $this_dir, $show_all;
-		$this_dir = $directory;
+		$dir = $GLOBALS['site_root'].'/'.$dir;
 		$results = array();
-		if(!is_dir($directory))
+		if(!is_dir($dir))
 			return $results;
-		$handler = opendir($directory);
+
+		global $logged_in, $this_dir, $show_all;
+		$this_dir = $dir;
+		$handler = opendir($dir);
 
 		while($file = readdir($handler)) {
-			$file_path	= $directory . "/" . $file;
-			if($file != '.' && $file != '..'  && is_readable($file_path) && !ignore_file($file) && (is_file($file_path) || (is_dir($file_path) && $file[0] != ".")))
+			$file_path	= $dir . "/" . $file;
+			if($file != '.' && $file != '..'  && is_readable($file_path) && !FileSystem::ignore_file($file)
+							&& (is_file($file_path) || (is_dir($file_path) && $file[0] != ".")))
 					array_push($results, $file);
 		}
 		closedir($handler);
 		sort($results);
-		usort($results, "PJCL_sort");
 		reset($results);
 		return $results;
 	}
 
 	/* This function reads only the items in a directory that containt the string in $filter and returns an array with this information */
-	function Filtered_Dir_List($directory, $filter)
+	function Filtered_File_List($dir, $filter)
 	{
+		$dir = $GLOBALS['site_root'].'/'.$dir;
 		$results = array();
-		if(!is_dir($directory))
+		if(!is_dir($dir))
 			return $results;
 
-		$handler = opendir($directory);
+		if(!is_array($filter))	//allow either an array or a csv list
+			$filter = str_getcsv($filter);
+
+		$handler = opendir($dir);
 
 		while($file = readdir($handler)) {
-			$file_path	= $directory . "/" . $file;
-			if($file != '.' && $file != '..'  && is_readable($file_path) && is_file($file_path) && stristr($file, $filter))
-				array_push($results, str_replace($filter, "", $file));
+			$file_path	= $dir . "/" . $file;
+			if($file != '.' && $file != '..'  && is_readable($file_path) && is_file($file_path))
+				foreach($filter as $f) {
+					if(stristr($file, $f)) {
+						array_push($results, str_replace($f, "", $file));
+						break;
+					}
+				}
 		}
 		closedir($handler);
 		sort($results);
@@ -113,9 +124,9 @@ class FileSystem {
 
 	//	$debug_info	.= "ingore_file: $file,	ext_block=".($ext_block ? 'TRUE' : 'FALSE').",	file_block=".($file_block ? 'TRUE' : 'FALSE').",	part_block=".($part_block ? 'TRUE' : 'FALSE')."\n<br />\n";
 
-		return ((($ext_block || $file_block || $part_block) && !$show_all) || secure_dir($file));
+		return ((($ext_block || $file_block || $part_block) && !$show_all) || FileSystem::secure_dir($file));
 	}
-	
+
 	/* get a file with no whitespace on the right, useful as PHP < 5 doesn't have FILE_IGNORE_NEW_LINES */
 	function file_rtrim($path)
 	{
