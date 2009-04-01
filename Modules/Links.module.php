@@ -12,7 +12,7 @@ class AdminLinks extends Admin {
 
 	function printFormAdmin() {
 		global	$debug, $debug_info;
-		$Links	= get_file_assoc($this->data_file, array('href', 'text', 'title'));
+		$Links	= FileSystem::get_file_assoc($this->data_file, array('href', 'text', 'title'));
 		multi2dSortAsc($Links, 'title');
 		?>
 			<table id="admin_links_tbl" class="admin_tbl"><tr>
@@ -66,7 +66,7 @@ class AdminLinks extends Admin {
 
 			$debug_info	.= "\$this_href = '$this_href',	\$this_text	= '$this_text',	\$this_title	= '$this_title'\n<br />";
 		}
-		return file_put_stuff($this->data_file, implode("\n", $link_list), 'w');
+		return FileSystem::file_put_stuff($this->data_file, implode("\n", $link_list), 'w');
 	}//*/
 }
 
@@ -76,7 +76,7 @@ class BlockLinks extends Block {
 	}
 
 	function block($args) {
-		$Links	= get_file_assoc($this->data_file, array('href', 'text', 'title'));
+		$Links	= FileSystem::get_file_assoc($this->data_file, array('href', 'text', 'title'));
 		
 		if(empty($Links))
 			return;
