@@ -177,15 +177,21 @@ function get_module_info($module)
 		for($j = $key; $j < count($lines); $j++)
 			unset($lines[$j]);
 		$info	= parse_ini_string(implode("\n", $lines));
+	} else
+		$info	= @parse_ini_file($file);
+
 		if(!empty($info['#dependencies']))
 			$info['#dependencies'] = str_getcsv($info['#dependencies']);
-	} else {
-		$info	= @parse_ini_file($file);
-		if(!empty($info['#dependencies']))
-			$info['#dependencies'] = explode(',', $info['#dependencies']);
-	}
-		
+
 	return $info;
+}
+
+/* add this PHP5.3 function if needed */
+if(!function_exists('str_getcsv')) {
+function str_getcsv($s)
+{
+	return explode(',', str_replace(', ', ',', $s));
+}
 }
 
 /* add this PHP5 function if needed */
