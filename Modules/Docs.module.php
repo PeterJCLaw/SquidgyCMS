@@ -376,24 +376,20 @@ ret;
 	{
 		global $debug_info;
 
-		$path	= Docs::fix_slashes(".//", "", $path);
+		$path	= str_replace(".//", "", $path);
 
 		$debug_info .= "\$path=$path\n<br />\$file=$file\n<br />\n";
 
 		if($path == $file || $path == "./")
 			return TRUE;
 
-		$P	= explode('/', $path);
-		$F	= explode('/', $file);
+		$length		= strlen($path);
 
-		if(count($P) >= count($F))
-			return FALSE;
+		$curr_s		= substr($file, 0, $length);
 
-		for($i=0; $i < count($P); $i++) {
-			if($P[$i] != $F[$i])
-				return FALSE;
-		}
-		return TRUE;
+		$debug_info .= "\$curr_s=$curr_s\n<br />\$length=$length\n<br />\n";
+
+		return ($path == $curr_s);	//if they match then the folder gets expanded
 	}
 
 	/* This function gets the name of the object to fit onto lines 13 characters wide */
