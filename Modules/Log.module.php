@@ -5,14 +5,14 @@
 #type = system
 ###
 
-class log {
+class Log {
 
 	function __construct() {
 		$this->error_log	= array();
 		$this->info_log	= array();
 	}
 
-	function log() {
+	function Log() {
 		$this->__construct();
 	}
 
@@ -66,7 +66,7 @@ class log {
 function log_error($text, $vars_arr = '')
 {
 	global $_Log;
-	if(!is_object($_Log) || get_class($_Log) != 'log')
+	if(!is_object($_Log) || strtolower(get_class($_Log)) != 'log')
 		$_Log	= new Log();
 	$_Log->error($text, $vars);
 }
@@ -76,7 +76,7 @@ function log_info($text, $vars = '')
 	if(empty($GLOBALS['debug']))
 		return;
 	global $_Log;
-	if(!is_object($_Log) || get_class($_Log) != 'log')
+	if(!is_object($_Log) || strtolower(get_class($_Log)) != 'log')
 		$_Log	= new Log();
 	$_Log->info($text, $vars);
 }
@@ -84,7 +84,7 @@ function log_info($text, $vars = '')
 function show_log($type = 'all')
 {
 	global $_Log;
-	if(is_object($_Log) && get_class($_Log) == 'log')
+	if(is_object($_Log) && strtolower(get_class($_Log)) == 'log')
 		return $_Log->show($type);
 }
 
