@@ -152,7 +152,7 @@ class Docs {	//parent class for useful functions
 		return $retval;
 	}
 	/* This function makes the individual file listing for a file in the file explorer */
-	function make_file_listing($item, $type, $icon_size)
+	function make_file_listing($item, $file, $type, $icon_size)
 	{
 
 		if($icon_size == 2) {	//if we want large icons
@@ -306,7 +306,7 @@ ret;
 				$item	= $file;
 
 			$RET_VAL	.= '			<li>';
-			$RET_VAL	.= Docs::make_file_listing($item, $type, $icon_size);
+			$RET_VAL	.= Docs::make_file_listing($item, $file, $type, $icon_size);
 			$RET_VAL	.= "\n			</li>\n";
 
 	/*		$count++;
