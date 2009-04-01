@@ -28,7 +28,7 @@ EXP;
 		} else
 			list($type, $size)	= $args;
 
-		return '<div id="Docs-Browse">'.print_files($type, $size, TRUE).'</div>';
+		return '<div id="Docs-Browse">'.Docs::file_grid($type, $size).'</div>';
 	}
 
 	function Tree($args) {
@@ -38,7 +38,7 @@ EXP;
 		else
 			list($path)	= $args;
 
-		return '<div id="Docs-Tree">'.file_explore($path, '', $ajax).'</div>';
+		return '<div id="Docs-Tree">'.Docs::file_tree($path, $ajax).'</div>';
 	}
 	
 	function ajax() {
@@ -65,7 +65,7 @@ class Docs {	//parent class for useful functions
 /* recursive function to explore the file / folder structure beneath
  * retruns blank if nothing of note is found
  */
-function file_explore($path, $tabs, $ajax)
+function file_tree($path, $ajax, $tabs='')
 {
 	global $debug_info, $curr_file;
 
@@ -84,11 +84,11 @@ function file_explore($path, $tabs, $ajax)
 
 	$debug_info	.= "\$paths_match=".($paths_match ? 'TRUE' : 'FALSE' )."\n<br />\$display=$display\n<br />\n";
 
-	$dir_contents = Docs::Full_Dir_List($path);
+	$dir_contents = FileSystem::Full_Dir_List($path);
 
 	if($dir_contents) {	//if there's something to show
 		if($ajax < 2)	//if not being called from get_file_tree.php
-			$retval	.= "\n$tabs<ul id=\"FE_$path_id\" class=\"File_Explore\"$display>\n";
+			$retval	.= "\n$tabs<ul id=\"FE_$path_id\" class=\"file_tree\"$display>\n";
 
 		if($ajax && $tabs != "" && !$paths_match)	//if ajax is enabled and not top level and paths don't match
 			$retval	.= "	$tabs<li>Loading File Tree...</li>\n";
@@ -104,22 +104,22 @@ function file_explore($path, $tabs, $ajax)
 
 				if (is_file($item) || is_dir($item)) {
 					if (is_dir($item)) {	//if its a folder
-						$tit			= "Go to $item_name";
+						$title			= "Go to $item_name";
 						$li_ins_class	= "FE_empty";
-						$item_sub_val	= file_explore($item, $tabs."		", $ajax);
+						$item_sub_val	= Docs::file_tree($item, $ajax, $tabs."		");
 						if($item_sub_val != '') {
-							$li_ins_class	= ($paths_match ? (path_compare($item, $curr_file) ? "expanded" : "collapsed") : "collapsed");
+							$li_ins_class	= ($paths_match ? (Docs::path_compare($item, $curr_file) ? "expanded" : "collapsed") : "collapsed");
 							$item_sub_val	= ($curr_item ? "" : "&nbsp;&nbsp;<a href=\"?dir=$href\" title=\"$tit\">=></a>")."$item_sub_val\n	$tabs";
-							$tit			= "Expand $item_name";
+							$title			= "Expand $item_name";
 							$href			= "javascript:toggle_FE('FE_$item_id', 'FE_LI_$item_id');\" class=\"js_link";
 						}
 						$li_insert		= " id=\"FE_LI_$item_id\" class=\"$li_ins_class\"";
 						$debug_info		.= "\$item_sub_val=$item_sub_val\n<br />\$li_insert=$li_insert\n<br />\n";
 					} else {
-						$item_name	= returnFileName($item_name); //gives us just the name (no extension) of the file
-						$tit		= "Go to $item_name";
+						$item_name	= FileSystem::returnFileName($item_name); //gives us just the name (no extension) of the file
+						$title		= "Go to $item_name";
 					}
-					$thing_name	= "<a href=\"$href\" title=\"$tit\">$item_name</a>";
+					$thing_name	= "<a href=\"$href\" title=\"$title\">$item_name</a>";
 
 					if($curr_item)
 						$thing_name	= "<b>$thing_name</b>";
@@ -167,7 +167,7 @@ function make_file_listing($type, $file, $icon_size, $directory, $request)
 		$title			= "Click to open folder";
 		$link_name		= Docs::nameFormat($file, 1, $line_len); //formats it for display
 	} elseif(is_file($item)) {
-		$name		= str_replace("_", " ", returnFileName($file)); //gives us just the name (no extension) of the image, without underscores
+		$name		= str_replace("_", " ", FileSystem::returnFileName($file)); //gives us just the name (no extension) of the image, without underscores
 		$link_name	= Docs::nameFormat($name, 1, $line_len); //formats it for display
 
 		if(in_array(FileSystem::returnFileExt($item), array("png", "jpg")))	//is it an image of the sort we can handle (jpg or png)
@@ -217,8 +217,8 @@ function make_file_listing($type, $file, $icon_size, $directory, $request)
 ret;
 }
 
-/* This function prints the icons or images for the file or image browsing pages */
-function print_files($Path, $type = "auto", $icon_size = 3, $return = FALSE)
+/* This function shows the icons or images for the file or image browsing pages */
+function file_grid($Path, $type = "auto", $icon_size = 3)
 {
 	global $site_root, $ImagePath, $NewsPath, $FilePath, $itemsPerPage, $itemsInRow, $numberOfRows, $adapted_from, 	$cacheDir, $maxWidth, $maxHeight;
 	global $who_copyright, $website_name_short, $copy_email_text, $copy_recipient, $copy_recip_gender, $copy_follow_text, $copy_fol_txt_img;
@@ -245,9 +245,9 @@ function print_files($Path, $type = "auto", $icon_size = 3, $return = FALSE)
 	}
 
 	if(array_key_exists('dir', $_REQUEST))
-		$request = $site_root.$_REQUEST['dir'];
+		$request = $site_root.'/'.$_REQUEST['dir'];
 	else	// no directory was specified so just show the default one from config.php
-		$request = $site_root.$Path;
+		$request = $site_root.'/'.$Path;
 
 	// found out if someone is trying to exploit it
 	authoriseRequest($request);
@@ -258,7 +258,7 @@ function print_files($Path, $type = "auto", $icon_size = 3, $return = FALSE)
 	if($type == "image")	//get either just the images or all the files
 		$results = dirList($request);
 	else
-		$results = Docs::Full_Dir_List($request);
+		$results = FileSystem::Full_Dir_List($request);
 
 	$split = array();
 	$split = split("/", $request);
@@ -304,7 +304,7 @@ function print_files($Path, $type = "auto", $icon_size = 3, $return = FALSE)
 	foreach($results as $file) {	//spit as many images as there are
 
 		$RET_VAL	.= '			<li>';
-		$RET_VAL	.= Docs::make_file_listing($file, $icon_size, $directory, $request, $type);
+		$RET_VAL	.= Docs::make_file_listing(type, $file, $icon_size, $directory, $request);
 		$RET_VAL	.= "\n			</li>\n";
 
 /*		$count++;
@@ -343,7 +343,7 @@ function whats_inside($dir)
 {
 	global $debug_info;
 
-	$dir_files	= Docs::Full_Dir_List($dir);
+	$dir_files	= FileSystem::Full_Dir_List($dir);
 	$dir_images	= dirList($dir);
 
 	$num_files	= 0;
