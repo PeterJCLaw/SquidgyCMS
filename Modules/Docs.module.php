@@ -41,7 +41,7 @@ EXP;
 
 		return '<div id="Docs-Tree">'.Docs::file_tree($path, $ajax).'</div>';
 	}
-	
+
 	function ajax() {
 		if(stristr($_GET['folder'], "FE_") === FALSE)
 			return "<li>Folder does not exist!</li>";
@@ -54,19 +54,19 @@ class AdminDocs extends Admin {
 	function AdminDocs() {
 		parent::__construct();
 	}
-	
+
 	function printFormAdmin() {
 	//somehow let them choose which files are publicly viewable
-	
+
 	}
 }
 
 class Docs {	//parent class for useful functions
 
 	/* This function reads ALL the items in a directory and returns an array with this information */
-	function Full_Dir_List($directory)
+	function Full_Dir_List($dir)
 	{
-		$results = FileSystem::Full_Dir_List($path);
+		$results = FileSystem::Full_Dir_List($dir);
 		usort($results, array("Docs", "PJCL_sort"));
 		reset($results);
 		return $results;
@@ -152,7 +152,6 @@ class Docs {	//parent class for useful functions
 	/* This function makes the individual file listing for a file in the file explorer */
 	function make_file_listing($type, $file, $icon_size, $request)
 	{
-	echo "type: $type, icon_size: $icon_size, request:$request, file: $file<br />\n";
 
 		if($icon_size == 2) {	//if we want large icons
 			$size_class		= 'large_icons';
@@ -166,16 +165,19 @@ class Docs {	//parent class for useful functions
 			$line_len		= 13;
 		}
 
-		$item	= $request . "/" . $file;
-		$href	= str_replace(array(".//", '//'), array("", '/'), $item);
+		if(!empty($request))
+			$item	= $request . "/" . $file;
+		else
+			$item	= $file;
+		$href	= Docs::fix_slashes($item);
 
-		if(is_dir($item)) {
+		if(FileSystem::is_dir($item)) {
 			$image_stuff	= "FSPHP_Images/".($type == 'auto' ? Docs::whats_inside($item) : $type)."_folder$sm.png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
 			$href			= "?dir=".$href;
 			$alt			= "Folder image";
 			$title			= "Click to open folder";
 			$link_name		= Docs::nameFormat($file, 1, $line_len); //formats it for display
-		} elseif(is_file($item)) {
+		} elseif(FileSystem::is_file($item)) {
 			$name		= str_replace("_", " ", FileSystem::returnFileName($file)); //gives us just the name (no extension) of the image, without underscores
 			$link_name	= Docs::nameFormat($name, 1, $line_len); //formats it for display
 
@@ -233,7 +235,7 @@ ret;
 		global $who_copyright, $website_name_short, $copy_email_text, $copy_recipient, $copy_recip_gender, $copy_follow_text, $copy_fol_txt_img;
 		global $nostalgic_images_footer, $n_i_f_link, $n_i_f_date_added;
 
-		checkPHP(); //checks for gd support
+		FSPHP::checkPHP(); //checks for gd support
 
 		switch($type)
 		{
@@ -256,11 +258,8 @@ ret;
 			$request = $Path;
 
 		// found out if someone is trying to exploit it
-		authoriseRequest($request);
+		FSPHP::authoriseRequest($request);
 
-		$directory = getcwd() . "/" . removeSlashes($request);
-
-		$results = array();
 		if($type == "image")	//get either just the images or all the files
 			$results = FileSystem::Filtered_File_List($request, '.jpg, .png');
 		else
@@ -274,7 +273,7 @@ ret;
 		for ($i = 1; $i < count($split) - 1; $i++) {	//don't add the first item (/$imagePath)
 			$up = $up . $split[$i] . "/";
 		}
-		$up = removeSlashes($up);
+		$up = Docs::fix_slashes($up);
 
 		if($request != $Path) // we need to decide whether to show the navigation buttons or not
 			$toplevel = false;
@@ -345,29 +344,26 @@ ret;
 	}
 
 	/* This function returns the the type of files in the directory passed */
+	function fix_shlashes($path)
+	{	//strip precending .// and change any // to /
+		$path	= str_replace(array(".//", '//'), array("", '/'), $path);
+
+		if($path[0] == '/')	//remove preceding /
+			$path	= substr($path, 1);
+
+		if($path[strlen($path)-1] == '/')	//remove trailing /
+			$path	= substr($path, 0, -1);
+
+		return $path
+	}
+
+	/* This function returns the the type of files in the directory passed */
 	function whats_inside($dir)
 	{
-		global $debug_info;
+		$dir_files	= FileSystem::Filtered_File_List($dir, -1);
+		$dir_images	= FileSystem::Filtered_File_List($dir, '.jpg, .png');
 
-		$dir_files	= FileSystem::Full_Dir_List($dir);
-		$dir_images	= FileSystem::Filtered_File_List($dir);
-
-		$num_files	= 0;
-		$num_images	= 0;
-
-		for($i=0; $item = $dir_files[$i]; $i++) {
-			if(is_file($dir."/".$item))	//find the total number of files, not including folders
-				$num_files ++;
-		}
-
-		for($i=0; $item = $dir_images[$i]; $i++) {
-			if(is_file($dir."/".$item))	//find the total number of images, not including folders
-				$num_images ++;
-		}
-
-		$debug_info	.= "\$dir=$dir\n<br />\$num_images=$num_images\n<br />\$num_files=$num_files\n<br />\n";
-
-		return ((2 * $num_images) > $num_files) ? "image" : "file";
+		return (2 * count($dir_images)) > count($dir_files) ? "image" : "file";
 	}
 
 	/* converts to a valid id tag */
