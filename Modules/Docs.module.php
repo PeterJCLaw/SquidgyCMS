@@ -63,6 +63,15 @@ class AdminDocs extends Admin {
 
 class Docs {	//parent class for useful functions
 
+	/* This function reads ALL the items in a directory and returns an array with this information */
+	function Full_Dir_List($directory)
+	{
+		$results = FileSystem::Full_Dir_List($path);
+		usort($results, array("Docs", "PJCL_sort"));
+		reset($results);
+		return $results;
+	}
+
 	/* recursive function to explore the file / folder structure beneath
 	 * retruns blank if nothing of note is found
 	 */
