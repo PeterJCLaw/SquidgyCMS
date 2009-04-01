@@ -247,7 +247,7 @@ function get_next_id($where, $filter)
 {
 	global $page_file, $logged_in, $debug_info;
 
-	$list	= Filtered_Dir_List($where, $filter);
+	$list	= FileSystem::Filtered_File_List($where, $filter);
 
 	$id_list	= array();
 

@@ -59,7 +59,7 @@ $debug_info	.= "\$toclist = ".implode(", ", $toclist)."\n<br />\n";
 include user_file($username);
 
 $toc_list	= array();
-$module_list	= Filtered_Dir_List("Modules", ".module.php");
+$module_list	= FileSystem::Filtered_File_List("Modules", ".module.php");
 foreach($module_list as $section)	//grab all the sections and add their objects to the array
 {
 	if($section == "Admin")

@@ -60,15 +60,15 @@ $referrer		= isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_R
 
 if(function_exists('Filtered_Dir_List')) {
 	if(is_readable($data_root)) {	//make the page and article arrays
-		$GEN_pages	= Filtered_Dir_List($data_root, ".page");
-		$GEN_art	= Filtered_Dir_List($data_root, ".article");
+		$GEN_pages	= FileSystem::Filtered_File_List($data_root, ".page");
+		$GEN_art	= FileSystem::Filtered_File_List($data_root, ".article");
 	} else {
 		$GEN_pages	= array();
 		$GEN_art	= array();
 	}
 
 	// make a list of committee members whose information is available
-	$job_list		= Filtered_Dir_List("$site_root/Users", ".user.php");
+	$job_list		= FileSystem::Filtered_File_List("$site_root/Users", ".user.php");
 	array_push($job_list, "Committee");
 	foreach($job_list as $key => $value)
 		$job_list[$key]	= str_replace(".", " ", $value);

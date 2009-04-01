@@ -14,7 +14,7 @@ if(!empty($upgrade)) {
 		extract($_GET['target'], EXTR_OVERWRITE);
 
 //names first
-	$GEN_users_old	= Filtered_Dir_List($site_root."/Users", ".comm.php");
+	$GEN_users_old	= FileSystem::Filtered_File_List($site_root."/Users", ".comm.php");
 
 	$fail_list	= array();
 	$rename	= 0;
