@@ -26,9 +26,10 @@ require_once("functions_FSPHP.inc.php");	//contains the File System PHP Gallery 
 require_once("functions_login.inc.php");	//contains the login functions
 require_once("functions_General.inc.php");	//contains my general functions - the file system gallery ones are now separate
 require_once($site_root."/config.inc.php");			//these files are now included in all the cathsoc pages since I'm using lots of functions
+require_once("Modules/FileSystem.php");
 
 if($allow_logging)
-	require_once("Modules/Log.module.php");
+	require_once("Modules/Log.php");
 else {	//dummy functions to prevent errors
 	function log_error($t, $v = '') { }
 	function log_info($t, $v = '') { }
