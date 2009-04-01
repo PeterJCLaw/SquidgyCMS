@@ -118,7 +118,7 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 
 		$block_html	= '';
 
-		$module_path = get_module_path($module)
+		$module_path = get_module_path($module);
 
 		if($module_path !== FALSE) {
 			require_once($module_path);
@@ -139,42 +139,12 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 			else
 				log_info("Module '$module' has no block '$block'");
 		}
-		else
-			log_info("Module '$module' does not exist");
 
 		$page	= str_replace("[[Block::$block_call]]", $block_html, $page);
 
 		$i+=9;
 	}
 	return $page;
-}
-
-/* read the first $n lines of file $f from $s onwards */
-function read_file_lines($f, $n, $s=0)
-{
-	$fh	= fopen($f, 'r');
-	for($i=$s; $i<$n; $i++) {
-		$file[$i]	= fgets($fh);
-	}
-	fclose($fh);
-	return $file;
-}
-
-/* grab a data file & convert it to a 2D array using the passed column names */
-function get_file_assoc($path, $cols)
-{
-	if(!is_readable($path))	//if we can't read it then bail
-		return array();
-	$file	= file_rtrim($path);	//read the info into an array, one element per line
-	$out	= array();
-	foreach($file as $line) {
-		$line_data	= array_combine($cols, explode('|:|', $line));
-		if(!empty($line_data))
-			array_push($out, $line_data);
-		else
-			log_info("Line ($line) is empty ($line_data)");
-	}
-	return $out;
 }
 
 /* get a module's path - allow for custom ones */
@@ -186,13 +156,14 @@ function get_module_path($module)
 		else
 			return "Sites/Custom_Modules/$module.module.php";
 	}
+	log_info("Module '$module' is not readable or does not exist");
 	return FALSE;
 }
 
 /* get a information about a module */
 function get_module_info($module)
 {
-	$file = get_module_path($module)
+	$file = get_module_path($module);
 	if($file === FALSE)
 		return FALSE;
 	if(floatval(phpversion()) >= 5.3) {
@@ -215,14 +186,6 @@ function get_module_info($module)
 	}
 		
 	return $info;
-}
-
-/* get a file with no whitespace on the right, useful as PHP < 5 doesn't have FILE_IGNORE_NEW_LINES */
-function file_rtrim($path)
-{
-	if(floatval(phpversion()) >= 5)
-		return file($path, FILE_IGNORE_NEW_LINES);
-	return array_map('rtrim', file($path));
 }
 
 /* add this PHP5 function if needed */
@@ -374,33 +337,6 @@ function print_tickboxes($item_list, $tick_side = '')
 
 	echo "	</ul>\n";
 	return;
-}
-
-/* This function writes a string passed to the filename given */
-function file_put_stuff($file, $data, $mode)
-{
-	$error	= '';
-	if(empty($file))
-		$error	= "\nCannot write data: no file specifed";
-
-	if(empty($mode))
-		$error	.= "\nCannot write data: no write mode specified";
-
-	if(is_readable($file) && !is_writable($file))
-		$error	.= "\nCannot write data: File ($file) not writeable";
-
-	if(!empty($error))
-		return $error;
-
-	$handle = fopen($file, $mode);
-
-	if(!fwrite($handle, $data))
-		$error	.= "\nFile write failed";
-
-	if(!fclose($handle))
-		$error	.= "\nFailed to close file";
-
-	return $error;
 }
 
 /* This function prints the success item on the admin page */
