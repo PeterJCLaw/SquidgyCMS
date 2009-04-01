@@ -7,7 +7,7 @@
 
 class AdminNews extends Admin {
 	function AdminNews() {
-		parent::__construct('Add News Article to the News section of the site');
+		parent::__construct();
 	}
 
 	function printFormAdmin() {

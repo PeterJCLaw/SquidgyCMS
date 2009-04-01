@@ -7,7 +7,7 @@
 
 class AdminEvent extends Admin {
 	function AdminEvent() {
-		parent::__construct('Add Events to the Events list');
+		parent::__construct();
 	}
 
 	function printFormAdmin() { ?>

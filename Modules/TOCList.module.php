@@ -7,7 +7,7 @@
 
 class AdminTOCList extends Admin {
 	function AdminTOCList() {
-		parent::__construct('Manage website pages and main page list', -1, -19);
+		parent::__construct(-1, -19);
 	}
 
 	function printFormAdmin() {

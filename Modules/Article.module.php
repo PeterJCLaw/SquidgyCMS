@@ -7,7 +7,7 @@
 
 class AdminArticle extends Admin {
 	function AdminArticle() {
-		parent::__construct('Create or change site articles');
+		parent::__construct();
 	}
 
 	function printFormAdmin() {

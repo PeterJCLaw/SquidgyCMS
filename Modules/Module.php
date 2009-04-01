@@ -38,7 +38,7 @@ class Admin extends Module {
 	protected $sect_title;
 	protected $grouping;
 */
-	function __construct($sect_title_in, $grouping = 0, $weight = 0) {
+	function __construct($grouping = 0, $weight = 0) {
 		parent::__construct();
 		if(!$GLOBALS['logged_in']) {
 			print_logon_form();

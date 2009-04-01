@@ -7,7 +7,7 @@
 
 class AdminContent extends Admin {
 	function AdminContent() {
-		parent::__construct('Manage website content', -1, -20);
+		parent::__construct(-1, -20);
 	}
 
 	function printFormAdmin() {

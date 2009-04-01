@@ -7,7 +7,7 @@
 
 class AdminLinks extends Admin {
 	function AdminLinks() {
-		parent::__construct('Manage a list of links');
+		parent::__construct();
 	}
 
 	function printFormAdmin() {

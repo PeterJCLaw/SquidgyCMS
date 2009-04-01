@@ -7,7 +7,7 @@
 
 class AdminPage extends Admin {
 	function AdminPage() {
-		parent::__construct('Create or change pages made from html and site blocks', -1);
+		parent::__construct(-1);
 	}
 
 	function printFormAdmin() {
