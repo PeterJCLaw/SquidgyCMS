@@ -69,7 +69,7 @@ class AdminArticle extends Admin {
 
 		$header_link	= "&art_req=$article_id";
 
-		return $error.file_put_stuff("$this->data_root/$article_id.article", $content, 'w');
+		return $error.FileSystem::file_put_stuff("$this->data_root/$article_id.article", $content, 'w');
 	}
 }
 
