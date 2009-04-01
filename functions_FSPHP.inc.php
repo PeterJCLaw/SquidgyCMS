@@ -19,7 +19,7 @@
  */
 ?>
 <?php
-
+class FSPHP{
 //Chris' orignial functions, which may have been tweaked by me, just a little
 
 /* This function reads all the images (jpg or png) in a directory and returns an array with this information
@@ -294,5 +294,6 @@ function writeCacheFile($item, $size_cache)
 
 	fclose($fp);
 	clearstatcache();
+}
 }
 ?>
