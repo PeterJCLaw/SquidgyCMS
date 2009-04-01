@@ -113,6 +113,69 @@ class FileSystem {
 
 		return ((($ext_block || $file_block || $part_block) && !$show_all) || secure_dir($file));
 	}
+	
+	/* get a file with no whitespace on the right, useful as PHP < 5 doesn't have FILE_IGNORE_NEW_LINES */
+	function file_rtrim($path)
+	{
+		if(floatval(phpversion()) >= 5)
+			return file($path, FILE_IGNORE_NEW_LINES);
+		return array_map('rtrim', file($path));
+	}
+
+	/* read the first $n lines of file $f from $s onwards */
+	function read_file_lines($f, $n, $s=0)
+	{
+		$fh	= fopen($f, 'r');
+		for($i=$s; $i<$n; $i++) {
+			$file[$i]	= fgets($fh);
+		}
+		fclose($fh);
+		return $file;
+	}
+
+	/* grab a data file & convert it to a 2D array using the passed column names */
+	function get_file_assoc($path, $cols)
+	{
+		if(!is_readable($path))	//if we can't read it then bail
+			return array();
+		$file	= file_rtrim($path);	//read the info into an array, one element per line
+		$out	= array();
+		foreach($file as $line) {
+			$line_data	= array_combine($cols, explode('|:|', $line));
+			if(!empty($line_data))
+				array_push($out, $line_data);
+			else
+				log_info("Line ($line) is empty ($line_data)");
+		}
+		return $out;
+	}
+
+	/* This function writes a string passed to the filename given */
+	function file_put_stuff($file, $data, $mode)
+	{
+		$error	= '';
+		if(empty($file))
+			$error	= "\nCannot write data: no file specifed";
+
+		if(empty($mode))
+			$error	.= "\nCannot write data: no write mode specified";
+
+		if(is_readable($file) && !is_writable($file))
+			$error	.= "\nCannot write data: File ($file) not writeable";
+
+		if(!empty($error))
+			return $error;
+
+		$handle = fopen($file, $mode);
+
+		if(!fwrite($handle, $data))
+			$error	.= "\nFile write failed";
+
+		if(!fclose($handle))
+			$error	.= "\nFailed to close file";
+
+		return $error;
+	}
 
 }
 ?>
