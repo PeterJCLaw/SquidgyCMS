@@ -11,12 +11,12 @@ class BlockDocs extends Block {
 	}
 
 	function Explore($args) {
-		$browse = $this->Browse($agrs)
-		$tree = $this->Tree($agrs)
+		$browse = $this->Browse($agrs);
+		$tree = $this->Tree($agrs);
 		return <<<EXP
 <div id="Docs-Explore">
-$browse
 $tree
+$browse
 </div>
 EXP;
 	}
