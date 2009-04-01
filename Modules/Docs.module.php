@@ -344,7 +344,7 @@ ret;
 	}
 
 	/* This function returns the the type of files in the directory passed */
-	function fix_shlashes($path)
+	function fix_slashes($path)
 	{	//strip precending .// and change any // to /
 		$path	= str_replace(array(".//", '//'), array("", '/'), $path);
 
@@ -354,7 +354,7 @@ ret;
 		if($path[strlen($path)-1] == '/')	//remove trailing /
 			$path	= substr($path, 0, -1);
 
-		return $path
+		return $path;
 	}
 
 	/* This function returns the the type of files in the directory passed */
