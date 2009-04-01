@@ -19,7 +19,7 @@ function get_page_basics() {
 	if($SN_arr[1] == "~".$RU_arr[1])
 		$SN_arr[1] = $RU_arr[1];	//dump the tilde if we don't want it NB: check this on other systems
 
-	return array(implode("/", $SN_arr)."/", $page, returnFileName($page));
+	return array(implode("/", $SN_arr)."/", $page, FileSystem::returnFileName($page));
 }
 
 /* prints an admin section, if it exsists */
