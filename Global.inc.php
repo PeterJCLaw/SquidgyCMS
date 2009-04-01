@@ -58,7 +58,7 @@ $debug_info		.="\n ini_set('url_rewriter.tags', '') = ".ini_set('url_rewriter.ta
 
 $referrer		= isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : "";
 
-if(function_exists('Filtered_Dir_List')) {
+if(in_array("filtered_file_list",get_class_methods('FileSystem'))) {
 	if(is_readable($data_root)) {	//make the page and article arrays
 		$GEN_pages	= FileSystem::Filtered_File_List($data_root, ".page");
 		$GEN_art	= FileSystem::Filtered_File_List($data_root, ".article");
@@ -74,8 +74,11 @@ if(function_exists('Filtered_Dir_List')) {
 		$job_list[$key]	= str_replace(".", " ", $value);
 
 	$whole_com_elem_id	= array_search("Committee", $job_list);
-} else
+} else {
+	$GEN_pages	= array();
+	$GEN_art	= array();
 	$job_list	= array();
+}
 
 $FSCMS_pages	= array('Contact_Us.php', 'Newsletters.php', 'Photos.php', 'Files.php');	//the ones that the the system provides
 

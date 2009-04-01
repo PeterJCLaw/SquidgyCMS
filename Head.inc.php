@@ -20,7 +20,7 @@ foreach($perm_values as $key) {
 $page_n		= str_replace("_", " ", $page_n);		//replace any underscores with spaces
 
 if($page_n == "Photos" && isset($dir))	//if its a page that uses the file systems functions
-	$place = what_dir_am_i_in($dir);		//if a dir is specified
+	$place = FileSystem::what_dir_am_i_in($dir);		//if a dir is specified
 
 if($page_n == "index") {	//if we're on the index page - we're going to serve a user page
 	$page_n	= "Home";
