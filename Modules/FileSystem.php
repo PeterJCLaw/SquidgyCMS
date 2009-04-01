@@ -31,6 +31,18 @@ class FileSystem {
 		return $folder[count($folder)-1];
 	}
 
+	/* mask the standard is_dir function, using site_root as a prefix */
+	function is_dir($dir)
+	{
+		return is_dir($GLOBALS['site_root'].'/'.$dir);
+	}
+
+	/* mask the standard is_file function, using site_root as a prefix */
+	function is_file($file)
+	{
+		return is_dir($GLOBALS['site_root'].'/'.$file);
+	}
+
 	/* This function reads ALL the items in a directory and returns an array with this information */
 	function Full_Dir_List($dir)
 	{
@@ -55,7 +67,7 @@ class FileSystem {
 		return $results;
 	}
 
-	/* This function reads only the items in a directory that containt the string in $filter and returns an array with this information */
+	/* This function reads only the items in a directory that containt the strings in $filter and returns an array with this information */
 	function Filtered_File_List($dir, $filter)
 	{
 		$dir = $GLOBALS['site_root'].'/'.$dir;
