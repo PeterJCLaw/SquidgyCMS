@@ -10,14 +10,14 @@ class FileSystem {
 	/* This function takes in the file name and retruns it, without the extension */
 	function returnFileName($n)
 	{
-		$ext_len	= strlen(returnFileEXT($n));
+		$ext_len	= strlen(FileSystem::returnFileExt($n));
 		if($ext_len > 0)
 			$n = substr($n, 0, -1*($ext_len+1));
 		return $n;
 	}
 
 	/* This function takes in the file name and retruns its extention */
-	function returnFileEXT($n)
+	function returnFileExt($n)
 	{
 		$all	= explode(".", $n);
 		$ext	= $all[count($all)-1];
@@ -32,11 +32,13 @@ class FileSystem {
 	}
 
 	/* This function reads ALL the items in a directory and returns an array with this information */
-	function dirAllList($directory)
+	function Full_Dir_List($directory)
 	{
 		global $logged_in, $this_dir, $show_all;
 		$this_dir = $directory;
 		$results = array();
+		if(!is_dir($directory))
+			return $results;
 		$handler = opendir($directory);
 
 		while($file = readdir($handler)) {
@@ -91,14 +93,14 @@ class FileSystem {
 		global $ignore_files, $ignore_exts, $ignore_parts, $debug_info, $show_all;
 
 		if(is_array($ignore_files))			//list of filenames to ignore
-			$file_block = in_array(returnFileName($file), $ignore_files);
+			$file_block = in_array(FileSystem::returnFileName($file), $ignore_files);
 		else
-			$file_block = (returnFileName($file) == $ignore_files) ? TRUE : FALSE;
+			$file_block = (FileSystem::returnFileName($file) == $ignore_files) ? TRUE : FALSE;
 
 		if(is_array($ignore_exts))			//list of file extensions to ignore, case insesnsitive
-			$ext_block = in_array(strtolower(returnFileEXT($file)), $ignore_exts);
+			$ext_block = in_array(strtolower(FileSystem::returnFileExt($file)), $ignore_exts);
 		else
-			$ext_block = (returnFileEXT($file) == $ignore_exts) ? TRUE : FALSE;
+			$ext_block = (FileSystem::returnFileExt($file) == $ignore_exts) ? TRUE : FALSE;
 
 		if(is_array($ignore_parts))			//list of parts of filenames to ignore, case insesnsitive
 			foreach($ignore_parts as $part_val)
@@ -138,7 +140,7 @@ class FileSystem {
 	{
 		if(!is_readable($path))	//if we can't read it then bail
 			return array();
-		$file	= file_rtrim($path);	//read the info into an array, one element per line
+		$file	= FileSystem::file_rtrim($path);	//read the info into an array, one element per line
 		$out	= array();
 		foreach($file as $line) {
 			$line_data	= array_combine($cols, explode('|:|', $line));
