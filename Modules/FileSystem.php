@@ -40,7 +40,7 @@ class FileSystem {
 	/* mask the standard is_file function, using site_root as a prefix */
 	function is_file($file)
 	{
-		return is_dir($GLOBALS['site_root'].'/'.$file);
+		return is_file($GLOBALS['site_root'].'/'.$file);
 	}
 
 	/* This function reads ALL the items in a directory and returns an array with this information */
