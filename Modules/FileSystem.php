@@ -63,6 +63,9 @@ class FileSystem {
 		if(!is_dir($dir))
 			return $results;
 
+		if($filter == -1)	//special filter for all files (no dirs)
+			$all = true;
+
 		if(!is_array($filter))	//allow either an array or a csv list
 			$filter = str_getcsv($filter);
 
@@ -72,7 +75,7 @@ class FileSystem {
 			$file_path	= $dir . "/" . $file;
 			if($file != '.' && $file != '..'  && is_readable($file_path) && is_file($file_path))
 				foreach($filter as $f) {
-					if(stristr($file, $f)) {
+					if($all || stristr($file, $f)) {
 						array_push($results, str_replace($f, "", $file));
 						break;
 					}
