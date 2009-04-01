@@ -11,7 +11,7 @@ class AdminModules extends Admin {
 	}
 
 	function printFormAdmin() {
-		$this->module_list	= array_map('get_module_info', Filtered_Dir_List("Modules", ".module.php"));
+		$this->module_list	= array_map('get_module_info', Filtered_File_List("Modules", ".module.php"));
 		$this->module_list_grouped	= group_array_by_key($this->module_list, '#package');
 		$this->enabled_modules	= is_readable($this->data_file) ? file($this->data_file) : array();
 

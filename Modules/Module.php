@@ -100,7 +100,7 @@ class Admin extends Module {
 	}
 	
 	function change_something_in_all_pages($old, $new) {
-		$GEN_pages	= array_map(array($this, 'site_full_path'), Filtered_Dir_List($this->data_root, ".page"));
+		$GEN_pages	= array_map(array($this, 'site_full_path'), Filtered_File_List($this->data_root, ".page"));
 		array_push($GEN_pages, $GLOBALS['pages_file']);
 		$error	= "";
 		foreach($GEN_pages as $page) {	//check if we can modify all the pages
@@ -110,7 +110,7 @@ class Admin extends Module {
 		foreach($GEN_pages as $page) {	//go through all the pages, replacing the old id with the new one, if its present
 			$page_content	= file_get_contents($page);
 			if(strpos($page_content, $old))
-				$error	.= file_put_stuff($page, str_replace($old, $new, $page_content), 'w');
+				$error	.= FileSystem::file_put_stuff($page, str_replace($old, $new, $page_content), 'w');
 		}
 		return $error;
 	}
