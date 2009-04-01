@@ -5,19 +5,30 @@
 #type = content
 ###
 
-class BlockFile extends Block {
-	function BlockFile() {
+class BlockDocs extends Block {
+	function BlockDocs() {
 		parent::__construct();
 	}
 
 	function Explore($args) {
+		$browse = $this->Browse($agrs)
+		$tree = $this->Tree($agrs)
+		return <<<EXP
+<div id="Docs-Explore">
+$browse
+$tree
+</div>
+EXP;
+	}
+
+	function Browse($args) {
 		if(empty($args)) {
 			$type	= 'file';
 			$size	= 3;
 		} else
 			list($type, $size)	= $args;
 
-		return print_files($type, $size, TRUE);
+		return '<div id="Docs-Browse">'.print_files($type, $size, TRUE).'</div>';
 	}
 
 	function Tree($args) {
@@ -27,7 +38,7 @@ class BlockFile extends Block {
 		else
 			list($path)	= $args;
 
-		return file_explore($path, '', $ajax);
+		return '<div id="Docs-Tree">'.file_explore($path, '', $ajax).'</div>';
 	}
 	
 	function ajax() {
@@ -38,22 +49,14 @@ class BlockFile extends Block {
 	}
 }
 
-class AdminFiles extends Admin {
-	function AdminFiles() {
-		$this->no_submit	= TRUE;
-		parent::__construct('View restricted committee files');
+class AdminDocs extends Admin {
+	function AdminDocs() {
+		parent::__construct();
 	}
 	
 	function printFormAdmin() {
-		global $Admin_Files_link;
-		if(!empty($Admin_Files_link)) { ?>
-			View restricted files by clicking <a href="<? echo $Admin_Files_link; ?>" title="View Restricted Files">here</a>.
-		<?php } else { ?>
-			There are no rerestricted files to view.
-			<br />
-			If you think that there should be please contact the <a href="Committee.php#Webmaster" title="Who?">Web Master</a>.
-		<?php }
-		return;
+	//somehow let them choose which files are publicly viewable
+	
 	}
 }
 ?>
