@@ -80,7 +80,7 @@ class AdminEvent extends Admin {
 		}
 
 		//now we output the stuff we just organised & return
-		return file_put_stuff($this->data_file, $output, 'a');
+		return FileSystem::file_put_stuff($this->data_file, $output, 'a');
 	}
 
 }
@@ -94,7 +94,7 @@ class BlockEvent extends Block {
 	{
 		global $debug_info;
 
-		$events	= get_file_assoc($this->data_file, array('time', 'start', 'finish', 'title', 'content'));
+		$events	= FileSystem::get_file_assoc($this->data_file, array('time', 'start', 'finish', 'title', 'content'));
 
 		if(empty($events))
 			return '<div id="events" class="gen_txt">No Upcomoing Events<span style="display: none;"> (The file was not readable)</span>.</div>';

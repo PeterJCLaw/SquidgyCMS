@@ -130,7 +130,7 @@ class AdminArticle_Page extends Admin {
 
 		$header_link	= "&p=$page_id";
 
-		return file_put_stuff("$this->data_root/".$page_id.".page", $content, 'w');
+		return FileSystem::file_put_stuff("$this->data_root/".$page_id.".page", $content, 'w');
 	}
 }
 ?>
