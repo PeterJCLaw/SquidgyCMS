@@ -2,12 +2,14 @@
 require_once('Global.inc.php');
 require_once("Modules/Module.php");
 
-if(!is_readable("Modules/$module.module.php")) {
+$module_path = get_module_path($module);
+
+if($module_path !== FALSE) {
 	print_Admin_Section(array('fail'));
 	exit();
 }
 
-require_once("Modules/$module.module.php");
+require_once($module_path);
 
 $class	= ucwords($type).$module;
 

@@ -65,8 +65,10 @@ foreach($module_list as $section)	//grab all the sections and add their objects 
 	if($section == "Admin")
 		continue;
 
-	if(is_readable("Modules/$section.module.php"))
-		require_once("Modules/$section.module.php");
+	$module_path = get_module_path($module);
+
+	if($module_path !== FALSE)
+		require_once($module_path);
 
 	$class_name	= "Admin$section";
 	if(class_exists($class_name)) {
