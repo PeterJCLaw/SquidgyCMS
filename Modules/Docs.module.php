@@ -11,6 +11,7 @@ class BlockDocs extends Block {
 	}
 
 	function Explore($args) {
+	//	$args['path'] = 'Files';
 		$browse = $this->Browse($agrs);
 		$tree = $this->Tree($agrs);
 		return <<<EXP
@@ -25,28 +26,29 @@ EXP;
 		if(empty($args)) {
 			$type	= 'auto';
 			$size	= 3;
-			$path	= '';
-		} else
-			$path = $args['path'];
+		}
 
-		return '<div id="Docs-Browse">'.Docs::file_grid($path, $type, $size).'</div>';
+		return '<div id="Docs-Browse">'.Docs::file_grid($this->get_path($args['path']), $type, $size).'</div>';
 	}
 
 	function Tree($args) {
 		global $ajax;
-		if(empty($args))
-			$path	= '';
-		else
-			$path = $args['path'];
 
-		return '<div id="Docs-Tree">'.Docs::file_tree($path, $ajax).'</div>';
+		return '<div id="Docs-Tree">'.Docs::file_tree($this->get_path($args['path']), $ajax).'</div>';
+	}
+
+	function get_path($path) {
+		if(array_key_exists('dir', $_REQUEST))
+			return $path.$_REQUEST['dir'];
+		else
+			return $path;
 	}
 
 	function ajax() {
 		if(stristr($_GET['folder'], "FE_") === FALSE)
 			return "<li>Folder does not exist!</li>";
 		else
-			return $this->Tree(array(substr($_GET['folder'], 3)));
+			return $this->Tree(array('path' => substr($_GET['folder'], 3)));
 	}
 }
 
@@ -90,13 +92,13 @@ class Docs {	//parent class for useful functions
 		$paths_match = Docs::path_compare($path, $curr_file);
 		$new_css	= TRUE;
 
-		$display	= ($paths_match || $new_css) ? "" : " style=\"display: none;\"";
+		$display	= ($paths_match || $new_css) ? '' : ' style="display: none;"';
 
-		$debug_info	.= "\$paths_match=".($paths_match ? 'TRUE' : 'FALSE' )."\n<br />\$display=$display\n<br />\n";
+		$debug_info	.= "\$paths_match=".var_export($paths_match, True)."\n<br />\$display=$display\n<br />\n";
 
 		$dir_contents = Docs::Full_Dir_List($path);
 
-		if($dir_contents) {	//if there's something to show
+		if(!empty($dir_contents)) {	//if there's something to show
 			if($ajax < 2)	//if not being called from get_file_tree.php
 				$retval	.= "\n$tabs<ul id=\"FE_$path_id\" class=\"file_tree\"$display>\n";
 
@@ -112,8 +114,8 @@ class Docs {	//parent class for useful functions
 					$item_sub_val = $li_insert = "";
 					$debug_info	.= "\$item=$item\n<br />\$item_id=$item_id\n<br />\n";
 
-					if (is_file($item) || is_dir($item)) {
-						if (is_dir($item)) {	//if its a folder
+					if (FileSystem::is_file($item) || FileSystem::is_dir($item)) {
+						if (FileSystem::is_dir($item)) {	//if its a folder
 							$title			= "Go to $item_name";
 							$li_ins_class	= "FE_empty";
 							$item_sub_val	= Docs::file_tree($item, $ajax, $tabs."		");
@@ -150,7 +152,7 @@ class Docs {	//parent class for useful functions
 		return $retval;
 	}
 	/* This function makes the individual file listing for a file in the file explorer */
-	function make_file_listing($type, $file, $icon_size, $request)
+	function make_file_listing($item, $type, $icon_size)
 	{
 
 		if($icon_size == 2) {	//if we want large icons
@@ -165,10 +167,6 @@ class Docs {	//parent class for useful functions
 			$line_len		= 13;
 		}
 
-		if(!empty($request))
-			$item	= $request . "/" . $file;
-		else
-			$item	= $file;
 		$href	= Docs::fix_slashes($item);
 
 		if(FileSystem::is_dir($item)) {
@@ -229,7 +227,7 @@ ret;
 	}
 
 	/* This function shows the icons or images for the file or image browsing pages */
-	function file_grid($Path, $type = "auto", $icon_size = 3)
+	function file_grid($request, $type = "auto", $icon_size = 3)
 	{
 		global $ImagePath, $NewsPath, $FilePath, $itemsPerPage, $itemsInRow, $numberOfRows, $adapted_from, 	$cacheDir, $maxWidth, $maxHeight;
 		global $who_copyright, $website_name_short, $copy_email_text, $copy_recipient, $copy_recip_gender, $copy_follow_text, $copy_fol_txt_img;
@@ -251,11 +249,6 @@ ret;
 				$icon_size	= ($icon_size == 3) ? 1 : $icon_size;
 				break;
 		}
-
-		if(array_key_exists('dir', $_REQUEST))
-			$request = $_REQUEST['dir'];
-		else	// no directory was specified so just show the default one from config.php
-			$request = $Path;
 
 		// found out if someone is trying to exploit it
 		FSPHP::authoriseRequest($request);
@@ -300,16 +293,20 @@ ret;
 ';
 
 		if(!$toplevel)
-			$RET_VAL	= $nav;
+			$RET_VAL	.= $nav;
 
 		$RET_VAL	.= "	<ul class=\"PHPlist $size_class\">\n		";
 
 		$itemsPerPage = $itemsInRow * $numberOfRows;
 
 		foreach($results as $file) {	//spit as many images as there are
+			if(!empty($request))
+				$item	= $request . "/" . $file;
+			else
+				$item	= $file;
 
 			$RET_VAL	.= '			<li>';
-			$RET_VAL	.= Docs::make_file_listing($type, $file, $icon_size, $request);
+			$RET_VAL	.= Docs::make_file_listing($item, $type, $icon_size);
 			$RET_VAL	.= "\n			</li>\n";
 
 	/*		$count++;
@@ -379,20 +376,24 @@ ret;
 	{
 		global $debug_info;
 
-		$path	= str_replace(".//", "", $path);
+		$path	= Docs::fix_slashes(".//", "", $path);
 
 		$debug_info .= "\$path=$path\n<br />\$file=$file\n<br />\n";
 
 		if($path == $file || $path == "./")
 			return TRUE;
 
-		$length		= strlen($path);
+		$P	= explode('/', $path);
+		$F	= explode('/', $file);
 
-		$curr_s		= substr($file, 0, $length);
+		if(count($P) >= count($F))
+			return FALSE;
 
-		$debug_info .= "\$curr_s=$curr_s\n<br />\$length=$length\n<br />\n";
-
-		return ($path == $curr_s);	//if they match then the folder gets expanded
+		for($i=0; $i < count($P); $i++) {
+			if($P[$i] != $F[$i])
+				return FALSE;
+		}
+		return TRUE;
 	}
 
 	/* This function gets the name of the object to fit onto lines 13 characters wide */
@@ -426,14 +427,14 @@ ret;
 	/* This function is used in conjunction with usort - it sorts based on whether a file is a folder, then by extension, then alphabetically */
 	function PJCL_sort($a, $b)
 	{
-		global $debug_info, $this_dir;
+	//	global $debug_info, $this_dir;
 
 	//	$debug_info	.= "\$this_dir=$this_dir\n<br />\$a=$a\n<br />\$b=$b\n<br />\n";
 		if($a == $b)
 			return 0;
 
-		$a_type	= is_dir($this_dir."/".$a) ? 0 : FileSystem::returnFileExt($a);	//0 indicates a folder, else you're given the file extension
-		$b_type	= is_dir($this_dir."/".$b) ? 0 : FileSystem::returnFileExt($b);
+		$a_type	= FileSystem::is_dir($a) ? 0 : FileSystem::returnFileExt($a);	//0 indicates a folder, else you're given the file extension
+		$b_type	= FileSystem::is_dir($b) ? 0 : FileSystem::returnFileExt($b);
 
 		$ab_type_cp	= strcasecmp($a_type, $b_type);
 		$ab_cp		= strcasecmp($a, $b);
