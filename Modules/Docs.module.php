@@ -84,7 +84,7 @@ function file_explore($path, $tabs, $ajax)
 
 	$debug_info	.= "\$paths_match=".($paths_match ? 'TRUE' : 'FALSE' )."\n<br />\$display=$display\n<br />\n";
 
-	$dir_contents = dirAllList($path);
+	$dir_contents = Docs::Full_Dir_List($path);
 
 	if($dir_contents) {	//if there's something to show
 		if($ajax < 2)	//if not being called from get_file_tree.php
@@ -140,7 +140,7 @@ function file_explore($path, $tabs, $ajax)
 	return $retval;
 }
 /* This function makes the individual file listing for a file in the file explorer */
-function make_file_listing($file, $icon_size, $directory, $request, $folder_icon)
+function make_file_listing($type, $file, $icon_size, $directory, $request)
 {
 	global $SitePath;
 	if($icon_size == 2) {	//if we want large icons
@@ -161,16 +161,16 @@ function make_file_listing($file, $icon_size, $directory, $request, $folder_icon
 	$href	= substr($href, strlen($SitePath));
 
 	if(is_dir($item)) {
-		$image_stuff	= "FSPHP_Images/".($folder_icon == 1 ? whats_inside($item) : $folder_icon)."_folder$sm.png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
+		$image_stuff	= "FSPHP_Images/".($type == 'auto' ? whats_inside($item) : $folder_icon)."_folder$sm.png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
 		$href			= "?dir=".$href;
 		$alt			= "Folder image";
 		$title			= "Click to open folder";
-		$link_name		= nameformat($file, 1, $line_len); //formats it for display
+		$link_name		= Docs::nameFormat($file, 1, $line_len); //formats it for display
 	} elseif(is_file($item)) {
 		$name		= str_replace("_", " ", returnFileName($file)); //gives us just the name (no extension) of the image, without underscores
-		$link_name	= nameformat($name, 1, $line_len); //formats it for display
+		$link_name	= Docs::nameFormat($name, 1, $line_len); //formats it for display
 
-		if(in_array(returnFileEXT($item), array("png", "jpg")))	//is it an image of the sort we can handle (jpg or png)
+		if(in_array(FileSystem::returnFileExt($item), array("png", "jpg")))	//is it an image of the sort we can handle (jpg or png)
 		{
 			$size_cache = returnPath($item)."/Thumbs/".returnName($item).".dim";
 
@@ -194,7 +194,7 @@ function make_file_listing($file, $icon_size, $directory, $request, $folder_icon
 			$alt			= $name;
 			$title			= "Click image to view larger";
 		} else {	//treat it as an ordinary file
-			$ext		= strtoupper(returnFileEXT($item));
+			$ext		= strtoupper(FileSystem::returnFileExt($item));
 
 			$image_stuff	= "FSPHP_Images/".(file_exists("FSPHP_Images/$ext.png") ? $ext : "UnknownFile").".png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
 			$alt			= "$ext File";
@@ -218,9 +218,9 @@ ret;
 }
 
 /* This function prints the icons or images for the file or image browsing pages */
-function print_files($type = "file", $icon_size = 3, $return = FALSE)
+function print_files($Path, $type = "auto", $icon_size = 3, $return = FALSE)
 {
-	global $SitePath, $ImagePath, $NewsPath, $FilePath, $itemsPerPage, $itemsInRow, $numberOfRows, $adapted_from, 	$cacheDir, $maxWidth, $maxHeight;
+	global $site_root, $ImagePath, $NewsPath, $FilePath, $itemsPerPage, $itemsInRow, $numberOfRows, $adapted_from, 	$cacheDir, $maxWidth, $maxHeight;
 	global $who_copyright, $website_name_short, $copy_email_text, $copy_recipient, $copy_recip_gender, $copy_follow_text, $copy_fol_txt_img;
 	global $nostalgic_images_footer, $n_i_f_link, $n_i_f_date_added;
 
@@ -229,28 +229,25 @@ function print_files($type = "file", $icon_size = 3, $return = FALSE)
 	switch($type)
 	{
 		case "image":	//images
-			$folder_icon	= "image";
 			$Path = $ImagePath;
 			$icon_size	= ($icon_size == 3) ? 2 : $icon_size;	//icon_size: 3- file dependant, 2- large, 1- small
 			break;
-		case "news":	//newsletters
-			$folder_icon	= "file";
+		case "file":	//not images
 			$Path = $NewsPath;
-			$icon_size	= ($icon_size == 3) ? 1 : $icon_size;	//icon_size: 3- file dependant, 2- large, 1- small
+			$icon_size	= ($icon_size == 3) ? 1 : $icon_size;
 			break;
-		case "file":	//files of any type
-			$folder_icon	= 1;
-			$Path = $FilePath;
-			$icon_size	= ($icon_size == 3) ? 1 : $icon_size;	//icon_size: 3- file dependant, 2- large, 1- small
-			break;
+		case "auto":	//files of any type
 		default:
-			return "Incorrect file type given - should be one of 'image', 'news' or 'file'.";
+			$type = "auto";
+			$Path = $FilePath;
+			$icon_size	= ($icon_size == 3) ? 1 : $icon_size;
+			break;
 	}
 
 	if(array_key_exists('dir', $_REQUEST))
-		$request = $SitePath.$_REQUEST['dir'];
+		$request = $site_root.$_REQUEST['dir'];
 	else	// no directory was specified so just show the default one from config.php
-		$request = $SitePath.$Path;
+		$request = $site_root.$Path;
 
 	// found out if someone is trying to exploit it
 	authoriseRequest($request);
@@ -261,7 +258,7 @@ function print_files($type = "file", $icon_size = 3, $return = FALSE)
 	if($type == "image")	//get either just the images or all the files
 		$results = dirList($request);
 	else
-		$results = dirAllList($request);
+		$results = Docs::Full_Dir_List($request);
 
 	$split = array();
 	$split = split("/", $request);
@@ -307,7 +304,7 @@ function print_files($type = "file", $icon_size = 3, $return = FALSE)
 	foreach($results as $file) {	//spit as many images as there are
 
 		$RET_VAL	.= '			<li>';
-		$RET_VAL	.= make_file_listing($file, $icon_size, $directory, $request, $folder_icon);
+		$RET_VAL	.= Docs::make_file_listing($file, $icon_size, $directory, $request, $type);
 		$RET_VAL	.= "\n			</li>\n";
 
 /*		$count++;
@@ -346,7 +343,7 @@ function whats_inside($dir)
 {
 	global $debug_info;
 
-	$dir_files	= dirAllList($dir);
+	$dir_files	= Docs::Full_Dir_List($dir);
 	$dir_images	= dirList($dir);
 
 	$num_files	= 0;
@@ -401,7 +398,7 @@ function path_compare($path, $file)
 }
 
 /* This function gets the name of the object to fit onto lines 13 characters wide */
-function nameformat($name, $line, $width)
+function nameFormat($name, $line, $width)
 {
 	global $debug_info;
 	if(function_exists('wordwrap')) {
@@ -413,7 +410,7 @@ function nameformat($name, $line, $width)
 	$critlen = $width * $line;
 
 	if($namelen > $critlen) {	//if its too long for this line
-		$name = nameformat($name, ($line+1), $width);	//see if it fits on the next
+		$name = Docs::nameFormat($name, ($line+1), $width);	//see if it fits on the next
 		$namelen = strlen($name);	//how long is it then?
 
 		for($j = $namelen-1 ; $j > $critlen-1 ; $j--) {	//make a space so that the <br /> can be inserted
@@ -437,8 +434,8 @@ function PJCL_sort($a, $b)
 	if($a == $b)
 		return 0;
 
-	$a_type	= is_dir($this_dir."/".$a) ? 0 : returnFileEXT($a);	//0 indicates a folder, else you're given the file extension
-	$b_type	= is_dir($this_dir."/".$b) ? 0 : returnFileEXT($b);
+	$a_type	= is_dir($this_dir."/".$a) ? 0 : FileSystem::returnFileExt($a);	//0 indicates a folder, else you're given the file extension
+	$b_type	= is_dir($this_dir."/".$b) ? 0 : FileSystem::returnFileExt($b);
 
 	$ab_type_cp	= strcasecmp($a_type, $b_type);
 	$ab_cp		= strcasecmp($a, $b);
