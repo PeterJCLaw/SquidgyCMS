@@ -118,11 +118,10 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 
 		$block_html	= '';
 
-		if(is_readable("Modules/$module.module.php") || is_readable("Sites/Custom_Modules/$module.module.php")) {
-			if(is_readable("Modules/$module.module.php"))	//grab the class, try the standard place first, then the custom one
-				require_once("Modules/$module.module.php");
-			else
-				require_once("Sites/Custom_Modules/$module.module.php");
+		$module_path = get_module_path($module)
+
+		if($module_path !== FALSE) {
+			require_once($module_path);
 
 			$block	= "Block$module";
 
@@ -178,11 +177,23 @@ function get_file_assoc($path, $cols)
 	return $out;
 }
 
-/* get a file with no whitespace on the right, useful as PHP < 5 doesn't have FILE_IGNORE_NEW_LINES */
+/* get a module's path - allow for custom ones */
+function get_module_path($module)
+{
+	if(is_readable("Modules/$module.module.php") || is_readable("Sites/Custom_Modules/$module.module.php")) {
+		if(is_readable("Modules/$module.module.php"))
+			return "Modules/$module.module.php";
+		else
+			return "Sites/Custom_Modules/$module.module.php";
+	}
+	return FALSE;
+}
+
+/* get a information about a module */
 function get_module_info($module)
 {
-	$file = "Modules/$module.module.php";
-	if(!is_readable($file))
+	$file = get_module_path($module)
+	if($file === FALSE)
 		return FALSE;
 	if(floatval(phpversion()) >= 5.3) {
 		$i = 0;
