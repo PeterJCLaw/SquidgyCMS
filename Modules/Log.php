@@ -31,7 +31,9 @@ class Log {
 	/* log an error */
 	function combine($text, $vars)
 	{
-		return $text." Vars: {".print_r($vars_arr, true)."}";
+		if(!empty($vars))
+			return $text." Vars: {".print_r($vars, true)."}";
+		return $text;
 	}
 
 	/* show the log */
@@ -66,7 +68,7 @@ class Log {
 function log_error($text, $vars_arr = '')
 {
 	global $_Log;
-	if(!is_object($_Log) || strtolower(get_class($_Log)) != 'log')
+	if(!is_a($_Log, 'Log'))
 		$_Log	= new Log();
 	$_Log->error($text, $vars);
 }
@@ -76,7 +78,7 @@ function log_info($text, $vars = '')
 	if(empty($GLOBALS['debug']))
 		return;
 	global $_Log;
-	if(!is_object($_Log) || strtolower(get_class($_Log)) != 'log')
+	if(!is_a($_Log, 'Log'))
 		$_Log	= new Log();
 	$_Log->info($text, $vars);
 }
@@ -84,7 +86,7 @@ function log_info($text, $vars = '')
 function show_log($type = 'all')
 {
 	global $_Log;
-	if(is_object($_Log) && strtolower(get_class($_Log)) == 'log')
+	if(is_a($_Log, 'Log'))
 		return $_Log->show($type);
 }
 
