@@ -44,12 +44,12 @@ class BlockNewsletter extends Block {
 	/* This function generates the link to the latest newsletter in the folder */
 	function date($args)
 	{
-		global $debug_info, $SitePath, $NewsPath;
+		global $debug_info, $site_root, $NewsPath;
 		list($when, $prefix, $postfix, $day)	= $args;
 		
-		if(empty($when) || empty($prefix) || empty($postfix) || empty($day) || !is_dir($SitePath.$NewsPath)) {
-			if(!is_dir($SitePath.$NewsPath))
-				log_info('Directory does not exist', $SitePath.$NewsPath);
+		if(empty($when) || empty($prefix) || empty($postfix) || empty($day) || !is_dir($site_root.$NewsPath)) {
+			if(!is_dir($site_root.$NewsPath))
+				log_info('Directory does not exist', $site_root.$NewsPath);
 			else
 				log_info('Insufficient information given to locate file', $args);
 			return "None";
@@ -58,7 +58,7 @@ class BlockNewsletter extends Block {
 		$stamp		= (!is_int($when) ? strtotime($when) : $when );
 		$date		= date('Y-m-d', $stamp);
 		$year		= date('Y', $stamp);
-		$folder		= $SitePath."$NewsPath/$year";
+		$folder		= $site_root."$NewsPath/$year";
 		$file		= $folder."/".$prefix.$date.$postfix;
 
 		$debug_info	.= "\n\$date=$date\n<br />\$when=$when\n<br />\$year=$year\n<br />\$file=$file\n<br />\$stamp=$stamp\n<br />\n";

@@ -35,7 +35,7 @@ if (array_key_exists('file', $_REQUEST) && array_key_exists('width', $_REQUEST) 
 {
 	global $maxWidth, $maxHeight;
 
-	$request	= $SitePath.$_REQUEST['file']; $debug	= 0;	//Peter Law added the SitePAth variable
+	$request	= $site_root.$_REQUEST['file']; $debug	= 0;	//Peter Law added the site_root variable
 	$debug	= $_REQUEST['debug'];
 
 	authoriseRequest($request);
