@@ -11,9 +11,8 @@ class BlockDocs extends Block {
 	}
 
 	function Explore($args) {
-	//	$args['path'] = 'Files';
-		$browse = $this->Browse($agrs);
-		$tree = $this->Tree($agrs);
+		$browse = $this->Browse($args);
+		$tree = $this->Tree($args);
 		return <<<EXP
 <div id="Docs-Explore">
 $tree
@@ -87,17 +86,17 @@ class Docs {	//parent class for useful functions
 		
 		$base = Docs::fix_slashes($base);
 		$path = Docs::fix_slashes($path);
-echo "<br />base:$base|path:$path|";
+
 		$path_id = Docs::id_convert($path);
 
-		if(in_array($base, array('', './'))) {	//top level
+		if(in_array($base, array('', './'))) {	//top level <- fix this
 			$path_id = '';
 			$retval  = '<div id="FE_preload"><ul class="file_tree"><li class="collapsed"></li><li class="expanded"></li><li class="FE_empty"></li></ul></div>';
 		} else
 			$retval	= "";
 
 		$paths_match = Docs::path_compare($base, $path);
-		$new_css	= TRUE;
+	//	$new_css	= TRUE;
 
 		$display	= ($paths_match || $new_css) ? '' : ' style="display: none;"';
 
@@ -106,7 +105,7 @@ echo "<br />base:$base|path:$path|";
 		$dir_contents = Docs::Full_Dir_List($base);
 
 		if(!empty($dir_contents)) {	//if there's something to show
-			if($ajax < 2)	//if not being called from get_file_tree.php
+			if($ajax < 2)	//if not an ajax call
 				$retval	.= "\n$tabs<ul id=\"FE_$path_id\" class=\"file_tree\"$display>\n";
 
 			if($ajax && $tabs != "" && !$paths_match)	//if ajax is enabled and not top level and paths don't match
@@ -141,7 +140,7 @@ echo "<br />base:$base|path:$path|";
 						$thing_name	= "<a href=\"$href\" title=\"$title\">$item_name</a>";
 
 						if($curr_item)
-							$thing_name	= "<b>$thing_name</b>";
+							$thing_name	= "<strong>$thing_name</strong>";
 
 						$retval	.= "	$tabs<li".$li_insert.">".$thing_name . $item_sub_val."</li>\n";
 					}
@@ -154,7 +153,7 @@ echo "<br />base:$base|path:$path|";
 		else
 			return '<span style="display: none;">No files to display</span>';
 
-		$debug_info	.= "\$path=$path\n<br />\$path_id=$path_id\n<br />\$curr_file=$curr_file\n<br />\$tabs=|$tabs|\n<br />\n";
+		$debug_info	.= "\$path=$path\n<br />\$path_id=$path_id\n<br />\$tabs=|$tabs|\n<br />\n";
 
 		return $retval;
 	}
@@ -375,28 +374,32 @@ ret;
 		return $tag;
 	}
 
-	/* compare the path passed to the current file
+	/* compare the base passed to the current file
 	 * by shrinking the current file to the same length as the passed file
 	 * then see if they're the same
 	 */
-	function path_compare($path, $file)
+	function path_compare($base, $path)
 	{
 		global $debug_info;
 
-		$path	= str_replace(".//", "", $path);
+		$base	= Docs::fix_slashes($base);
+		$path	= Docs::fix_slashes($path);
 
-		$debug_info .= "\$path=$path\n<br />\$file=$file\n<br />\n";
+		$debug_info .= "\$base=$base\n<br />\$path=$path\n<br />\n";
 
-		if($path == $file || $path == "./")
+		if($base == $path || $base == "./")
 			return TRUE;
 
-		$length		= strlen($path);
+		$B	= explode('/', $base);
+		$P	= explode('/', $path);
 
-		$curr_s		= substr($file, 0, $length);
+		$length		= strlen($base);
+
+		$curr_s		= substr($path, 0, $length);
 
 		$debug_info .= "\$curr_s=$curr_s\n<br />\$length=$length\n<br />\n";
 
-		return ($path == $curr_s);	//if they match then the folder gets expanded
+		return ($base == $curr_s);	//if they match then the folder gets expanded
 	}
 
 	/* This function gets the name of the object to fit onto lines 13 characters wide */
