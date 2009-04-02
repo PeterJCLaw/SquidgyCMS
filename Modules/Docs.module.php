@@ -34,7 +34,7 @@ EXP;
 	function Tree($args) {
 		global $ajax;
 
-		return '<div id="Docs-Tree">'.Docs::file_tree($this->get_path($args['path']), $ajax).'</div>';
+		return '<div id="Docs-Tree">'.Docs::file_tree($args['path'], $this->get_path($args['path']), $ajax).'</div>';
 	}
 
 	function get_path($path) {
@@ -76,27 +76,34 @@ class Docs {	//parent class for useful functions
 
 	/* recursive function to explore the file / folder structure beneath
 	 * retruns blank if nothing of note is found
+	 * base is the current folder to use as a base
+	 * path is the current position in the file tree to be shown as open
+	 * ajax is a signal of the ajax status - whether this is an ajax call or not
+	 * tabs is the level of tabs to include in the source to make it nice
 	 */
-	function file_tree($path, $ajax, $tabs='')
+	function file_tree($base, $path, $ajax, $tabs='')
 	{
-		global $debug_info, $curr_file;
-
+		global $debug_info;
+		
+		$base = Docs::fix_slashes($base);
+		$path = Docs::fix_slashes($path);
+echo "<br />base:$base|path:$path|";
 		$path_id = Docs::id_convert($path);
 
-		if($path == './') {	//top level
+		if(in_array($base, array('', './'))) {	//top level
 			$path_id = '';
 			$retval  = '<div id="FE_preload"><ul class="file_tree"><li class="collapsed"></li><li class="expanded"></li><li class="FE_empty"></li></ul></div>';
 		} else
 			$retval	= "";
 
-		$paths_match = Docs::path_compare($path, $curr_file);
+		$paths_match = Docs::path_compare($base, $path);
 		$new_css	= TRUE;
 
 		$display	= ($paths_match || $new_css) ? '' : ' style="display: none;"';
 
 		$debug_info	.= "\$paths_match=".var_export($paths_match, True)."\n<br />\$display=$display\n<br />\n";
 
-		$dir_contents = Docs::Full_Dir_List($path);
+		$dir_contents = Docs::Full_Dir_List($base);
 
 		if(!empty($dir_contents)) {	//if there's something to show
 			if($ajax < 2)	//if not being called from get_file_tree.php
@@ -118,7 +125,7 @@ class Docs {	//parent class for useful functions
 						if (FileSystem::is_dir($item)) {	//if its a folder
 							$title			= "Go to $item_name";
 							$li_ins_class	= "FE_empty";
-							$item_sub_val	= Docs::file_tree($item, $ajax, $tabs."		");
+							$item_sub_val	= Docs::file_tree($item, $path, $ajax, $tabs."		");
 							if($item_sub_val != '') {
 								$li_ins_class	= ($paths_match ? (Docs::path_compare($item, $curr_file) ? "expanded" : "collapsed") : "collapsed");
 								$item_sub_val	= ($curr_item ? "" : "&nbsp;&nbsp;<a href=\"?dir=$href\" title=\"$tit\">=></a>")."$item_sub_val\n	$tabs";
@@ -145,7 +152,7 @@ class Docs {	//parent class for useful functions
 				$retval	.= "$tabs</ul>";
 		}
 		else
-			return '';
+			return '<span style="display: none;">No files to display</span>';
 
 		$debug_info	.= "\$path=$path\n<br />\$path_id=$path_id\n<br />\$curr_file=$curr_file\n<br />\$tabs=|$tabs|\n<br />\n";
 
