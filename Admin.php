@@ -39,7 +39,6 @@ location.hash.onchange	= switch_tabs;
 </script>
 SCRIPTS;
 
-	require_once("Modules/Module.php");
 	include 'Head.inc.php';
 
 /* This is the actual page below this point */
@@ -50,13 +49,13 @@ if(!$logged_in) {
 }
 
 if(is_readable($admin_file)) {	//get the list of wanted ones
-	$toclist	= file_rtrim($admin_file);
+	$toclist	= FileSystem::file_rtrim($admin_file);
 } else
 	$toclist	= array();
 
 $debug_info	.= "\$toclist = ".implode(", ", $toclist)."\n<br />\n";
 
-include user_file($username);
+include Users::file($username);
 
 $toc_list	= array();
 $module_list	= FileSystem::Filtered_File_List("Modules", ".module.php");
