@@ -1,41 +1,19 @@
 <?php
-#name = Profile
+#name = Profiles
 #description = User profiles and public listing thereof
 #package = Core - optional
 #type = content
 #dependencies = Users
 ###
 
-class AdminProfile extends Admin {
-	function AdminProfile() {
-		parent::__construct('Change your personal profile');
-	}
-
-	function committee_photo_select($curr_img)
-	{
-		global $debug_info;
-		$img_list	= Filtered_Dir_List("Site_Images", "comm_");
-		$selected	= "\" selected=\"selected";
-		$debug_info .= "\$curr_img=$curr_img\n<br />\n";
-		$out	= "";
-		foreach($img_list as $image)
-		{
-			$debug_info .= "\$image=$image\n<br />\n";
-			$image	= str_replace(".jpg", "", $image);
-			$sel2	= "";
-			if($image == str_replace(array("comm_", ".jpg"), "", $curr_img)) {
-				$sel2	= $selected;
-				$selected	= "";
-			}
-			$out	.= "<option value=\"$image$sel2\">$image</option>\n				";
-		}
-		$out	.= "<option value=\"none$selected\">None</option>\n";
-		return $out;
+class AdminProfiles extends Admin {
+	function AdminProfiles() {
+		parent::__construct();
 	}
 
 	function printFormAdmin() {
 		global $debug_info, $username, $site_root;
-		include "$site_root/Users/".info_name($username).".comm.php";
+		include Users::file($username);
 		$debug_info	.= "name = '$name', image_path = '$image_path', gender = '$gender', spiel = '$spiel'\n<br />\n";
 ?>
 			<table><tr>
@@ -44,15 +22,15 @@ class AdminProfile extends Admin {
 						<input class="text" type="text" id="new_name" name="new_name" value="<?php echo stripslashes($name); ?>" title="Your name as you would like it to appear on the site" />
 					</td>
 					<td rowspan="5" id="pic_cell">
-						<a id="pic_preview_link" href="Site_Images/<?php echo comm_pic($image_path); ?>" title="Your image preview">
-							<img id="pic_preview" src="Thumbs/<?php echo comm_pic($image_path); ?>" title="Your image preview, click to view larger" alt="Your image preview" width="75px" height="90px" />
+						<a id="pic_preview_link" href="Site_Images/<?php echo Profile::get_image($image_path); ?>" title="Your image preview">
+							<img id="pic_preview" src="Thumbs/<?php echo Profile::get_image($image_path); ?>" title="Your image preview, click to view larger" alt="Your image preview" width="75px" height="90px" />
 						</a>
 					</td>
 				</tr><tr>
 					<th><label for="photo_change" title="Change your picture">Picture:</label></th>
 					<td>
 						<select id="photo_change" name="photo" title="Change your picture" onchange="change_pic(this.value)">
-						<?php echo $this->committee_photo_select($image_path); ?>
+						<?php echo Profile::photo_select($image_path); ?>
 						</select>
 					</td>
 					<td rowspan="4" id="gender_cell">
@@ -87,8 +65,7 @@ class AdminProfile extends Admin {
 		$content	= addslashes($content);	//they get removed by the handler
 		$new_name	= addslashes(stripslashes($new_name));	//they get added when sent
 
-		$file = "$site_root/Users/".info_name($username).".comm.php";
-
+		$file = Users::file($username);
 		include $file;
 
 		$out_hash	= $pass_hash;
@@ -112,5 +89,79 @@ class AdminProfile extends Admin {
 
 		return  file_put_stuff($file, $out_val, 'w');
 	}
+}
+
+class BlockProfiles extends Block {
+	function BlockProfiles() {
+		parent::__construct();
+	}
+
+	function ListDiv($args) {
+		echo 'fo';
+		global $job_list;
+		$ret	= '
+<table id="comm_tbl">';
+
+		foreach($job_list as $job) {
+			if(in_array($job, array('Committee', 'Chaplain')))
+				continue;
+			$info_name = info_name($job);
+			include Users::file($info_name);
+			$firstname = first_name($name);
+			$ret	.= '<tr>
+		<td rowspan="2" class="Profile::get_image">
+			<a href="Site_Images/'.Profile::get_image($image_path).'" title="Click image to view larger"><img src="Thumbs/'.Profile::get_image($image_path).'" alt="'."$firstname, $job".'" title="Click image to view larger" /></a>				</td>
+		<td>
+			<h4 id="'.str_replace(".", "_", $info_name).'" class="comm_name">'."$job - ".stripslashes($name).'</h4>
+			<span class="comm_email">
+				'.email_link("email $gender", $gender, $info_name, 0,0,0,0).' or use the <a href="Contact_Us.php?target='.$job.'" title="Use the online contact form">contact form</a>.
+			</span>
+		</td>
+	</tr><tr>
+		<td class="comm_txt">
+			'.stripslashes($spiel) //gets rid of any slashes invoked by (')s
+			.'
+		</td>
+	</tr>';
+			}
+		return $ret.'
+</table>';
+	}
+}
+
+//utilities class for Profile things
+class Profile {
+	/* This function determines if the profile picture passed is valid, if it is it returns it, else returns a standin image */
+	function get_image($image) {
+		if($image_path == "" || !is_readable("Site_Images/$image_path"))
+			$image_path	= "Unknown.jpg";
+
+		return $image_path;
+	}
+	
+	/*this function generates the photo select box*/
+	function photo_select($curr_img)
+	{
+		global $debug_info;
+		$img_list	= FileSystem::Filtered_File_List("Site_Images", "comm_");
+		$none_selected	= '" selected="selected';
+		$debug_info .= "\$curr_img=$curr_img\n<br />\n";
+		$out	= "";
+		foreach($img_list as $image)
+		{
+			$debug_info .= "\$image=$image\n<br />\n";
+			$image	= str_replace(".jpg", "", $image);
+			$sel2	= "";
+			if($image == str_replace(array("comm_", ".jpg"), "", $curr_img)) {
+				$user_selected	= $none_selected;
+				$none_selected	= "";
+			}
+			$out	.= "<option value=\"$image$user_selected\">$image</option>\n				";
+		}
+		$out	.= "<option value=\"none$none_selected\">None</option>\n";
+		return $out;
+	}
+
+
 }
 ?>
