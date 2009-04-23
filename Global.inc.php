@@ -28,7 +28,7 @@ require_once("functions_General.inc.php");	//contains my general functions - the
 require_once($site_root."/config.inc.php");			//these files are now included in all the cathsoc pages since I'm using lots of functions
 /*load the required core modules*/
 require_once("Modules/FileSystem.php");
-require_once("Modules/Users.php");
+require_once("Modules/Users.module.php");
 
 if($allow_logging)
 	require_once("Modules/Log.php");
