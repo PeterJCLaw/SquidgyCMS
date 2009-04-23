@@ -60,11 +60,6 @@ function print_Admin_Section($val) {
 /* parses the squidgyCMS wiki-style pages and makes html */
 function SquidgyParser($page_file, $start = 0, $finish = 0) {
 	global $debug, $debug_info;
-	if(is_readable("Modules/Module.php"))
-		require_once("Modules/Module.php");
-	else
-		return FALSE;
-
 	$page	= file_get_contents($page_file);
 	$len	= strlen($page);
 
