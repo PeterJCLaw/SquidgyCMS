@@ -46,7 +46,6 @@ class FileSystem {
 	/* This function reads ALL the items in a directory and returns an array with this information */
 	function Full_Dir_List($dir)
 	{
-		$dir = $GLOBALS['site_root'].'/'.$dir;
 		$results = array();
 		if(!is_dir($dir))
 			return $results;
@@ -70,7 +69,6 @@ class FileSystem {
 	/* This function reads only the items in a directory that containt the strings in $filter and returns an array with this information */
 	function Filtered_File_List($dir, $filter)
 	{
-		$dir = $GLOBALS['site_root'].'/'.$dir;
 		$results = array();
 		if(!is_dir($dir))
 			return $results;
