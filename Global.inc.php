@@ -26,7 +26,9 @@ require_once("functions_FSPHP.inc.php");	//contains the File System PHP Gallery 
 require_once("functions_login.inc.php");	//contains the login functions
 require_once("functions_General.inc.php");	//contains my general functions - the file system gallery ones are now separate
 require_once($site_root."/config.inc.php");			//these files are now included in all the cathsoc pages since I'm using lots of functions
+/*load the required core modules*/
 require_once("Modules/FileSystem.php");
+require_once("Modules/Users.php");
 
 if($allow_logging)
 	require_once("Modules/Log.php");
@@ -68,7 +70,7 @@ if(in_array("filtered_file_list",get_class_methods('FileSystem'))) {
 	}
 
 	// make a list of committee members whose information is available
-	$job_list		= FileSystem::Filtered_File_List("$site_root/Users", ".user.php");
+	$job_list	= FileSystem::Filtered_File_List("$site_root/Users", ".user.php");
 	array_push($job_list, "Committee");
 	foreach($job_list as $key => $value)
 		$job_list[$key]	= str_replace(".", " ", $value);
