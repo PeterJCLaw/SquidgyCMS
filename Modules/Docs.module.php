@@ -67,10 +67,18 @@ class Docs {	//parent class for useful functions
 	/* This function reads ALL the items in a directory and returns an array with this information */
 	function Full_Dir_List($dir)
 	{
+		$dir = $GLOBALS['site_root'].'/'.$dir;
 		$results = FileSystem::Full_Dir_List($dir);
 		usort($results, array("Docs", "tree_sort"));
 		reset($results);
 		return $results;
+	}
+
+	/* This function reads only the items in a directory that containt the strings in $filter and returns an array with this information */
+	function Filtered_Dir_List($dir)
+	{
+		$dir = $GLOBALS['site_root'].'/'.$dir;
+		return FileSystem::Filtered_Dir_List($dir);
 	}
 
 	/* recursive function to explore the file / folder structure beneath
@@ -100,7 +108,7 @@ class Docs {	//parent class for useful functions
 
 		$display	= ($paths_match || $new_css) ? '' : ' style="display: none;"';
 
-		$debug_info	.= "\$paths_match=".var_export($paths_match, True)."\n<br />\$display=$display\n<br />\n";
+		$debug_info	.= "file_tree:paths_match=".var_export($paths_match, True)."|display=$display|";
 
 		$dir_contents = Docs::Full_Dir_List($base);
 
@@ -118,7 +126,7 @@ class Docs {	//parent class for useful functions
 					$item_id	= Docs::id_convert($item);
 					$curr_item	= ($item == $curr_file) ? TRUE : FALSE;
 					$item_sub_val = $li_insert = "";
-					$debug_info	.= "\$item=$item\n<br />\$item_id=$item_id\n<br />\n";
+					$debug_info	.= "item=$item|item_id=$item_id|<br />\n";
 
 					if (FileSystem::is_file($item) || FileSystem::is_dir($item)) {
 						if (FileSystem::is_dir($item)) {	//if its a folder
@@ -132,7 +140,7 @@ class Docs {	//parent class for useful functions
 								$href			= "javascript:toggle_FE('FE_$item_id', 'FE_LI_$item_id');\" class=\"js_link";
 							}
 							$li_insert		= " id=\"FE_LI_$item_id\" class=\"$li_ins_class\"";
-							$debug_info		.= "\$item_sub_val=$item_sub_val\n<br />\$li_insert=$li_insert\n<br />\n";
+							$debug_info		.= "item_sub_val=$item_sub_val|li_insert=$li_insert|<br />\n";
 						} else {
 							$item_name	= FileSystem::returnFileName($item_name); //gives us just the name (no extension) of the file
 							$title		= "Go to $item_name";
@@ -153,7 +161,7 @@ class Docs {	//parent class for useful functions
 		else
 			return '<span style="display: none;">No files to display</span>';
 
-		$debug_info	.= "\$path=$path\n<br />\$path_id=$path_id\n<br />\$tabs=|$tabs|\n<br />\n";
+		$debug_info	.= "path=$path|path_id=$path_id|tabs=/$tabs/|<br />\n";
 
 		return $retval;
 	}
@@ -385,9 +393,9 @@ ret;
 		$base	= Docs::fix_slashes($base);
 		$path	= Docs::fix_slashes($path);
 
-		$debug_info .= "\$base=$base\n<br />\$path=$path\n<br />\n";
+		$debug_info .= "path_compare:base=$base|path=$path|<br />\n";
 
-		if($base == $path || $base == "./")
+		if(in_array($base, array($path, "./", '')))
 			return TRUE;
 
 		$B	= explode('/', $base);
