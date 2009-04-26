@@ -22,8 +22,8 @@ class AdminProfile extends Admin {
 						<input class="text" type="text" id="new_name" name="new_name" value="<?php echo stripslashes($name); ?>" title="Your name as you would like it to appear on the site" />
 					</td>
 					<td rowspan="5" id="pic_cell">
-						<a id="pic_preview_link" href="Site_Images/<?php echo Profile::get_image($image_path); ?>" title="Your image preview">
-							<img id="pic_preview" src="Thumbs/<?php echo Profile::get_image($image_path); ?>" title="Your image preview, click to view larger" alt="Your image preview" width="75px" height="90px" />
+						<a id="pic_preview_link" href="<?php echo Profile::get_image($image_path); ?>" title="Your image preview">
+							<img id="pic_preview" src="<?php echo Profile::get_image($image_path); ?>" title="Your image preview, click to view larger" alt="Your image preview" width="75px" height="90px" />
 						</a>
 					</td>
 				</tr><tr>
@@ -70,7 +70,7 @@ class AdminProfile extends Admin {
 
 		$out_hash	= $pass_hash;
 		if(!empty($photo))
-			$image_path	= "comm_$photo.jpg";
+			$image_path	= "$photo.jpg";
 		else
 			$image_path	= "Unknown.jpg";
 
@@ -97,7 +97,6 @@ class BlockProfile extends Block {
 	}
 
 	function ListDiv($args) {
-		echo 'fo';
 		global $job_list;
 		$ret	= '
 <table id="comm_tbl">';
@@ -110,7 +109,7 @@ class BlockProfile extends Block {
 			$firstname = first_name($name);
 			$ret	.= '<tr>
 		<td rowspan="2" class="Profile::get_image">
-			<a href="Site_Images/'.Profile::get_image($image_path).'" title="Click image to view larger"><img src="Thumbs/'.Profile::get_image($image_path).'" alt="'."$firstname, $job".'" title="Click image to view larger" /></a>				</td>
+			<a href="'.Profile::get_image($image_path, 'orig').'" title="Click image to view larger"><img src="'.Profile::get_image($image_path).'" alt="'."$firstname, $job".'" title="Click image to view larger" /></a>				</td>
 		<td>
 			<h4 id="'.str_replace(".", "_", $info_name).'" class="comm_name">'."$job - ".stripslashes($name).'</h4>
 			<span class="comm_email">
@@ -132,27 +131,38 @@ class BlockProfile extends Block {
 //utilities class for Profile things
 class Profile {
 	/* This function determines if the profile picture passed is valid, if it is it returns it, else returns a standin image */
-	function get_image($image) {
-		if($image_path == "" || !is_readable("Site_Images/$image_path"))
-			$image_path	= "Unknown.jpg";
+	function get_image($image, $type = 'thumb') {
+		//check that we've been passed a sane image, correct it if not
+		if(empty($image) || strpos($image, '.jpg') === FALSE)
+			$image = "Unknown.jpg";
 
-		return $image_path;
+		switch($type) {
+			case 'orig':	//check the original file
+				$path = "$site_root/Users/$image";
+				break;
+			case 'thumb': //check the thumbnail
+			default:
+				$path = "$site_root/Users/Thumbs/$image";
+		}
+		if(!is_readable($path))
+			$path	= "Site_Images/Unknown.jpg";
+
+		return $path;
 	}
-	
+
 	/*this function generates the photo select box*/
 	function photo_select($curr_img)
 	{
-		global $debug_info;
-		$img_list	= FileSystem::Filtered_File_List("Site_Images", "comm_");
+		global $debug_info, $site_root;
+		$img_list	= FileSystem::Filtered_File_List("$site_root/Users", ".jpg");
 		$none_selected	= '" selected="selected';
 		$debug_info .= "\$curr_img=$curr_img\n<br />\n";
 		$out	= "";
-		foreach($img_list as $image)
-		{
+
+		foreach($img_list as $image) {
 			$debug_info .= "\$image=$image\n<br />\n";
-			$image	= str_replace(".jpg", "", $image);
 			$sel2	= "";
-			if($image == str_replace(array("comm_", ".jpg"), "", $curr_img)) {
+			if($image == str_replace(".jpg", "", $curr_img)) {
 				$user_selected	= $none_selected;
 				$none_selected	= "";
 			}
