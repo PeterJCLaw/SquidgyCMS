@@ -60,7 +60,7 @@ class AdminProfile extends Admin {
 
 	function submit()
 	{
-		global $new_name, $n_gender, $content, $username, $new_pass, $old_pass, $confirm_pass, $debug_info, $site_root;
+		global $new_name, $n_gender, $content, $username, $new_pass, $old_pass, $confirm_pass, $photo, $debug_info, $site_root;
 
 		$content	= addslashes($content);	//they get removed by the handler
 		$new_name	= addslashes(stripslashes($new_name));	//they get added when sent
@@ -155,20 +155,21 @@ class Profile {
 	{
 		global $debug_info, $site_root;
 		$img_list	= FileSystem::Filtered_File_List("$site_root/Users", ".jpg");
-		$none_selected	= '" selected="selected';
+		$selected	= '" selected="selected';
 		$debug_info .= "\$curr_img=$curr_img\n<br />\n";
 		$out	= "";
 
 		foreach($img_list as $image) {
+			if($image == 'Unknown')	//this is the default image
+				continue;
 			$debug_info .= "\$image=$image\n<br />\n";
-			$sel2	= "";
 			if($image == str_replace(".jpg", "", $curr_img)) {
-				$user_selected	= $none_selected;
-				$none_selected	= "";
-			}
-			$out	.= "<option value=\"$image$user_selected\">$image</option>\n				";
+				$out	.= "<option value=\"$image$selected\">$image</option>\n				";
+				$selected = '';
+			} else
+				$out	.= "<option value=\"$image\">$image</option>\n				";
 		}
-		$out	.= "<option value=\"none$none_selected\">None</option>\n";
+		$out	.= "<option value=\"none$selected\">None</option>\n";
 		return $out;
 	}
 
