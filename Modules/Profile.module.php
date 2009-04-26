@@ -22,7 +22,7 @@ class AdminProfile extends Admin {
 						<input class="text" type="text" id="new_name" name="new_name" value="<?php echo stripslashes($name); ?>" title="Your name as you would like it to appear on the site" />
 					</td>
 					<td rowspan="5" id="pic_cell">
-						<a id="pic_preview_link" href="<?php echo Profile::get_image($image_path); ?>" title="Your image preview">
+						<a id="pic_preview_link" href="<?php echo Profile::get_image($image_path, 'orig'); ?>" title="Your image preview">
 							<img id="pic_preview" src="<?php echo Profile::get_image($image_path); ?>" title="Your image preview, click to view larger" alt="Your image preview" width="75px" height="90px" />
 						</a>
 					</td>
@@ -132,10 +132,10 @@ class BlockProfile extends Block {
 class Profile {
 	/* This function determines if the profile picture passed is valid, if it is it returns it, else returns a standin image */
 	function get_image($image, $type = 'thumb') {
+		global $site_root;
 		//check that we've been passed a sane image, correct it if not
 		if(empty($image) || strpos($image, '.jpg') === FALSE)
 			$image = "Unknown.jpg";
-
 		switch($type) {
 			case 'orig':	//check the original file
 				$path = "$site_root/Users/$image";
@@ -171,7 +171,6 @@ class Profile {
 		$out	.= "<option value=\"none$none_selected\">None</option>\n";
 		return $out;
 	}
-
 
 }
 ?>
