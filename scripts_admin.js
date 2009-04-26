@@ -175,17 +175,15 @@ function pass_change(type)
 {
 	if(!$('pass_0'))
 		return;
-	PASS_AR	= [ "old_pass", "new_pass", "confirm_pass" ];
-	if(type == "show")
-	{
-		boxes	= "";
-		link	= "none";
+	var PASS_AR	= [ "old_pass", "new_pass", "confirm_pass" ];
+	if(type == "show") {
+		var boxes	= "";
+		var link	= "none";
 	} else {
-		boxes	= "none";
-		link	= "";
+		var boxes	= "none";
+		var link	= "";
 	}
-	for(i=1; i<4; i++)
-	{
+	for(i=1; i<4; i++) {
 		$(PASS_AR[i-1]).value	= '';
 		$('pass_'+i).style.display	= boxes;
 	}
@@ -203,11 +201,12 @@ function show_change(type)
 function change_pic(value)
 {
 	if(value != "none")
-		img_path	= 'comm_' + value + '.jpg';
+		var path = value + '.jpg';
 	else
-		img_path	= 'Unknown.jpg';
-	$('pic_preview').src	= 'Thumbs/' + img_path;
-	$('pic_preview_link').href	= 'Site_Images/' + img_path;
+		var path = 'Unknown.jpg';
+
+	$('pic_preview').src	= SITE_root+'/Users/Thumbs/'+path;
+	$('pic_preview_link').href	= SITE_root+'/Users/'+path;
 	return;
 }
 
