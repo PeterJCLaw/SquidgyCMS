@@ -5,7 +5,7 @@
 #type = system
 ###
 
-class Module {
+class ModuleTemplate {
 
 	function __construct() {
 		global $data_root, $site_root, $debug;
@@ -15,7 +15,7 @@ class Module {
 		$this->debug	= $debug;
 	}
 
-	function Module() {
+	function ModuleTemplate() {
 		return $this->__construct();
 	}
 
@@ -29,7 +29,7 @@ class Module {
 	}
 }
 
-class Admin extends Module {
+class Admin extends ModuleTemplate {
 
 	var $section;	//php <5
 	var $sect_title;
@@ -44,13 +44,21 @@ class Admin extends Module {
 			print_logon_form();
 			exit();
 		}
+
 		if(!isset($this->no_submit))
 			$this->no_submit	= FALSE;
-		$this->sect_title	= $sect_title_in;
 		$this->grouping	= $grouping;
 		$this->weight	= $weight;
 		$this->section	= $this->get_my_class();
 		$this->section_human	= ucwords(str_replace("_", " ", $this->section));
+
+		$info = Module::get_info($this->section);
+		if(is_array($info) && isset($info['#name']) && isset($info['#description'])) {
+			$this->own_file_info	= $info;
+			$this->sect_title		= $this->own_file_info['#description'];
+			$this->section_human	= $this->own_file_info['#name'];
+		}
+
 		if(!empty($this->debug) && $this->debug > 1) {
 			echo "DEBUG = $this->debug\n\$sect_title_in = '$sect_title_in'\n";
 			print_r($this);
@@ -98,7 +106,7 @@ class Admin extends Module {
 	function site_full_path($page) {
 		return "$this->data_root/$page.page";
 	}
-	
+
 	function change_something_in_all_pages($old, $new) {
 		$GEN_pages	= array_map(array($this, 'site_full_path'), Filtered_File_List($this->data_root, ".page"));
 		array_push($GEN_pages, $GLOBALS['pages_file']);
@@ -155,27 +163,27 @@ class Admin extends Module {
 
 	function printFormHeader() {
 	global $debug, $sect_title; ?>
-	<form id="<?php echo $this->section ?>_form" action="admin_handler.php" method="<? echo $debug ? 'get' : 'post'; ?>" onsubmit="return Validate_On_Admin_Submit(this)">
-	<div class="admin_form_head">
-		<span class="f_right JS_move">
-			<input type="submit" name="submit" value="Save - <?php echo $this->section_human; ?>" />
-			<br />
-			<input type="reset" value="Reset - <?php echo $this->section_human; ?>" />
-		</span>
-		<?php echo $this->sect_title; ?>:
-		<input type="hidden" name="debug" value="<?php echo $debug; ?>" />
-		<input type="hidden" name="type" value="<?php echo $this->section_human; ?>" />
-	</div>
-	<div class="admin_form">
+<form id="<?php echo $this->section ?>_form" action="admin_handler.php" method="<? echo $debug ? 'get' : 'post'; ?>" onsubmit="return Validate_On_Admin_Submit(this)">
+<div class="admin_form_head">
+	<span class="f_right JS_move">
+		<input type="submit" name="submit" value="Save - <?php echo $this->section_human; ?>" />
+		<br />
+		<input type="reset" value="Reset - <?php echo $this->section_human; ?>" />
+	</span>
+	<?php echo $this->sect_title; ?>:
+	<input type="hidden" name="debug" value="<?php echo $debug; ?>" />
+	<input type="hidden" name="type" value="<?php echo $this->section_human; ?>" />
+</div>
+<div class="admin_form">
 <?php }
 
-	function printTextarea($textarea = '') { ?>
-		<textarea name="content" id="<?php echo $this->section; ?>_content" rows="12" cols="71"><?php echo htmlspecialchars(stripslashes($textarea)); ?></textarea>
+	function printTextarea($text = '') { ?>
+	<textarea name="content" id="<?php echo $this->section; ?>_content" rows="12" cols="71"><?php echo htmlspecialchars(stripslashes($text)); ?></textarea>
 <?php }
 
 	function printFormFooter() { ?>
-	</div>
-	</form>
+</div>
+</form>
 <?php }
 
 	/* This function generates a Time selector */
@@ -243,7 +251,7 @@ class Admin extends Module {
 	}
 }
 
-class Block extends Module {
+class Block extends ModuleTemplate {
 
 	function __construct() {
 		return parent::__construct();
@@ -251,6 +259,15 @@ class Block extends Module {
 
 	function Block() {
 		return $this->__construct();
+	}
+}
+
+class Module {
+	function get_info($module) {
+		return get_module_info($module);
+	}
+	function get_path($module) {
+		return get_module_path($module);
 	}
 }
 ?>
