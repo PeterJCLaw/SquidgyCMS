@@ -1,13 +1,13 @@
 <?php
-#name = Profiles
+#name = Profile
 #description = User profiles and public listing thereof
 #package = Core - optional
 #type = content
 #dependencies = Users
 ###
 
-class AdminProfiles extends Admin {
-	function AdminProfiles() {
+class AdminProfile extends Admin {
+	function AdminProfile() {
 		parent::__construct();
 	}
 
@@ -91,8 +91,8 @@ class AdminProfiles extends Admin {
 	}
 }
 
-class BlockProfiles extends Block {
-	function BlockProfiles() {
+class BlockProfile extends Block {
+	function BlockProfile() {
 		parent::__construct();
 	}
 
