@@ -41,7 +41,7 @@ function validate_boxes(FORM)
 {
 	target_list	= get_Sub_Class_Elements(FORM.id, 'tick_1');
 	out = '';
-	for(i=0; i<target_list.length; i++)
+	for(var i=0; i<target_list.length; i++)
 	{
 		val	= target_list[i].checked;
 		out	+= ", i = " + i + ", val = " + val;
@@ -55,10 +55,10 @@ function validate_boxes(FORM)
 /* toggle the open or closed  status of the list heading including changing the icon */
 function toggle_FE(child_ul, parent_li)
 {
-	LI_Obj	= $(parent_li);
-	UL_Obj	= $(child_ul);
-	UL_stripped	= UL_Obj.innerHTML.toLowerCase().replace(/^\s*|\s*$/g,'');
-	UL_Obj_s	= UL_Obj.style;
+	var LI_Obj	= $(parent_li);
+	var UL_Obj	= $(child_ul);
+	var UL_stripped	= UL_Obj.innerHTML.toLowerCase().replace(/^\s*|\s*$/g,'');
+	var UL_Obj_s	= UL_Obj.style;
 
 	if(UL_stripped == "<li>loading file tree...</li>" || UL_stripped == "<li>loading file tree... </li>")	//call the ajax function to load it
 		ajax('get', 'ajax.php', 'type=block&class=File&folder='+child_ul, function(ajaxobj) { $(child_ul).innerHTML = ajaxobj.responseText; });
@@ -72,15 +72,15 @@ function toggle_FE(child_ul, parent_li)
 // Tick (or untick) items as a group
 function group_tick_2(thing)
 {
-	state	= thing.checked;
-	tick_list	= get_Sub_Class_Elements('', thing.className);
+	var state	= thing.checked;
+	var tick_list	= get_Sub_Class_Elements('', thing.className);
 	if(thing.id == '_Whole') {
-		for(i=0; i<tick_list.length; i++) {
+		for(var i=0; i<tick_list.length; i++) {
 			tick_list[i].checked	= state;
 		}
 		window.LOG	+= "\nWhole group being ticked";
 	} else {
-		for(count = 0, i = 0; i<tick_list.length; i++) {
+		for(var count = 0, i = 0; i<tick_list.length; i++) {
 			if(tick_list[i].id != '_Whole' && tick_list[i].checked)
 				count++;
 		}
@@ -96,16 +96,16 @@ function group_tick_2(thing)
 function get_Sub_Class_Elements(container, search_class)
 {
 	if(container != '' && $(container) != null)
-		BASE	= $(container);
+		var BASE	= $(container);
 	else
-		BASE	= document;
+		var BASE	= document;
 
 	if(!bad_browser && typeof BASE.getElementsByClassName(search_class) == 'function') {
 		return BASE.getElementsByClassName(search_class);
 	}
 
-	elem_list	= BASE.getElementsByTagName('*');
-	out_list = new Array();
+	var elem_list	= BASE.getElementsByTagName('*');
+	var out_list = new Array();
 
 	for(j=0, i=0; i<elem_list.length; i++)
 	{
@@ -113,7 +113,6 @@ function get_Sub_Class_Elements(container, search_class)
 			out_list[j]	= elem_list[i];
 			j++;
 		}
-		classes	= new Array();
 	}
 	elem_list	= new Array();	//clear it away
 	return out_list;

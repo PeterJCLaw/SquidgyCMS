@@ -23,7 +23,7 @@ function load_admin()
 	window.hideList	= get_Sub_Class_Elements('admin_divs_holder', 'JS_hide');
 	window.showList	= get_Sub_Class_Elements('admin_divs_holder', 'JS_show');
 	window.moveList	= get_Sub_Class_Elements('admin_divs_holder', 'JS_move');
-	for(i=0; i<moveList.length; i++)
+	for(var i=0; i<moveList.length; i++)
 		moveList[i].className	= moveList[i].className.replace('JS_move', 'JS');	//only allow it to be moved once
 	if('' != location.hash)
 		window.cur_div	= location.hash.substr(1);

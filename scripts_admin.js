@@ -16,23 +16,23 @@ function TBrefresh(thing)
 // Add a row of articles
 function add_article_row ()
 {
-	num_rows	= $('num_rows').value;
-	ai_sel		= new Array()
-	curr_sel	= new Array()
+	var num_rows	= $('num_rows').value;
+	var ai_sel		= new Array()
+	var curr_sel	= new Array()
 
-	num_rows_1	= 1*num_rows + 1;
-	num_rows_2	= 2*num_rows + 1;
-	num_rows_3	= num_rows_2 + 1;
+	var num_rows_1	= 1*num_rows + 1;
+	var num_rows_2	= 2*num_rows + 1;
+	var num_rows_3	= num_rows_2 + 1;
 
-	replace_1	= "article_id_" + num_rows_2;
-	replace_2	= "article_id_" + num_rows_3;
+	var replace_1	= "article_id_" + num_rows_2;
+	var replace_2	= "article_id_" + num_rows_3;
 
-	old_html	= $('art_sel_p').innerHTML;
-	new_html	= old_html.replace(/article_id_1/g, replace_1);	//change the ids
+	var old_html	= $('art_sel_p').innerHTML;
+	var new_html	= old_html.replace(/article_id_1/g, replace_1);	//change the ids
 	new_html	= new_html.replace(/article_id_2/g, replace_2);
 
-	for(i=1; i <= 2*num_rows; i++) {
-		art_id	= 'article_id_'+i;
+	for(var i=1; i <= 2*num_rows; i++) {
+		var art_id	= 'article_id_'+i;
 		ai_sel[i]	= $(art_id).selectedIndex;
 	}
 
@@ -44,7 +44,7 @@ function add_article_row ()
 		$(art_id).options[ai_sel[i]].selected	= true;
 	}
 
-	num_opts	= $('article_id_1').length-1;
+	var num_opts	= $('article_id_1').length-1;
 	curr_sel[1]	= $('article_id_1').selectedIndex;
 	curr_sel[2]	= $('article_id_2').selectedIndex;
 
@@ -72,9 +72,9 @@ function clearRow(thing)
 // Tick (or untick) items as a group
 function group_tick(thing)
 {
-	state	= thing.checked;
-	tick_list	= get_Sub_Class_Elements('', thing.className);
-	for(i=0; i<tick_list.length; i++) {
+	var state	= thing.checked;
+	var tick_list	= get_Sub_Class_Elements('', thing.className);
+	for(var i=0; i<tick_list.length; i++) {
 		tick_list[i].checked	= state;
 	}
 	return;
@@ -83,11 +83,11 @@ function group_tick(thing)
 // get a page or article
 function get(type, orig)
 {
-	that	= $(type+"_select");
-	type_l	= type.toLowerCase();
-	req		= (type_l == "page" ? "p" : "a");
-	SI		= that.selectedIndex;
-	SI_len	= that.length;
+	var that	= $(type+"_select");
+	var type_l	= type.toLowerCase();
+	var req		= (type_l == "page" ? "p" : "a");
+	var SI		= that.selectedIndex;
+	var SI_len	= that.length;
 
 
 	if(that.value == orig && !window.AJAX_enabled) {	//if its unchanged
@@ -126,7 +126,7 @@ function switch_tabs(cur_div, mode)
 		mode	= 0;
 
 	if(mode == 0) {	//if the first call
-		for(i=0; i<divList.length; i++) {	//switch to the correct div
+		for(var i=0; i<divList.length; i++) {	//switch to the correct div
 			if($(divList[i].id+'_h3'))
 				$(divList[i].id+'_h3').style.display	= 'none';
 			if(divList[i].id != cur_div)
@@ -183,7 +183,7 @@ function pass_change(type)
 		var boxes	= "none";
 		var link	= "";
 	}
-	for(i=1; i<4; i++) {
+	for(var i=1; i<4; i++) {
 		$(PASS_AR[i-1]).value	= '';
 		$('pass_'+i).style.display	= boxes;
 	}
@@ -270,13 +270,13 @@ function ChangeOptionDays(formObj, prefix)
 	var CurrentDaysInSelection	= DaysObject.length;
 	if(CurrentDaysInSelection > DaysForThisSelection)
 	{
-		for(i=0; i<(CurrentDaysInSelection-DaysForThisSelection); i++) {
+		for(var i=0; i<(CurrentDaysInSelection-DaysForThisSelection); i++) {
 			DaysObject.options[DaysObject.options.length - 1] = null
 		}
 	}
 	if(DaysForThisSelection > CurrentDaysInSelection)
 	{
-		for(i=0; i<DaysForThisSelection; i++) {
+		for(var i=0; i<DaysForThisSelection; i++) {
 			DaysObject.options[i] = new Option(eval(i + 1));
 		}
 	}
@@ -289,7 +289,7 @@ function ChangeOptionDays(formObj, prefix)
 
 function Validate_On_Admin_Submit(FORM)
 {
-	form_id	= FORM.id.replace('_form', '');
+	var form_id	= FORM.id.replace('_form', '');
 	window.LOG	+= "Admin Validation: form_id = "+form_id;
 
 	/* run through the sections with custom validation */
@@ -336,12 +336,12 @@ function Validate_On_Admin_Submit(FORM)
 			return false;
 		}
 		if($('WYSIWYG_Page') != null) {
-			not_none	= 0;
-			num_rows	= $('num_rows').value;
-			for(i=1; i <= 2*num_rows; i++) {
-				d_down	= "article_id_" + i;
-				SI	= $(d_down).selectedIndex;
-				len	= $(d_down).length - 1;
+			var not_none	= 0;
+			var num_rows	= $('num_rows').value;
+			for(var i=1; i <= 2*num_rows; i++) {
+				var d_down	= "article_id_" + i;
+				var SI	= $(d_down).selectedIndex;
+				var len	= $(d_down).length - 1;
 				if(SI != len)
 					not_none	+= 1;
 			}
