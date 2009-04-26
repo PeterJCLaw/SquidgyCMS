@@ -1,5 +1,5 @@
 <?php
-$opt_list	= array('users');
+$opt_list	= array('users', 'user_images');
 	include 'Global.inc.php';
 ?>
 <form action="" method="get"><div>
@@ -15,6 +15,7 @@ if(!empty($upgrade)) {
 
 //names first
 	$GEN_users_old	= FileSystem::Filtered_File_List($site_root."/Users", ".comm.php");
+	$images	= FileSystem::Filtered_File_List($site_root."/Users/Thumbs", "comm_");
 
 	$fail_list	= array();
 	$rename	= 0;
@@ -24,6 +25,20 @@ if(!empty($upgrade)) {
 			$orig	= $site_root."/Users/$val.comm.php";
 			if(!is_readable($orig) || !is_writeable($orig) || !rename($orig, $site_root."/Users/$val.user.php"))
 				array_push($fail_list, $orig);
+			else
+				$rename++;
+		}
+
+	if($user_images)
+		foreach($images as $val) {
+			$orig1	= $site_root."/Users/Thumbs/comm_$val";
+			$orig2	= $site_root."/Users/comm_$val";
+			if(!is_readable($orig1) || !is_writeable($orig1) || !rename($orig1, $site_root."/Users/Thumbs/$val"))
+				array_push($fail_list, $orig1);
+			else
+				$rename++;
+			if(!is_readable($orig2) || !is_writeable($orig2) || !rename($orig2, $site_root."/Users/$val"))
+				array_push($fail_list, $orig2);
 			else
 				$rename++;
 		}
