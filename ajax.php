@@ -2,9 +2,9 @@
 require_once('Global.inc.php');
 require_once("Modules/Module.php");
 
-$module_path = get_module_path($module);
+$module_path = Module::get_path($module);
 
-if($module_path !== FALSE) {
+if($module_path === FALSE) {
 	print_Admin_Section(array('fail'));
 	exit();
 }
