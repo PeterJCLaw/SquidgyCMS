@@ -1,5 +1,5 @@
 <?php
-#name = Modules and cheese
+#name = Modules
 #description = Enables management of site modules
 #package = Core - required
 #type = system
