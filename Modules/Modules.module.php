@@ -8,12 +8,13 @@
 class AdminModules extends Admin {
 	function AdminModules() {
 		parent::__construct();
+		$this->data_file = $GLOBALS['admin_file'];
 	}
 
 	function printFormAdmin() {
-		$this->module_list	= array_map('get_module_info', Filtered_File_List("Modules", ".module.php"));
+		$this->module_list	= array_map('get_module_info', FileSystem::Filtered_File_List("Modules", ".module.php"));
 		$this->module_list_grouped	= group_array_by_key($this->module_list, '#package');
-		$this->enabled_modules	= is_readable($this->data_file) ? file($this->data_file) : array();
+		$this->enabled_modules	= is_readable($this->data_file) ? FileSystem::file_rtrim($this->data_file) : array();
 
 		if($this->debug > 1)
 			echo 'Module List: '.print_r($this->module_list, true);
@@ -34,7 +35,7 @@ class AdminModules extends Admin {
 				$i++;
 
 				if($package == 'Core - required' || in_array($section, $this->enabled_modules)) {
-					if($package == 'Core - required' || $this->is_module_depended_on($section))
+					if($package == 'Core - required' || $this->what_depends_on($section))
 						$disabled	= ' disabled="disabled"';
 					else
 						$disabled	= '';
@@ -58,7 +59,7 @@ class AdminModules extends Admin {
 		return;
 	}
 
-	function is_module_depended_on($module) {
+	function what_depends_on($module) {
 		foreach($this->enabled_modules as $e_mod) {
 			if(is_array($this->module_list[$e_mod]['#dependencies']) && in_array($module, $this->module_list[$e_mod]['#dependencies']))
 				return true;
