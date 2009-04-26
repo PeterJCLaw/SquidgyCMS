@@ -1,7 +1,7 @@
 <?php
 #name = Webmaster
 #description = User and Module managment
-#package = Core - required
+#package = Core - depreciated
 #type = admin
 ###
 
