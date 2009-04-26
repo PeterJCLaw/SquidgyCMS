@@ -48,38 +48,36 @@ if(!$logged_in) {
 	exit();
 }
 
-if(is_readable($admin_file)) {	//get the list of wanted ones
-	$toclist	= FileSystem::file_rtrim($admin_file);
-} else
-	$toclist	= array();
-
-$debug_info	.= "\$toclist = ".implode(", ", $toclist)."\n<br />\n";
-
 include Users::file($username);
 
-$toc_list	= array();
-$module_list	= FileSystem::Filtered_File_List("Modules", ".module.php");
-foreach($module_list as $section)	//grab all the sections and add their objects to the array
-{
-	if($section == "Admin")
+if(is_readable($admin_file)) {	//get the list of wanted ones
+	$enabled_modules	= FileSystem::file_rtrim($admin_file);
+} else
+	$enabled_modules	= array();
+
+$debug_info	.= "enabled_modules = ".implode(", ", $enabled_modules)."\n<br />\n";
+
+$all_modules	= FileSystem::Filtered_File_List("Modules", ".module.php");
+
+foreach($all_modules as $module) {
+	$info = Module::get_info($module);
+	$path = Module::get_path($module);
+
+	//if we don't want the module or it doesn't exist skip the rest
+	if($info['#package'] != 'Core - required' && !in_array($module, $enabled_modules) && $path !== FALSE)
 		continue;
 
-	$module_path = get_module_path($module);
+	require_once($path);
 
-	if($module_path !== FALSE)
-		require_once($module_path);
-
-	$class_name	= "Admin$section";
+	$class_name	= "Admin$module";
 	if(class_exists($class_name)) {
 		$sect_obj	= new $class_name();
 
-		$_Admin_list[$section]	= $sect_obj->get_info();
-		$_Admin_list[$section]['obj']	= $sect_obj;
-
-		if((in_array($section, $toclist) || $_Admin_list[$section]['grouping'] == -1) && (strtolower($username) == 'webmaster' || strtolower($section) != 'webmaster'))
-			array_push($toc_list, $section);	//add to the list if compulsory (allowing for webmaster specials) or requested
+		$_Admin_list[$module]	= $sect_obj->get_info();
+		$_Admin_list[$module]['obj']	= $sect_obj;
 	}
 }
+
 multi2dSortAsc($_Admin_list, "weight");
 if(!empty($debug) && $debug > 1) {
 	echo "printing \$_Admin_list:\n";
@@ -94,16 +92,12 @@ if(!empty($debug) && $debug > 1) {
 		<p>Please note that only changes to the one form that you submit will be saved.</p>
 		<ul id="admin_TOC"><?php
 
-	$tocwidth = 100 / count($toc_list);
+	$toc_width = 100 / count($_Admin_list);
 
-	foreach($_Admin_list as $section => $val)
-	{
-		if(!in_array($section, $toc_list))	//if not asked for then skip the rest
-			continue;
-
+	foreach($_Admin_list as $module => $val) {
 		echo '
-			<li style="width: '.$tocwidth.'%;" title="'.$val['desc'].'"><a title="'.$val['desc'].'" id="'.$section.'_link" href="#'.$section
-				.'" onclick="switch_tabs(\''.$section.'\', 0);">'.$val['section_human'].'</a></li>';
+			<li style="width: '.$toc_width.'%;" title="'.$val['desc'].'"><a title="'.$val['desc'].'" id="'.$module.'_link" href="#'.$module
+				.'" onclick="switch_tabs(\''.$module.'\', 0);">'.$val['section_human'].'</a></li>';
 	}
 ?>
 
@@ -113,12 +107,9 @@ if(!empty($debug) && $debug > 1) {
 // loop through all the posible sections
 foreach($_Admin_list as $section => $val)
 {
-	if(!in_array($section, $toc_list))	//if not asked for then skip the rest
-		continue;
-
 	echo "\n".'<div id="'.$section.'" class="admin_div"><h3 id="'.$section.'_h3">'.$val['section_human']."</h3>\n";
 
-	if($ajax && strtolower($section) != 'webmaster')
+	if($ajax)
 		echo '<br />Loading Section...';
 	else
 		print_Admin_Section($val);

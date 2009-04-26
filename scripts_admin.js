@@ -139,7 +139,7 @@ function switch_tabs(cur_div, mode)
 			}
 		}
 
-		if(cur_div.toLowerCase() != "webmaster" && window.AJAX_enabled && $(cur_div+'_h3')) {	//if we need to ajax stuff
+		if(window.AJAX_enabled && $(cur_div+'_h3')) {	//if we need to and can do ajax stuff
 			ajax('GET', "ajax.php", "type=admin&module="+cur_div+'&p='+PAGE+'&a='+ART, function(ajax_obj) {
 				$(cur_div).innerHTML	= ajax_obj.responseText;
 				switch_tabs(cur_div, 1);	//now go again, but skip the top stuff
