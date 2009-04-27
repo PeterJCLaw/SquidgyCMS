@@ -66,7 +66,7 @@ class AdminUsers extends Admin {
 
 		$file	= Users::file($who);	//convert to a filename type and include
 		include $file;
-		$error .= $this->change_commiittee_files($pass_hash, md5("password"), $file);
+		$error .= $this->change_user_file($pass_hash, md5("password"), $file);
 		send_mail(email($who), "$who: $website_name_short Website Password Reset", "Dear ".$who
 			.",\n\nYour password for the $website_name_long website has been reset to 'password' (without the quotes)."
 			."\n\nIf you did not request this and you have not just been elected to the committee then please email the Webmaster ($webmaster_email) and report this error."
@@ -74,7 +74,7 @@ class AdminUsers extends Admin {
 		return;
 	}
 
-	function change_commiittee_files($old_val, $new_val, $file)
+	function change_user_file($old_val, $new_val, $file)
 	{
 		global $debug_info;
 
@@ -88,7 +88,7 @@ class AdminUsers extends Admin {
 		$debug_info .= "\$file=$file\n<br />\$new_val=$new_val\n<br />\$old_val=$old_val\n<br />"
 				."\$old_file_contents=$old_file_contents\n<br />\$new_file_contents=$new_file_contents\n<br />\n";
 
-		return file_put_stuff($file, $new_file_contents, 'w');
+		return FileSystem::file_put_stuff($file, $new_file_contents, 'w');
 	}
 
 	function submit()
@@ -121,7 +121,7 @@ class AdminUsers extends Admin {
 
 				$debug_info	.= "\$sect[$sect_key]=$sect[$sect_key],	\$tmpval	= $tmpval\n<br />";
 			}
-			$error	.= file_put_stuff($admin_file, implode("\n", $toclist), 'w');
+			$error	.= FileSystem::file_put_stuff($admin_file, implode("\n", $toclist), 'w');
 		}
 
 		return $error;
@@ -130,10 +130,6 @@ class AdminUsers extends Admin {
 
 class Users {
 	function file($n) {
-		return user_file($n);
-	}
-	
-	function reset_pass($n) {
 		return user_file($n);
 	}
 }
