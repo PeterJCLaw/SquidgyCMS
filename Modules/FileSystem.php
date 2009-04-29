@@ -47,7 +47,7 @@ class FileSystem {
 	function Full_Dir_List($dir)
 	{
 		$results = array();
-		if(!is_dir($dir))
+		if(!is_dir($dir) || !is_readable($dir))
 			return $results;
 
 		global $logged_in, $this_dir, $show_all;
@@ -70,7 +70,7 @@ class FileSystem {
 	function Filtered_File_List($dir, $filter)
 	{
 		$results = array();
-		if(!is_dir($dir))
+		if(!is_dir($dir) || !is_readable($dir))
 			return $results;
 
 		if($filter == -1)	//special filter for all files (no dirs)
