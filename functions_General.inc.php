@@ -1,5 +1,12 @@
 <?php
 /* This function groups array elements by one property of those elements */
+function has_method($object, $method) {
+	$methods = get_class_methods($object);
+	$methods = array_map('strtolower', $methods);
+	return in_array($method, $methods);
+}
+
+/* This function groups array elements by one property of those elements */
 function group_array_by_key($arr, $col) {
 	$out = array();
 	foreach($arr as $key => $val) {
