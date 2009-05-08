@@ -97,6 +97,7 @@ function get(type, orig)
 	if(that.value == 'new') {	//if its a new one
 		$(type_l+"_id").value	= 'new';
 		$(type_l+'_title').value	= '';
+		$(type+'_content').value	= '';
 		$(type+'_content').innerHTML	= '';
 		return;
 	}
@@ -106,6 +107,7 @@ function get(type, orig)
 	} else {
 		ajax('GET', window.DATA_root+'/'+escape(that.value)+'.'+type_l, 0, function(ajax_obj) {
 			$(type+'_content').innerHTML	= ajax_obj.responseText;
+			$(type+'_content').value	= ajax_obj.responseText;
 			$(type_l+'_title').value	= unescape(that.value).substr(1+that.value.indexOf('-')).replace(/\+/g, ' ');
 			$(type_l+'_id').value	= that.value;
 		} );
