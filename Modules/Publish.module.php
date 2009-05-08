@@ -1,13 +1,13 @@
 <?php
-#name = Content
-#description = Manages organisation of pages and atricles
+#name = Publish
+#description = Manages which bits of content are published
 #package = Core - required
 #type = content
 ###
 
-class AdminContent extends Admin {
-	function AdminContent() {
-		parent::__construct(-1, -20);
+class AdminPublish extends Admin {
+	function AdminPublish() {
+		parent::__construct('Manage website content', -1, -20);
 	}
 
 	function printFormAdmin() {
@@ -106,7 +106,7 @@ class AdminContent extends Admin {
 
 				$debug_info	.= "\$enable[$enable_key]=$enable[$enable_key],	\$val	= $val\n<br />";
 			}
-			$error	.= FileSystem::file_put_stuff($pages_file, "<?php\n\$Site_TOClist	= array(\n	".implode(",\n	", $toclist)."\n	);\n?>", 'w');
+			$error	.= file_put_stuff($pages_file, "<?php\n\$Site_TOClist	= array(\n	".implode(",\n	", $toclist)."\n	);\n?>", 'w');
 		}
 
 		return $error;
