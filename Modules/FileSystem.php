@@ -143,6 +143,8 @@ class FileSystem {
 	/* get a file with no whitespace on the right, useful as PHP < 5 doesn't have FILE_IGNORE_NEW_LINES */
 	function file_rtrim($path)
 	{
+		if(!is_readable($path))
+			return array();
 		if(floatval(phpversion()) >= 5)
 			return file($path, FILE_IGNORE_NEW_LINES);
 		return array_map('rtrim', file($path));
