@@ -269,5 +269,21 @@ class Module {
 	function get_path($module) {
 		return get_module_path($module);
 	}
+	function list_all_with_info() {
+		return array_map('get_module_info', FileSystem::Filtered_File_List("Modules", ".module.php"));
+	}
+	function list_enabled($include_required_modules = FALSE) {
+		$enabled_modules = is_readable($GLOBALS['admin_file']) ? FileSystem::file_rtrim($GLOBALS['admin_file']) : array();
+
+		if($include_required_modules) {
+			$module_list	= Module::list_all_with_info();
+			$grouped_list	= group_array_by_key($module_list, '#package');
+			foreach($grouped_list['Core - required'] as $core)
+				array_push($enabled_modules, $core['#id']);
+			
+		}
+
+		return $enabled_modules;
+	}
 }
 ?>

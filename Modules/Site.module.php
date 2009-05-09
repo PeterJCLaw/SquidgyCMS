@@ -1,7 +1,7 @@
 <?php
 #name = Site
 #description = Links etc that are useful in the page template
-#package = Core - optional
+#package = Core - required
 #type = content
 ###
 

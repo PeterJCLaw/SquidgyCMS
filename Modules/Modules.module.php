@@ -12,9 +12,9 @@ class AdminModules extends Admin {
 	}
 
 	function printFormAdmin() {
-		$this->module_list	= array_map('get_module_info', FileSystem::Filtered_File_List("Modules", ".module.php"));
+		$this->module_list	= Module::list_all_with_info();
 		$this->module_list_grouped	= group_array_by_key($this->module_list, '#package');
-		$this->enabled_modules	= is_readable($this->data_file) ? FileSystem::file_rtrim($this->data_file) : array();
+		$this->enabled_modules	= Module::list_enabled(FALSE);
 
 		if($this->debug > 1)
 			echo 'Module List: '.print_r($this->module_list, true);
@@ -29,8 +29,7 @@ class AdminModules extends Admin {
 			$i = 1;
 			foreach($sub_list as $val) {
 				$description	= $val['#description'];
-				$section	= $val['#name'];
-				$section_HTMLid	= str_replace(' ', '_', $section);
+				$section	= $val['#id'];
 				$odd_even	= $i % 2 == 1 ? 'odd' : 'even';
 				$i++;
 
@@ -43,11 +42,11 @@ class AdminModules extends Admin {
 				} else
 					$checked	= '';
 
-				$sect_box	= '<input type="checkbox" class="tick" name="sect['."$section_HTMLid]\" id=\"_enable_$section_HTMLid\"$checked />";
+				$sect_box	= '<input type="checkbox" class="tick" name="sect['."$section]\" id=\"_enable_$section\"$checked />";
 
 				echo "<tr class=\"$odd_even\">
 		<td class=\"L\">$sect_box</td>
-		<td><label for=\"_enable_$section_HTMLid\">$section</label></td>
+		<td><label for=\"_enable_$section\">".$val['#name']."</label></td>
 		<td class=\"R\">$description</td>
 	</tr>";
 			}
@@ -67,7 +66,40 @@ class AdminModules extends Admin {
 		return FALSE;
 	}
 
+	function verify_module($module) {
+		return true;
+		$info = get_module_info($module);
+		include $info['#path'];
+		$module = ucwords($module);
+		$adminClass = "Admin$module";
+		$blockClass = "Block$module";
+		if(class_exists($adminClass)) {
+			if(has_method($adminClass, 'submit') && has_method($adminClass, 'printFormHeader') && has_method($adminClass, 'printFormAdmin') && has_method($adminClass, 'printFormFooter'))
+				$adminPass = true;
+			elseif(!empty($val['no_submit']) && $val['no_submit'])	//if there's no submission - eg just providing a link somewhere
+				$val['obj']->printFormAdmin();
+			else
+				$adminPass = FaLSE;
+		}
+		if(class_exists($blockClass)) {
+			$blockPass = true;
+		}
+		return $adminPass && $blockPass;
+	}
+
 	function submit() {
+		global $sect;
+		$enable_list = array();
+
+		if(!empty($sect))
+			foreach($sect as $sect_key => $tmpval) {
+				if($tmpval && $this->verify_module($sect_key))
+					array_push($enable_list, $sect_key);
+
+				$debug_info	.= "\$sect[$sect_key]=$sect[$sect_key],	\$tmpval	= $tmpval\n<br />";
+			}
+
+		$error	.= FileSystem::file_put_stuff($this->data_file, implode("\n", $enable_list), 'w');
 	}
 }
 

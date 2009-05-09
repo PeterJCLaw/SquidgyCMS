@@ -1,7 +1,9 @@
 <?php
 /* This function groups array elements by one property of those elements */
-function has_method($object, $method) {
-	$methods = get_class_methods($object);
+function has_method($class, $method) {
+	if(!class_exists($class))
+		return FALSE;
+	$methods = get_class_methods($class);
 	$methods = array_map('strtolower', $methods);
 	return in_array($method, $methods);
 }
@@ -118,6 +120,7 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 
 	$debug_info	.= "<br />\n";
 
+	$enabled_modules	= Module::list_enabled(true);
 	$len	= strlen($page);
 	$i	= 0;
 	while(!(strpos($page, '[[Block::') === FALSE || strpos($page, ']]') === FALSE) && $i<$len) {	//keep going until you run out of custom bits
@@ -136,7 +139,7 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 
 		$module_path = get_module_path($module);
 
-		if($module_path !== FALSE) {
+		if($module_path !== FALSE && in_array($module, $enabled_modules)) {
 			require_once($module_path);
 
 			$block	= "Block$module";
@@ -151,10 +154,10 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 
 				if(empty($block_html))
 					log_info("Block method '${block}->$method' returned nothing");
-			}
-			else
+			} else
 				log_info("Module '$module' has no block '$block'");
-		}
+		} else
+			log_info("Module '$module' does not exist or is not enabled");
 
 		$page	= str_replace("[[Block::$block_call]]", $block_html, $page);
 
@@ -196,8 +199,11 @@ function get_module_info($module)
 	} else
 		$info	= @parse_ini_file($file);
 
-		if(!empty($info['#dependencies']))
-			$info['#dependencies'] = str_getcsv($info['#dependencies']);
+	if(!empty($info['#dependencies']))
+		$info['#dependencies'] = str_getcsv($info['#dependencies']);
+
+	$info['#id']	= $module;
+	$info['#path']	= $file;
 
 	return $info;
 }
