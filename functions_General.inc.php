@@ -64,6 +64,26 @@ function print_Admin_Section($val) {
 	return;
 }
 
+/* parses the squidgyCMS block arguments from a string into an array, associative if applicable */
+function SquidgyParseArgs($argString) {
+	if(empty($argString) || ereg('/^\s+$/', $argString) !== FALSE)
+		return array();
+
+	if( $argString[0] == '}' && strlen($argString) == strpos($argString, '}')+1 )
+		$argArray	= explode('||', $argString);	//throw them into an array
+	else
+		return array($argString);
+
+	if(strpos($argString, ':') !== FALSE) {
+		foreach($argArray as $arg) {
+			list($name, $value) = explode(':', $arg);
+			$argDict[$name] = $value;
+		}
+		return $argDict;
+	} else
+		return $argArray;
+}
+
 /* parses the squidgyCMS wiki-style pages and makes html */
 function SquidgyParser($page_file, $start = 0, $finish = 0) {
 	global $debug, $debug_info;
@@ -108,15 +128,9 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 		list($module, $method)	= explode("-", $type);
 
 		$args	= substr($block_call, strlen($type)+2);	//grab the arguments
-		if(!empty($args))
-			$args	= explode("||", $args);	//sort them into an array
-		else
-			$args	= array();	//or make a blank array
+		$args	= SquidgyParseArgs($args);	//turn them into a useful array
 
-		$debug_info	.= "block_call = '$block_call', i = '$i', type = '$type', args = '".implode(", ", $args)."'\n<br />\n";
-		if($debug > 1) {
-			echo "args:\n<br />\n".print_r($args, true)."\n<br />\n";
-		}
+		$debug_info	.= "block_call = '$block_call', i = '$i', type = '$type', args = '".print_r($args, true)."'\n<br />\n";
 
 		$block_html	= '';
 
@@ -263,6 +277,8 @@ function get_next_id($where, $filter)
 		array_push($id_list, get_GEN_id($val));
 	}
 
+	if(count($id_list) == 0)
+		return 1;
 	return max($id_list)+1;
 }
 

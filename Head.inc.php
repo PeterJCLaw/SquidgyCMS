@@ -45,7 +45,7 @@ switch ($page_n)	//page name
 		break;
 	case "Admin":
 		$page_head_title	= "$website_name_short - Administration";	//the page title
-		$page_heading	= "Committee Administration";
+		$page_heading	= "Administration";
 		$this_page	= 'Admin';
 		break;
 	case "Home":
