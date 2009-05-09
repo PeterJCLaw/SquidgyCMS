@@ -10,57 +10,35 @@ class AdminPublish extends Admin {
 		parent::__construct('Manage website content', -1, -20);
 	}
 
-	function printFormAdmin() {
-		global $GEN_art, $GEN_pages, $Site_TOClist, $FSCMS_pages;
-		natsort($GEN_art);
-		natsort($GEN_pages);
-		$Site_pages	= array_merge($GEN_pages, $FSCMS_pages);
-		?>
-			<table id="admin_manage_tbl" class="admin_tbl"><tr>
-				<th title="Click on the page title link to edit the page">Page:</th>
-				<th title="Tick the box to delete the page, this cannot be undone" class="T R">Delete:</th>
-				<th title="Click on the article title link to edit the article">Edit Article:</th>
-				<th title="Tick the box to delete the article, this cannot be undone" class="T R">Delete:</th>
+	function printFormAdmin() { ?>
+			<table class="admin_tbl"><tr>
+				<th title="Click on the page title link to edit the chunk">Edit Chunk:</th>
+				<th title="Tick the box to enable the chunk" class="M">Enable:</th>
+				<th title="Tick the box to delete the chunk, this cannot be undone" class="R">Delete:</th>
 			</tr><?php
+		$Chunks = FileSystem::Filtered_File_List($this->data_root, '.chunk');
+		natsort($Chunks);
 		$check	= '<input type="checkbox" class="tick" name="';
-		$Page	= reset($Site_pages);
-		$Art	= reset($GEN_art);
-		while(!empty($Page) || !empty($Art))
-		{
-			$del_box_p	= $weight_box	= $enable_box	= $page_link	= $del_box_a	= $art_link	= '&nbsp;';
-			if(!empty($Page)) {
-				if(in_array($Page, $GEN_pages)) {	//if its a user page
-					if($Page == '1-Home') {
-						$page_name	= "Home";
-						$del_box_p	= "&nbsp;";
-					} else {
-						$page_name	= get_GEN_title($Page);
-						$del_box_p	= $check.'del['.$Page.'.page]" />';
-					}
-					$page_link	= '<a href="?p='.$Page.'#Page" title="Edit the \''.$page_name.'\' page">'.$page_name.'</a>';
-				} else {
-					if($Page == 'Committee.php')
-						$page_link	= '<a href="#Profile" title="Edit your committee page profile">Committee</a>';
-					else
-						$page_link	= str_replace("_", " ", substr($Page, 0, -4));
-				}
-			}
-			if(!empty($Art)) {
-				$art_name	= get_GEN_title($Art);
-				$del_box_a	= $check.'del['.$Art.'.article]" />';
-				$art_href	= "?a=".$Art;
-				$art_link	= '<a href="'.$art_href.'#Article" title="Edit the \''.$art_name.'\' article">'.$art_name.'</a>';
-			}
+		foreach($Chunks as $Chunk) {
+			$del_box	= $enable_box	= $view_link	= '&nbsp;';
+			$title	= get_GEN_title($Chunk);
+			$link	= '<a href="?p='.$Chunk.'#Page" title="Edit the \''.$title.'\' chunk">'.$title.'</a>';
 
-			$Page	= next($Site_pages);
-			$Art	= next($GEN_art);
+			if($Chunk != '1-Home') {
+				$del_box	= $check.'del['.$Chunk.'.chunk]" title="delete this chunk, cannot be undone"/>';
+				if(in_array($chunk, $enabled_chunks))
+					$on = ' checked="checked"';
+				else
+					$on = '';
+				$enable_box = $check.'enable['.$chunk.'.chunk]"'.$on.' />';
+			} else
+				$enable_box = $check.'" disabled="disabled" checked="checked" />';
 
 			echo '
 			<tr>
-				<td class="L">'.$page_link.'</td>
-				<td class="T R">'.$del_box_p.'</td>
-				<td class="L">'.$art_link.'</td>
-				<td class="T R">'.$del_box_a.'</td>
+				<td class="L">'.$link.'</td>
+				<td class="M">'.$enable_box.'</td>
+				<td class="R">'.$del_box.'</td>
 			</tr>';
 		} ?>
 			</table>
@@ -68,7 +46,7 @@ class AdminPublish extends Admin {
 	}
 
 	function submit() {
-		global $debug_info, $del, $enable, $weight, $links, $FSCMS_pages, $pages_file, $GEN_pages;
+		global $debug_info, $del, $enable, $links, $FSCMS_pages, $pages_file, $GEN_pages;
 		$error	= "";
 
 		if(!empty($del)) {
