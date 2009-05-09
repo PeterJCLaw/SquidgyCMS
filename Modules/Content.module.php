@@ -73,4 +73,51 @@ class AdminContent extends Admin {
 		return FileSystem::file_put_stuff("$this->data_root/".$chunk_id.".chunk", $content, 'w');
 	}
 }
+
+class BlockContent extends Block {
+	function BlockContent() {
+		parent::__construct();
+	}
+	
+	function replace_one($old, $new, $target) {
+		$pos = strpos($target, $old);
+		if($pos === FALSE)
+			return $target;
+		$before = substr($target, 0, $pos);
+		$after = substr($target, $pos+strlen($old));
+		return $before.$new.$after;
+	}
+
+	function getTemplate($n) {
+		$Chunk = $this->Chunk($n);
+		if($Chunk !== FALSE)
+			return $Chunk;
+		$themefile = "use the default theme one";
+		$defaultFile = "Use the default SquidgyCMS one";
+		foreach(array($themefile. $defaultFile) as $file) {
+			if(is_readable($file))
+				return file_get_contents($file);
+		}
+		return 'Foo[[Block::Content-Chunk]]GaFoo[[Block::Content-Chunk]]Gamm';
+	}
+	
+	function UseTemplate($args) {
+		$template = $this->getTemplate($args['template']);
+		if($template == FALSE)
+			return FALSE;
+		$chunks = explode(',',$args['chunks']);
+		foreach($chunks as $chunk) {
+			$template = $this->replace_one('[[Block::Content-Chunk]]', "[[Block::Content-Chunk::$chunk]]", $template);
+		}
+		return $template;
+	}
+	
+	function Chunk($args) {
+		list($chunk) = $args;
+		$file = "$this->data_root/".$chunk.".chunk";
+		if(!empty($chunk) && is_readable($file))
+			return file_get_contents($file);
+		return FALSE;
+	}
+}
 ?>
