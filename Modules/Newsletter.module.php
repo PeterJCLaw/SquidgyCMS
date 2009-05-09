@@ -13,7 +13,8 @@ class BlockNewsletter extends Block {
 	/* This function returns the date of the first Sunday of the calendar year */
 	function firstDay($args)
 	{
-		list($year, $day)	= $args;
+		$year	= $args['year'];
+		$day	= $args['day'];
 
 		$day_list['Sun']	= $day_list['Sunday']	= 0;
 		$day_list['Mon']	= $day_list['Monday']	= 1;
@@ -31,8 +32,7 @@ class BlockNewsletter extends Block {
 		}
 
 		$date = strtotime(date("01/01/$year"));
-		for($i=0; $i<7; $i++)
-		{
+		for($i=0; $i<7; $i++) {
 			if($i > 0)
 				$date	= strtotime("+1 day", $date);
 			if(date("w", $date) == $day)
@@ -46,7 +46,8 @@ class BlockNewsletter extends Block {
 	{
 		global $debug_info, $site_root, $NewsPath;
 		list($when, $prefix, $postfix, $day)	= $args;
-		
+		extract($args, EXTR_IF_EXISTS);
+
 		if(empty($when) || empty($prefix) || empty($postfix) || empty($day) || !is_dir($site_root.$NewsPath)) {
 			if(!is_dir($site_root.$NewsPath))
 				log_info('Directory does not exist', $site_root.$NewsPath);

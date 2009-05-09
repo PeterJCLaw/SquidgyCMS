@@ -53,8 +53,10 @@ class BlockNews extends Block {
 		if(empty($news))
 			return FALSE;
 
-		if(!empty($args))
+		if(!empty($args)) {
 			list($key, $add_format, $exp_format, $all)	= $args;
+			extract($args, EXTR_IF_EXISTS);
+		}
 
 		if(empty($key) || !in_array($key, array('added', 'expires')))	//sanity check
 			$key	= "added";
