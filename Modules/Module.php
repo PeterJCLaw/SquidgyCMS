@@ -264,14 +264,43 @@ class Block extends ModuleTemplate {
 
 class Module {
 	function get_info($module) {
-		return get_module_info($module);
+		$file = get_module_path($module);
+		if($file === FALSE)
+			return FALSE;
+		$fh	= fopen($file, 'r');
+		fgets($fh);
+		while($line = rtrim(fgets($fh))) {
+			if($line == '###')
+				break;
+			list($key, $value) = explode('=', $line);
+			$info[rtrim($key)] = trim($value);
+		}
+		fclose($fh);
+
+		if(!empty($info['#dependencies']))
+			$info['#dependencies'] = str_getcsv($info['#dependencies']);
+
+		$info['#id']	= $module;
+		$info['#path']	= $file;
+
+		return $info;
 	}
+
 	function get_path($module) {
-		return get_module_path($module);
+		if(is_readable("Modules/$module.module.php") || is_readable("Sites/Custom_Modules/$module.module.php")) {
+			if(is_readable("Modules/$module.module.php"))
+				return "Modules/$module.module.php";
+			else
+				return "Sites/Custom_Modules/$module.module.php";
+		}
+		log_info("Module '$module' is not readable or does not exist");
+		return FALSE;
 	}
+
 	function list_all_with_info() {
 		return array_map('get_module_info', FileSystem::Filtered_File_List("Modules", ".module.php"));
 	}
+
 	function list_enabled($include_required_modules = FALSE) {
 		$enabled_modules = is_readable($GLOBALS['admin_file']) ? FileSystem::file_rtrim($GLOBALS['admin_file']) : array();
 
@@ -280,7 +309,7 @@ class Module {
 			$grouped_list	= group_array_by_key($module_list, '#package');
 			foreach($grouped_list['Core - required'] as $core)
 				array_push($enabled_modules, $core['#id']);
-			
+
 		}
 
 		return $enabled_modules;

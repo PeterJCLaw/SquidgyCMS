@@ -167,45 +167,15 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 }
 
 /* get a module's path - allow for custom ones */
-function get_module_path($module)
+function get_module_path($m)
 {
-	if(is_readable("Modules/$module.module.php") || is_readable("Sites/Custom_Modules/$module.module.php")) {
-		if(is_readable("Modules/$module.module.php"))
-			return "Modules/$module.module.php";
-		else
-			return "Sites/Custom_Modules/$module.module.php";
-	}
-	log_info("Module '$module' is not readable or does not exist");
-	return FALSE;
+	return Module::get_path($m)
 }
 
 /* get a information about a module */
-function get_module_info($module)
+function get_module_info($m)
 {
-	$file = get_module_path($module);
-	if($file === FALSE)
-		return FALSE;
-	if(floatval(phpversion()) >= 5.3) {
-		$i = 0;
-		while(!$key) {
-			$lines = read_file_lines($file, 10, 10*$i);
-			$key = array_search('###', $lines);
-			unset($lines[0]);	//remove the dud bits
-			$i++;
-		}
-		for($j = $key; $j < count($lines); $j++)
-			unset($lines[$j]);
-		$info	= parse_ini_string(implode("\n", $lines));
-	} else
-		$info	= @parse_ini_file($file);
-
-	if(!empty($info['#dependencies']))
-		$info['#dependencies'] = str_getcsv($info['#dependencies']);
-
-	$info['#id']	= $module;
-	$info['#path']	= $file;
-
-	return $info;
+	return Module::get_info($m);
 }
 
 /* add this PHP5.3 function if needed */
