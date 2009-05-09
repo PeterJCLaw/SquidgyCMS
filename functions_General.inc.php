@@ -66,11 +66,11 @@ function print_Admin_Section($val) {
 
 /* parses the squidgyCMS block arguments from a string into an array, associative if applicable */
 function SquidgyParseArgs($argString) {
-	if(empty($argString) || ereg('/^\s+$/', $argString) !== FALSE)
+	if(empty($argString) || ereg('^\s+$', $argString) !== FALSE)
 		return array();
 
-	if( $argString[0] == '}' && strlen($argString) == strpos($argString, '}')+1 )
-		$argArray	= explode('||', $argString);	//throw them into an array
+	if( ereg('^\{.*\}$', $argString) !== FALSE )
+		$argArray	= explode('||', substr($argString, 1, -1));	//throw them into an array
 	else
 		return array($argString);
 
