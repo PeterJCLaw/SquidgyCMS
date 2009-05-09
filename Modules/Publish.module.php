@@ -11,42 +11,43 @@ class AdminPublish extends Admin {
 	}
 
 	function printFormAdmin() { ?>
-			<table class="admin_tbl"><tr>
-				<th title="Click on the page title link to edit the chunk">Edit Chunk:</th>
-				<th title="Tick the box to enable the chunk" class="M">Enable:</th>
-				<th title="Tick the box to delete the chunk, this cannot be undone" class="R">Delete:</th>
-			</tr><?php
-		$Chunks = FileSystem::Filtered_File_List($this->data_root, '.chunk');
-		natsort($Chunks);
+<table class="admin_tbl"><tr>
+	<th title="Click on the page title link to edit the chunk">Edit chunk:</th>
+	<th title="Tick the box to enable the chunk" class="M">Enable:</th>
+	<th title="Tick the box to delete the chunk, this cannot be undone" class="R">Delete:</th>
+</tr><?php
+		$chunks = FileSystem::Filtered_File_List($this->data_root, '.chunk');
+		$published_chunks = FileSystem::file_rtrim($this->data_file);
+		natsort($chunks);
 		$check	= '<input type="checkbox" class="tick" name="';
-		foreach($Chunks as $Chunk) {
+		foreach($chunks as $chunk) {
 			$del_box	= $enable_box	= $view_link	= '&nbsp;';
-			$title	= get_GEN_title($Chunk);
-			$link	= '<a href="?p='.$Chunk.'#Page" title="Edit the \''.$title.'\' chunk">'.$title.'</a>';
+			$title	= get_GEN_title($chunk);
+			$link	= '<a href="?p='.$chunk.'#Content" title="Edit the \''.$title.'\' chunk">'.$title.'</a>';
 
-			if($Chunk != '1-Home') {
-				$del_box	= $check.'del['.$Chunk.'.chunk]" title="delete this chunk, cannot be undone"/>';
-				if(in_array($chunk, $enabled_chunks))
+			if($chunk != '1-Home') {
+				$del_box	= $check.'del['.$chunk.'.chunk]" title="delete this chunk, cannot be undone"/>';
+				if(in_array($chunk, $published_chunks))
 					$on = ' checked="checked"';
 				else
 					$on = '';
-				$enable_box = $check.'enable['.$chunk.'.chunk]"'.$on.' />';
+				$enable_box = $check.'publish['.$chunk.']"'.$on.' />';
 			} else
 				$enable_box = $check.'" disabled="disabled" checked="checked" />';
 
 			echo '
-			<tr>
-				<td class="L">'.$link.'</td>
-				<td class="M">'.$enable_box.'</td>
-				<td class="R">'.$del_box.'</td>
-			</tr>';
+<tr>
+	<td class="L">'.$link.'</td>
+	<td class="M">'.$enable_box.'</td>
+	<td class="R">'.$del_box.'</td>
+</tr>';
 		} ?>
-			</table>
+</table>
 <?php return;
 	}
 
 	function submit() {
-		global $debug_info, $del, $enable, $links, $FSCMS_pages, $pages_file, $GEN_pages;
+		global $debug_info, $del, $publish, $links, $FSCMS_pages, $pages_file, $GEN_pages;
 		$error	= "";
 
 		if(!empty($del)) {
@@ -56,35 +57,13 @@ class AdminPublish extends Admin {
 			}
 		}
 
-		if(!empty($enable)) {
-			$toclist	= array();
-			foreach($enable as $enable_key => $val) {
-				$w	= (int) $weight[$enable_key];
-
-				if($enable_key == 'Home') {
-					$href	= './';
-					$title	= 'Home';
-				} elseif(in_array($enable_key, $FSCMS_pages)) {
-					$href	= $enable_key;
-					$title	= str_replace("_", " ", substr($enable_key, 0, -4));
-					if(!is_readable($href))
-						continue;
-				} elseif(in_array($enable_key, $GEN_pages)) {
-					$href	= "?p=$enable_key";
-					$title	= get_GEN_title($enable_key);
-					if(!is_readable("$this->data_root/$enable_key.page"))
-						continue;
-				} else {
-					$title	= $enable_key;
-					$href	= $links[$enable_key];
-				}
-
-				if(!empty($val))	//if its enabled get its weight & build the output
-					array_push($toclist, "'$enable_key'	=> array('title' => '$title',	'href' => '$href',	'weight' => ".(empty($w) ? 0 : $w).')');
-
-				$debug_info	.= "\$enable[$enable_key]=$enable[$enable_key],	\$val	= $val\n<br />";
+		if(!empty($publish)) {
+			$published_chunks	= array();
+			foreach($publish as $chunk => $val) {
+				if(!empty($val))
+					array_push($published_chunks, $chunk);
 			}
-			$error	.= file_put_stuff($pages_file, "<?php\n\$Site_TOClist	= array(\n	".implode(",\n	", $toclist)."\n	);\n?>", 'w');
+			$error	.= FileSystem::file_put_stuff($this->data_file, implode("\n", $published_chunks), 'w');
 		}
 
 		return $error;
