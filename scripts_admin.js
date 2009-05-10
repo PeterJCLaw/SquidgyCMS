@@ -8,7 +8,7 @@ function TBpress(that)
 // gets called after a set delay after a key press on certain text boxes
 function TBrefresh(thing)
 {
-	that	= $(thing);
+	var that	= $(thing);
 	clearTimeout(that.countdown);
 	//do the refresh stuff
 }
@@ -48,10 +48,9 @@ function add_article_row ()
 	curr_sel[1]	= $('article_id_1').selectedIndex;
 	curr_sel[2]	= $('article_id_2').selectedIndex;
 
-	for(i=num_rows_2, j=1; i <= 2*num_rows_1; i++, j++) {
-		art_id	= 'article_id_'+i;
-		cur_sel	= curr_sel[j];
-		$(art_id).options[cur_sel].selected	= false;
+	for(var j=1, i=num_rows_2; i <= 2*num_rows_1; i++, j++) {
+		var art_id	= 'article_id_'+i;
+		$(art_id).options[curr_sel[j]].selected	= false;
 		$(art_id).options[num_opts].selected	= true;
 	}
 
@@ -63,7 +62,7 @@ function clearRow(thing)
 {
 	row	= thing.parentNode.parentNode;
 	input_list	= row.getElementsByTagName('input');
-	for(i=0; i<input_list.length; i++) {
+	for(var i=0; i<input_list.length; i++) {
 		input_list[i].value	= '';
 	}
 	return;
@@ -157,11 +156,11 @@ function switch_tabs(cur_div, mode)
 		window.hideList	= get_Sub_Class_Elements('admin_divs_holder', 'JS_hide');
 		window.showList	= get_Sub_Class_Elements('admin_divs_holder', 'JS_show');
 		window.moveList	= get_Sub_Class_Elements('admin_divs_holder', 'JS_move');
-		for(i=0; i<moveList.length; i++)
+		for(var i=0; i<moveList.length; i++)
 			moveList[i].className	= moveList[i].className.replace('JS_move', 'JS');	//only allow it to be moved once
 	}
 
-	for(i=0; i<hideList.length; i++) {	//hide stuff
+	for(var i=0; i<hideList.length; i++) {	//hide stuff
 		$(hideList[i].id).style.display		= 'none';
 	}
 	for(i=0; i<showList.length; i++) {	//show stuff

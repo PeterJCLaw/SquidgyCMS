@@ -19,7 +19,7 @@ function GetXmlHttpObject()
 
 function ajax(method, url, params, do_this)
 {
-	xmlHttp	= GetXmlHttpObject();
+	var xmlHttp	= GetXmlHttpObject();
 
 	if(xmlHttp == null) {
 		alert("Your browser does not support AJAX!");

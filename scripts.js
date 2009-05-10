@@ -107,14 +107,12 @@ function get_Sub_Class_Elements(container, search_class)
 	var elem_list	= BASE.getElementsByTagName('*');
 	var out_list = new Array();
 
-	for(j=0, i=0; i<elem_list.length; i++)
-	{
+	for(var j=0, i=0; i<elem_list.length; i++) {
 		if(elem_list[i].className == search_class || elem_list[i].className.indexOf(search_class) != -1) {
 			out_list[j]	= elem_list[i];
 			j++;
 		}
 	}
-	elem_list	= new Array();	//clear it away
 	return out_list;
 }
 
