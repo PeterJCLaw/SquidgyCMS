@@ -22,12 +22,16 @@ EXP;
 	}
 
 	function Browse($args) {
-		if(empty($args)) {
-			$type	= 'auto';
-			$size	= 3;
-		}
+		list($path, $size, $type) = array();
+		extract($args, EXTR_IF_EXISTS);
 
-		return '<div id="Docs-Browse">'.Docs::file_grid($this->get_path($args['path']), $type, $size).'</div>';
+		if(empty($type))
+			$type	= 'auto';
+
+		if(empty($size))
+			$size	= 3;
+
+		return '<div id="Docs-Browse">'.Docs::file_grid($this->get_path($path), $type, $size).'</div>';
 	}
 
 	function Tree($args) {
@@ -38,7 +42,7 @@ EXP;
 
 	function get_path($path) {
 		if(array_key_exists('dir', $_REQUEST))
-			return $path.$_REQUEST['dir'];
+			return $_REQUEST['dir'];
 		else
 			return $path;
 	}
@@ -91,7 +95,7 @@ class Docs {	//parent class for useful functions
 	function file_tree($base, $path, $ajax, $tabs='')
 	{
 		global $debug_info;
-		
+
 		$base = Docs::fix_slashes($base);
 		$path = Docs::fix_slashes($path);
 
