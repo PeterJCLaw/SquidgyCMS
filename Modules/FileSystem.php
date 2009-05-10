@@ -161,13 +161,32 @@ class FileSystem {
 		return $file;
 	}
 
-	/* grab a data file & convert it to a 2D array using the passed column names */
-	function get_file_assoc($path, $cols)
+	/* grab a 2D array then output it as a file, including colnames if told to, automatically if needed */
+	function put_file_assoc($path, $data, $cols=FALSE)
+	{
+		if($cols !== FALSE && !is_array($cols))	{ //not no, but not valid either
+			$cols = array_keys($data[0]);
+			$file_string = implode('|:|', $cols)."\n";
+		} else
+			$file_string = '';
+
+		foreach($data as $line) {
+			$file_string .= implode('|:|', $line)."\n";
+		}
+		return FileSystem::file_put_contents($path, $file_string, 'w');
+	}
+
+	/* grab a data file & convert it to a 2D array using the passed column names, or use the ones from the file is none are pased */
+	function get_file_assoc($path, $cols=FALSE)
 	{
 		if(!is_readable($path))	//if we can't read it then bail
 			return array();
 		$file	= FileSystem::get_file_rtrim($path);	//read the info into an array, one element per line
 		$out	= array();
+		if($cols === FALSE) {	//automatic cols sorting
+			$cols = explode('|:|', $file[0]);
+			unset($file[0]);
+		}
 		foreach($file as $line) {
 			$line_data	= array_combine($cols, explode('|:|', $line));
 			if(!empty($line_data))

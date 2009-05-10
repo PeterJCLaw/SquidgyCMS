@@ -12,6 +12,8 @@ class ModuleTemplate {
 		$this->site_root	= $site_root;
 		$this->data_root	= $data_root;
 		$this->data_file	= $this->data_root.'/'.strtolower($this->get_my_class()).'.data';
+		$this->complex_data	= FALSE;
+		$this->data	= array();
 		$this->debug	= $debug;
 	}
 
@@ -21,6 +23,20 @@ class ModuleTemplate {
 
 	function get_my_class() {
 		return substr(get_class($this), 5);
+	}
+
+	function get_data() {
+		if($this->complex_data)
+			$this->data = FileSystem::get_file_assoc($this->data_file);
+		else
+			$this->data = FileSystem::get_file_rtrim($this->data_file);
+	}
+
+	function put_data() {
+		if($this->complex_data)
+			return FileSystem::put_file_assoc($this->data_file, $this->data, true);
+		else
+			return FileSystem::file_put_contents($this->data_file, implode("\n",$this->data), 'w');
 	}
 
 	function get_info() {
@@ -118,7 +134,7 @@ class Admin extends ModuleTemplate {
 		foreach($GEN_pages as $page) {	//go through all the pages, replacing the old id with the new one, if its present
 			$page_content	= file_get_contents($page);
 			if(strpos($page_content, $old))
-				$error	.= FileSystem::file_put_stuff($page, str_replace($old, $new, $page_content), 'w');
+				$error	.= FileSystem::file_put_contents($page, str_replace($old, $new, $page_content), 'w');
 		}
 		return $error;
 	}
@@ -302,7 +318,7 @@ class Module {
 	}
 
 	function list_enabled($include_required_modules = FALSE) {
-		$enabled_modules = is_readable($GLOBALS['admin_file']) ? FileSystem::file_rtrim($GLOBALS['admin_file']) : array();
+		$enabled_modules = is_readable($GLOBALS['admin_file']) ? FileSystem::get_file_rtrim($GLOBALS['admin_file']) : array();
 
 		if($include_required_modules) {
 			$module_list	= Module::list_all_with_info();
