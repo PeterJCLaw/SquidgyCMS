@@ -169,7 +169,7 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 /* get a module's path - allow for custom ones */
 function get_module_path($m)
 {
-	return Module::get_path($m)
+	return Module::get_path($m);
 }
 
 /* get a information about a module */
