@@ -8,12 +8,13 @@
 class AdminLinks extends Admin {
 	function AdminLinks() {
 		parent::__construct();
+		$this->complex_data = true;
 	}
 
 	function printFormAdmin() {
 		global	$debug, $debug_info;
-		$Links	= FileSystem::get_file_assoc($this->data_file, array('href', 'text', 'title'));
-		multi2dSortAsc($Links, 'title');
+		$this->get_data();
+		multi2dSortAsc($this->data, 'title');
 		?>
 			<table id="admin_links_tbl" class="admin_tbl"><tr>
 				<th title="The link text - the text you see">Link Text:</th>
@@ -21,11 +22,11 @@ class AdminLinks extends Admin {
 				<th title="The URL that the link points to" class="T M">Link Target:</th>
 				<th title="Clear that row" class="T R">Clear:</th>
 			</tr><?php
-		$Link	= reset($Links);
+		$Link	= reset($this->data);
 		$i	= 0;
 		while(!empty($Link)) {	//cycle through each of the existing links
 			echo $this->make_Link_Row($i, $Link['text'], $Link['href'], $Link['title']);
-			$Link	= next($Links);
+			$Link	= next($this->data);
 			$i++;
 		}
 
@@ -62,29 +63,30 @@ class AdminLinks extends Admin {
 			$this_title	= empty($title[$key]) ? '' : $title[$key];
 
 			if(!empty($this_text) && !empty($this_href))	//if its enabled get its weight & build the output
-				array_push($link_list, "$this_href|:|$this_text|:|$this_title");
+				array_push($this->data, array('href'=>$this_href, 'text'=>$this_text, 'title'=>$this_title));
 
 			$debug_info	.= "\$this_href = '$this_href',	\$this_text	= '$this_text',	\$this_title	= '$this_title'\n<br />";
 		}
-		return FileSystem::file_put_contents($this->data_file, implode("\n", $link_list), 'w');
+		return $this->put_data();
 	}//*/
 }
 
 class BlockLinks extends Block {
 	function BlockLinks() {
 		parent::__construct();
+		$this->complex_data = true;
 	}
 
 	function block($args) {
-		$Links	= FileSystem::get_file_assoc($this->data_file, array('href', 'text', 'title'));
+		$this->get_data();
 		
-		if(empty($Links))
+		if(empty($this->data))
 			return;
 		
-		multi2dSortAsc($Links, 'title');
-		$Link	= reset($Links);
+		multi2dSortAsc($this->data, 'title');
+		$Link	= reset($this->data);
 		$out	= "\n	<ul class=\"links_list\">";
-		$last	= count($Links)-1;
+		$last	= count($this->data)-1;
 		$i	= 0;
 		
 		while(!empty($Link)) {
@@ -92,7 +94,7 @@ class BlockLinks extends Block {
 			$title	= (empty($Link['title']) ? '' : ' title="'.$Link['title'].(strpos($Link['href'], 'http') === 0 ? ', External Link' : '').'"');
 			$out	.= '
 		<li'.$class.'><a href="'.$Link['href'].'"'.$title.'>'.$Link['text'].'</a></li>';
-			$Link	= next($Links);
+			$Link	= next($this->data);
 			$i++;
 		}
 		$out	.="\n	</ul>";
