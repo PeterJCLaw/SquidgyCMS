@@ -27,7 +27,7 @@ switch($type) {
 		break;
 	
 	case 'block':
-		if(class_exists($class) && method_exists($class, 'ajax')) {
+		if(has_method($class, 'ajax')) {
 			$thisobj	= new $class();
 			echo $thisobj->ajax();
 		} else
