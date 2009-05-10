@@ -141,7 +141,7 @@ class FileSystem {
 	}
 
 	/* get a file with no whitespace on the right, useful as PHP < 5 doesn't have FILE_IGNORE_NEW_LINES */
-	function file_rtrim($path)
+	function get_file_rtrim($path)
 	{
 		if(!is_readable($path))
 			return array();
@@ -151,7 +151,7 @@ class FileSystem {
 	}
 
 	/* read the first $n lines of file $f from $s onwards */
-	function read_file_lines($f, $n, $s=0)
+	function get_file_lines($f, $n, $s=0)
 	{
 		$fh	= fopen($f, 'r');
 		for($i=$s; $i<$n; $i++) {
@@ -166,7 +166,7 @@ class FileSystem {
 	{
 		if(!is_readable($path))	//if we can't read it then bail
 			return array();
-		$file	= FileSystem::file_rtrim($path);	//read the info into an array, one element per line
+		$file	= FileSystem::get_file_rtrim($path);	//read the info into an array, one element per line
 		$out	= array();
 		foreach($file as $line) {
 			$line_data	= array_combine($cols, explode('|:|', $line));
@@ -179,7 +179,7 @@ class FileSystem {
 	}
 
 	/* This function writes a string passed to the filename given */
-	function file_put_stuff($file, $data, $mode)
+	function file_put_contents($file, $data, $mode)
 	{
 		$error	= '';
 		if(empty($file))

@@ -70,7 +70,7 @@ class AdminContent extends Admin {
 
 		$header_link	= "&p=$chunk_id";
 
-		return FileSystem::file_put_stuff("$this->data_root/".$chunk_id.".chunk", $content, 'w');
+		return FileSystem::file_put_contents("$this->data_root/".$chunk_id.".chunk", $content, 'w');
 	}
 }
 

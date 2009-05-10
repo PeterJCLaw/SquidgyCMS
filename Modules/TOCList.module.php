@@ -103,7 +103,7 @@ class AdminTOCList extends Admin {
 		}
 		array_push($toclist, "'AliasList'	=> array(\n		".implode(",\n		", $alias_list)."\n		)");
 
-			$error	.= FileSystem::file_put_stuff($pages_file, "<?php\n\$Site_TOClist	= array(\n	".implode(",\n	", $toclist)."\n	);\n?>", 'w');
+			$error	.= FileSystem::file_put_contents($pages_file, "<?php\n\$Site_TOClist	= array(\n	".implode(",\n	", $toclist)."\n	);\n?>", 'w');
 		}
 
 		return $error;

@@ -35,7 +35,7 @@ class AdminNews extends Admin {
 		$timestamp	= mktime(0,0,0,$month, $day + 1, $year);
 		$output = "\n".time()."|:|$timestamp|:|$content";
 
-		return FileSystem::file_put_stuff($this->data_file, $output, 'a');
+		return FileSystem::file_put_contents($this->data_file, $output, 'a');
 	}
 }
 

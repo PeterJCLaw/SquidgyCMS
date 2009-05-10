@@ -88,7 +88,7 @@ class AdminUsers extends Admin {
 		$debug_info .= "\$file=$file\n<br />\$new_val=$new_val\n<br />\$old_val=$old_val\n<br />"
 				."\$old_file_contents=$old_file_contents\n<br />\$new_file_contents=$new_file_contents\n<br />\n";
 
-		return FileSystem::file_put_stuff($file, $new_file_contents, 'w');
+		return FileSystem::file_put_contents($file, $new_file_contents, 'w');
 	}
 
 	function submit()
@@ -121,7 +121,7 @@ class AdminUsers extends Admin {
 
 				$debug_info	.= "\$sect[$sect_key]=$sect[$sect_key],	\$tmpval	= $tmpval\n<br />";
 			}
-			$error	.= FileSystem::file_put_stuff($admin_file, implode("\n", $toclist), 'w');
+			$error	.= FileSystem::file_put_contents($admin_file, implode("\n", $toclist), 'w');
 		}
 
 		return $error;

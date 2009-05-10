@@ -80,7 +80,7 @@ class AdminEvent extends Admin {
 		}
 
 		//now we output the stuff we just organised & return
-		return FileSystem::file_put_stuff($this->data_file, $output, 'a');
+		return FileSystem::file_put_contents($this->data_file, $output, 'a');
 	}
 
 }

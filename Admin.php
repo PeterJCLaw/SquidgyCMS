@@ -51,7 +51,7 @@ if(!$logged_in) {
 include Users::file($username);
 
 if(is_readable($admin_file)) {	//get the list of wanted ones
-	$enabled_modules	= FileSystem::file_rtrim($admin_file);
+	$enabled_modules	= FileSystem::get_file_rtrim($admin_file);
 } else
 	$enabled_modules	= array();
 
