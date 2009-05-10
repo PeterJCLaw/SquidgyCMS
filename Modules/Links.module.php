@@ -66,7 +66,7 @@ class AdminLinks extends Admin {
 
 			$debug_info	.= "\$this_href = '$this_href',	\$this_text	= '$this_text',	\$this_title	= '$this_title'\n<br />";
 		}
-		return FileSystem::file_put_stuff($this->data_file, implode("\n", $link_list), 'w');
+		return FileSystem::file_put_contents($this->data_file, implode("\n", $link_list), 'w');
 	}//*/
 }
 

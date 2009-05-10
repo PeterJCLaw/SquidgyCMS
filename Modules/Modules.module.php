@@ -89,17 +89,16 @@ class AdminModules extends Admin {
 
 	function submit() {
 		global $sect;
-		$enable_list = array();
 
 		if(!empty($sect))
 			foreach($sect as $sect_key => $tmpval) {
 				if($tmpval && $this->verify_module($sect_key))
-					array_push($enable_list, $sect_key);
+					array_push($this->data, $sect_key);
 
 				$debug_info	.= "\$sect[$sect_key]=$sect[$sect_key],	\$tmpval	= $tmpval\n<br />";
 			}
 
-		$error	.= FileSystem::file_put_stuff($this->data_file, implode("\n", $enable_list), 'w');
+		$error	.= $this->put_data();
 	}
 }
 

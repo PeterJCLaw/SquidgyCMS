@@ -16,8 +16,8 @@ class AdminPublish extends Admin {
 	<th title="Tick the box to enable the chunk" class="M">Enable:</th>
 	<th title="Tick the box to delete the chunk, this cannot be undone" class="R">Delete:</th>
 </tr><?php
+		$this->get_data();
 		$chunks = FileSystem::Filtered_File_List($this->data_root, '.chunk');
-		$published_chunks = FileSystem::file_rtrim($this->data_file);
 		natsort($chunks);
 		$check	= '<input type="checkbox" class="tick" name="';
 		foreach($chunks as $chunk) {
@@ -27,7 +27,7 @@ class AdminPublish extends Admin {
 
 			if($chunk != '1-Home') {
 				$del_box	= $check.'del['.$chunk.'.chunk]" title="delete this chunk, cannot be undone"/>';
-				if(in_array($chunk, $published_chunks))
+				if(in_array($chunk, $this->data))
 					$on = ' checked="checked"';
 				else
 					$on = '';
@@ -58,12 +58,11 @@ class AdminPublish extends Admin {
 		}
 
 		if(!empty($publish)) {
-			$published_chunks	= array();
 			foreach($publish as $chunk => $val) {
 				if(!empty($val))
-					array_push($published_chunks, $chunk);
+					array_push($this->data, $chunk);
 			}
-			$error	.= FileSystem::file_put_stuff($this->data_file, implode("\n", $published_chunks), 'w');
+			$error	.= $this->put_data();
 		}
 
 		return $error;
