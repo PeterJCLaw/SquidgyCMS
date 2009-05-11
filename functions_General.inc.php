@@ -218,14 +218,14 @@ function get_GEN_title($name)
 }
 
 /* function adapted from http://www.prodevtips.com/2008/01/06/sorting-2d-arrays-in-php-anectodes-and-reflections/ */
-function multi2dSortAsc(&$arr, $key)
+function multi2dSortAsc(&$arr, $sort_key)
 {
-	if(empty($key) || empty($arr))
+	if(empty($sort_key) || empty($arr))
 		return;
 	$sort_col	= array();
-	foreach($arr as $sub)
-		$sort_col[]	= $sub[$key];
-	array_multisort($sort_col, $arr);
+	foreach($arr as $key => $sub)
+		$sort_col[$key]	= $sub[$sort_key];
+	array_multisort($sort_col, &$arr);
 }
 
 /* compare items by filename id */
