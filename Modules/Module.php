@@ -71,8 +71,8 @@ class Admin extends ModuleTemplate {
 		$info = Module::get_info($this->section);
 		if(is_array($info) && isset($info['#name']) && isset($info['#description'])) {
 			$this->own_file_info	= $info;
-			$this->sect_title		= $this->own_file_info['#description'];
-			$this->section_human	= $this->own_file_info['#name'];
+			$this->sect_title		= $info['#description'];
+			$this->section_human	= $info['#name'];
 		}
 
 		if(!empty($this->debug) && $this->debug > 1) {
@@ -178,7 +178,7 @@ class Admin extends ModuleTemplate {
 <?php	}
 
 	function printFormHeader() {
-	global $debug, $sect_title; ?>
+	global $debug; ?>
 <form id="<?php echo $this->section ?>_form" action="admin_handler.php" method="<? echo $debug ? 'get' : 'post'; ?>" onsubmit="return Validate_On_Admin_Submit(this)">
 <div class="admin_form_head">
 	<span class="f_right JS_move">
@@ -280,7 +280,7 @@ class Block extends ModuleTemplate {
 
 class Module {
 	function get_info($module) {
-		$file = get_module_path($module);
+		$file = Module::get_path($module);
 		if($file === FALSE)
 			return FALSE;
 		$fh	= fopen($file, 'r');
