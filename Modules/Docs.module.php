@@ -60,13 +60,77 @@ class AdminDocs extends Admin {
 		parent::__construct();
 	}
 
-	function printFormAdmin() {
-	//somehow let them choose which files are publicly viewable
+	function select_box($id, $options, $default=FALSE) {
+		$selector_box = "<select id=\"$id\"";
+		foreach($options as $name => $value) {
+			if($default !== FALSE && $name == $default)
+				$value .= '" selected="selected';
+			$selector_box .= "\n	<option value=\"$value\">$name</option>";
+		}
+		$selector_box .= "\n</select>";
+	}
 
+	function printFormAdmin() { ?>
+<table><tr>
+	<th>Path:</th>
+	<!-- th title="The authorisation level required to view the files in that folder">Auth. level</th -->
+	<th title="Whether this path can be seen">Enabled</th>
+	</tr>
+	<?php
+		$this->get_data();
+		$paths = Docs::recursive_get_folders('');
+		//$options = array('Everyone'=>USER_GUEST, );
+		foreach($paths as $path) {
+			if(!FileSystem::is_dir($path))
+				continue;
+			$input = '<input type="checkbox"';
+			if(in_array($path, $this->data))
+				$input .= ' checked="checked"';
+			$input .= " name=\"enable[$path]\" />";
+
+		//	$select = $this->select_box($options, $path_auth_level);
+			echo "<tr>\n	<td>$path</td><td>$input</td>\n</tr>";
+		}
+	?>
+</table>
+<?php }
+
+	function submit() {
+		global $enable;
+		foreach($enable as $path => $enabled) {
+			if($enabled)
+				array_push($this->data, $path);
+		}
+		$this->put_data();
 	}
 }
 
 class Docs {	//parent class for useful functions
+
+	/* This function recursively gets all the subfolders of a folder */
+	function recursive_get_folders($orig_dir)
+	{
+		$dir = $GLOBALS['site_root'].'/'.$orig_dir;
+
+		$results = array();
+		if(!is_dir($dir) || !is_readable($dir))
+			return $results;
+
+		$this_dir = $dir;
+		$handler = opendir($dir);
+
+		while($file = readdir($handler)) {
+			if($file != '.' && $file != '..'  && is_dir("$dir/$file")) {
+				array_push($results, "$orig_dir/$file");
+			//	print_r(Docs::recursive_get_folders("$orig_dir/$file"));
+				$results = array_merge($results, Docs::recursive_get_folders("$orig_dir/$file"));
+			}
+		}
+		closedir($handler);
+		sort($results);
+		reset($results);
+		return $results;
+	}
 
 	/* This function reads ALL the items in a directory and returns an array with this information */
 	function Full_Dir_List($dir)
