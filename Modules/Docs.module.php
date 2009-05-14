@@ -41,7 +41,7 @@ EXP;
 	}
 
 	function get_path($path) {
-		if(array_key_exists('dir', $_REQUEST))
+		if(array_key_exists('dir', $_REQUEST) && !empty($_REQUEST['dir']))
 			return $_REQUEST['dir'];
 		else
 			return $path;
@@ -81,7 +81,8 @@ class AdminDocs extends Admin {
 		$paths = Docs::recursive_get_folders('');
 		//$options = array('Everyone'=>USER_GUEST, );
 		foreach($paths as $path) {
-			if(!FileSystem::is_dir($path))
+			$path  = Docs::fix_slashes($path);
+			if(!FileSystem::is_dir($path) || Docs::reserved_dir($path))
 				continue;
 			$input = '<input type="checkbox"';
 			if(in_array($path, $this->data))
@@ -106,6 +107,16 @@ class AdminDocs extends Admin {
 }
 
 class Docs {	//parent class for useful functions
+
+	/* This function tells if the path is a reserved one */
+	function reserved_dir($path)
+	{
+		foreach(array('Data', 'Users') as $reserved)
+			if(Docs::path_compare($reserved, $path))
+				return true;
+		$bits = explode('/',$path);
+		return in_array('Thumbs', $bits);
+	}
 
 	/* This function recursively gets all the subfolders of a folder */
 	function recursive_get_folders($orig_dir)
@@ -132,11 +143,23 @@ class Docs {	//parent class for useful functions
 		return $results;
 	}
 
+	/* This function checks the paths in an array against the list of allowed ones */
+	function check_paths($query_paths, $prefix='')
+	{
+		$allowed_paths = FileSystem::get_file_rtrim($GLOBALS['data_root'].'/docs.data');
+		$out_paths = array();
+		if(!in_array($prefix, $allowed_paths))
+			return array();
+		foreach($query_paths as $path)
+			if( in_array($prefix.'/'.$path, $allowed_paths) || FileSystem::is_file($prefix.'/'.$path) )
+				array_push($out_paths, $path);
+		return $out_paths;
+	}
+
 	/* This function reads ALL the items in a directory and returns an array with this information */
 	function Full_Dir_List($dir)
 	{
-		$dir = $GLOBALS['site_root'].'/'.$dir;
-		$results = FileSystem::Full_Dir_List($dir);
+		$results = Docs::check_paths(FileSystem::Full_Dir_List($GLOBALS['site_root'].'/'.$dir), $dir);
 		usort($results, array("Docs", "tree_sort"));
 		reset($results);
 		return $results;
@@ -145,8 +168,7 @@ class Docs {	//parent class for useful functions
 	/* This function reads only the items in a directory that containt the strings in $filter and returns an array with this information */
 	function Filtered_Dir_List($dir)
 	{
-		$dir = $GLOBALS['site_root'].'/'.$dir;
-		return FileSystem::Filtered_Dir_List($dir);
+		return Docs::check_paths(FileSystem::Filtered_Dir_List($GLOBALS['site_root'].'/'.$dir), $dir);
 	}
 
 	/* recursive function to explore the file / folder structure beneath
@@ -263,14 +285,14 @@ class Docs {	//parent class for useful functions
 
 			if(in_array(FileSystem::returnFileExt($item), array("png", "jpg")))	//is it an image of the sort we can handle (jpg or png)
 			{
-				$size_cache = returnPath($item)."/Thumbs/".returnName($item).".dim";
+				$size_cache = FSPHP::returnPath($item)."/Thumbs/".FSPHP::returnName($item).".dim";
 
 				// if the cache file doesn't exist make it
 				if(!file_exists($size_cache))
-					writeCacheFile($item, $size_cache);
+					FSPHP::writeCacheFile($item, $size_cache);
 
 				// the cache file either already existed or we just made it so use it
-				$sizes	= explode(" ", readCacheFile($size_cache));
+				$sizes	= explode(" ", FSPHP::readCacheFile($size_cache));
 				$thumb_ratio	= $sizes[2] / $sizes[3];
 
 				if($thumb_ratio > 1)	//if its a landscape image adjust the height or vice versa
