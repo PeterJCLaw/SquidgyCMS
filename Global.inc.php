@@ -80,7 +80,7 @@ if(has_method('FileSystem', "filtered_file_list")) {
 	$job_list	= array();
 }
 
-$FSCMS_pages	= array('Contact_Us.php', 'Newsletters.php', 'Photos.php', 'Files.php');	//the ones that the the system provides
+$FSCMS_pages	= array('Contact_Us.php');	//the ones that the the system provides
 
 $logged_in	= FALSE;	//just in case
 
