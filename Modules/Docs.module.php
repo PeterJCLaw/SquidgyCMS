@@ -41,8 +41,8 @@ EXP;
 	}
 
 	function get_path($path) {
-		if(array_key_exists('dir', $_REQUEST) && !empty($_REQUEST['dir']))
-			return $_REQUEST['dir'];
+		if(!empty($_GET['dir']))
+			return $_GET['dir'];
 		else
 			return $path;
 	}
@@ -174,7 +174,7 @@ class Docs {	//parent class for useful functions
 	/* recursive function to explore the file / folder structure beneath
 	 * retruns blank if nothing of note is found
 	 * base is the current folder to use as a base
-	 * path is the current position in the file tree to be shown as open
+	 * path is the position in the file tree to be shown as open
 	 * ajax is a signal of the ajax status - whether this is an ajax call or not
 	 * tabs is the level of tabs to include in the source to make it nice
 	 */
@@ -184,11 +184,11 @@ class Docs {	//parent class for useful functions
 
 		$base = Docs::fix_slashes($base);
 		$path = Docs::fix_slashes($path);
-
-		$path_id = Docs::id_convert($path);
+		$base_id = Docs::id_convert($base);
+		print_r(array($base, $path, $base_id));
 
 		if(in_array($base, array('', './'))) {	//top level <- fix this
-			$path_id = '';
+			$base_id = '';
 			$retval  = '<div id="FE_preload"><ul class="file_tree"><li class="collapsed"></li><li class="expanded"></li><li class="FE_empty"></li></ul></div>';
 		} else
 			$retval	= "";
@@ -204,7 +204,7 @@ class Docs {	//parent class for useful functions
 
 		if(!empty($dir_contents)) {	//if there's something to show
 			if($ajax < 2)	//if not an ajax call
-				$retval	.= "\n$tabs<ul id=\"FE_$path_id\" class=\"file_tree\"$display>\n";
+				$retval	.= "\n$tabs<ul id=\"FE_$base_id\" class=\"file_tree\"$display>\n";
 
 			if($ajax && $tabs != "" && !$paths_match)	//if ajax is enabled and not top level and paths don't match
 				$retval	.= "	$tabs<li>Loading File Tree...</li>\n";
@@ -212,7 +212,7 @@ class Docs {	//parent class for useful functions
 				$ajax	= round($ajax/2);
 				foreach($dir_contents as $item_name)	//for each of the results in this folder
 				{
-					$href		= $item		= ($path_id == "" ? "" : "$path/").$item_name;
+					$href		= $item		= ($base_id == "" ? "" : "$path/").$item_name;
 					$item_id	= Docs::id_convert($item);
 					$curr_item	= ($item == $curr_file) ? TRUE : FALSE;
 					$item_sub_val = $li_insert = "";
@@ -251,7 +251,7 @@ class Docs {	//parent class for useful functions
 		else
 			return '<span style="display: none;">No files to display</span>';
 
-		$debug_info	.= "path=$path|path_id=$path_id|tabs=/$tabs/|<br />\n";
+		$debug_info	.= "path=$path|base_id=$base_id|tabs=/$tabs/|<br />\n";
 
 		return $retval;
 	}
@@ -472,9 +472,8 @@ ret;
 		return $tag;
 	}
 
-	/* compare the base passed to the current file
-	 * by shrinking the current file to the same length as the passed file
-	 * then see if they're the same
+	/* compare the base passed to the current path by cylcing through the
+	 * directory structure until we either run out of folders or they differ
 	 */
 	function path_compare($base, $path)
 	{
@@ -491,13 +490,14 @@ ret;
 		$B	= explode('/', $base);
 		$P	= explode('/', $path);
 
-		$length		= strlen($base);
+		if( count($B) >= count($P) )	//base shouldn't be longer than path
+			return FALSE;
 
-		$curr_s		= substr($path, 0, $length);
-
-		$debug_info .= "\$curr_s=$curr_s\n<br />\$length=$length\n<br />\n";
-
-		return ($base == $curr_s);	//if they match then the folder gets expanded
+		for($i=0; $i<count($B); $i++) {	//keep going until they differ
+			if($B[$i] != $P[$i])
+				return FALSE;
+		}
+		return TRUE;	//else they're the same
 	}
 
 	/* This function gets the name of the object to fit onto lines 13 characters wide */
