@@ -8,18 +8,22 @@
 class AdminModules extends Admin {
 	function AdminModules() {
 		parent::__construct();
+		$this->module_properties = array('#id', '#name', '#package', '#type', '#path', '#dependencies', '#description');
 		$this->data_file = $GLOBALS['admin_file'];
+		$this->complex_data = true;
+		$this->data_key_column = '#id';
+		$this->get_data();
+		if(empty($this->data)) {
+			log_info('Module listing empty: reloadng', $this->data);
+			$this->reload_module_list();
+		}
 	}
 
 	function printFormAdmin() {
-		$this->module_list	= Module::list_all_with_info();
-		$this->module_list_grouped	= group_array_by_key($this->module_list, '#package');
-		$this->enabled_modules	= Module::list_enabled(FALSE);
+//		print_r($this->data);
+		$module_list_grouped	= group_array_by_key($this->data, '#package');
 
-		if($this->debug > 1)
-			echo 'Module List: '.print_r($this->module_list, true);
-
-		foreach($this->module_list_grouped as $package => $sub_list) {
+		foreach($module_list_grouped as $package => $sub_list) {
 ?>
 <table id="<?php echo str_replace(' ', '_', $package); ?>" class="modules">
 	<caption><h4><?php echo $package; ?></h4></caption>
@@ -29,12 +33,12 @@ class AdminModules extends Admin {
 			$i = 1;
 			foreach($sub_list as $val) {
 				$description	= $val['#description'];
-				$section	= $val['#id'];
 				$odd_even	= $i % 2 == 1 ? 'odd' : 'even';
+				$id	= $val['#id'];
 				$i++;
 
-				if($package == 'Core - required' || in_array($section, $this->enabled_modules)) {
-					if($package == 'Core - required' || $this->what_depends_on($section))
+				if($package == 'Core - required' || !empty($val['enabled'])) {
+					if($package == 'Core - required' || $this->what_depends_on($id))
 						$disabled	= ' disabled="disabled"';
 					else
 						$disabled	= '';
@@ -42,11 +46,11 @@ class AdminModules extends Admin {
 				} else
 					$checked	= '';
 
-				$sect_box	= '<input type="checkbox" class="tick" name="sect['."$section]\" id=\"_enable_$section\"$checked />";
+				$sect_box	= '<input type="checkbox" class="tick" name="sect['."$id]\" id=\"_enable_$id\"$checked />";
 
 				echo "<tr class=\"$odd_even\">
 		<td class=\"L\">$sect_box</td>
-		<td><label for=\"_enable_$section\">".$val['#name']."</label></td>
+		<td><label for=\"_enable_$id\">".$val['#name']."</label></td>
 		<td class=\"R\">$description</td>
 	</tr>";
 			}
@@ -59,11 +63,32 @@ class AdminModules extends Admin {
 	}
 
 	function what_depends_on($module) {
-		foreach($this->enabled_modules as $e_mod) {
-			if(is_array($this->module_list[$e_mod]['#dependencies']) && in_array($module, $this->module_list[$e_mod]['#dependencies']))
-				return true;
+		$dependencies = array();
+		foreach($this->data as $id => $info) {
+			if(empty($info['#dependencies']))
+				continue;
+			$depends_on = str_getcsv($info['#dependencies']);
+			if(in_array($module, $depends_on))
+				array_push($dependencies, $id);
 		}
-		return FALSE;
+		return $dependencies;
+	}
+
+	function reload_module_list() {
+		$old_data = $this->data;
+		$this->data = array();
+		$info = Module::list_all_with_info();
+//		print_r($info);
+		foreach($info as $module) {
+			foreach($this->module_properties as $col) {
+				if(empty($module[$col]))
+					$module[$col] = 0;
+			}
+			$module['enabled'] = empty($old_data[$module['#id']]['enabled']) ? 0 : 1;
+			$this->data[$module['#id']] = $module;
+		}
+		print_r($this->data);
+		$this->put_data();
 	}
 
 	function verify_module($module) {
@@ -91,14 +116,14 @@ class AdminModules extends Admin {
 		global $sect;
 
 		if(!empty($sect))
-			foreach($sect as $sect_key => $tmpval) {
-				if($tmpval && $this->verify_module($sect_key))
-					array_push($this->data, $sect_key);
-
-				$debug_info	.= "\$sect[$sect_key]=$sect[$sect_key],	\$tmpval	= $tmpval\n<br />";
+			foreach($sect as $id => $tmpval) {
+				if($tmpval && $this->verify_module($id))
+					$this->data[$id]['enabled'] = 1;
+				else
+					$this->data[$id]['enabled'] = 0;
 			}
 
-		$error	.= $this->put_data();
+		return $this->put_data();
 	}
 }
 
