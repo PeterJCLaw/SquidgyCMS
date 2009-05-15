@@ -20,7 +20,6 @@ class AdminModules extends Admin {
 	}
 
 	function printFormAdmin() {
-//		print_r($this->data);
 		$module_list_grouped	= group_array_by_key($this->data, '#package');
 
 		foreach($module_list_grouped as $package => $sub_list) {
@@ -78,7 +77,6 @@ class AdminModules extends Admin {
 		$old_data = $this->data;
 		$this->data = array();
 		$info = Module::list_all_with_info();
-//		print_r($info);
 		foreach($info as $module) {
 			foreach($this->module_properties as $col) {
 				if(empty($module[$col]))
@@ -87,7 +85,6 @@ class AdminModules extends Admin {
 			$module['enabled'] = empty($old_data[$module['#id']]['enabled']) ? 0 : 1;
 			$this->data[$module['#id']] = $module;
 		}
-		print_r($this->data);
 		$this->put_data();
 	}
 
