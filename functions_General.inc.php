@@ -137,7 +137,7 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 
 		$block_html	= '';
 
-		$module_path = get_module_path($module);
+		$module_path = Module::get_path($module);
 
 		if($module_path !== FALSE && in_array($module, $enabled_modules)) {
 			require_once($module_path);
@@ -164,12 +164,6 @@ function SquidgyParser($page_file, $start = 0, $finish = 0) {
 		$i+=9;
 	}
 	return $page;
-}
-
-/* get a module's path - allow for custom ones */
-function get_module_path($m)
-{
-	return Module::get_path($m);
 }
 
 /* add this PHP5.3 function if needed */
