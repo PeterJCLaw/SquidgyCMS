@@ -1,12 +1,12 @@
 <?php
-#name = Links
-#description = Enables lists of links to be made
+#name = Menus
+#description = Menu management and display
 #package = Core - optional
 #type = content
 ###
 
-class AdminLinks extends Admin {
-	function AdminLinks() {
+class AdminMenus extends Admin {
+	function AdminMenus() {
 		parent::__construct();
 		$this->complex_data = true;
 	}
@@ -71,8 +71,8 @@ class AdminLinks extends Admin {
 	}//*/
 }
 
-class BlockLinks extends Block {
-	function BlockLinks() {
+class BlockMenus extends Block {
+	function BlockMenus() {
 		parent::__construct();
 		$this->complex_data = true;
 	}
