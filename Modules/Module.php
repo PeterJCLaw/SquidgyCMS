@@ -314,7 +314,7 @@ class Module {
 	}
 
 	function list_all_with_info() {
-		return array_map('get_module_info', FileSystem::Filtered_File_List("Modules", ".module.php"));
+		return array_map(array('Module','get_info'), FileSystem::Filtered_File_List("Modules", ".module.php"));
 	}
 
 	function list_enabled($include_required_modules = FALSE) {

@@ -172,12 +172,6 @@ function get_module_path($m)
 	return Module::get_path($m);
 }
 
-/* get a information about a module */
-function get_module_info($m)
-{
-	return Module::get_info($m);
-}
-
 /* add this PHP5.3 function if needed */
 if(!function_exists('str_getcsv')) {
 function str_getcsv($s)

@@ -68,7 +68,7 @@ class AdminModules extends Admin {
 
 	function verify_module($module) {
 		return true;
-		$info = get_module_info($module);
+		$info = Module::get_info($module);
 		include $info['#path'];
 		$module = ucwords($module);
 		$adminClass = "Admin$module";
