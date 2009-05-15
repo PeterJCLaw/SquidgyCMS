@@ -153,7 +153,7 @@ class FileSystem {
 	function put_file_assoc($path, $data, $cols=FALSE)
 	{
 		if($cols !== FALSE && !is_array($cols))	{ //not no, but not valid either
-			$cols = array_keys($data[0]);
+			$cols = array_keys(reset($data));
 			$file_string = implode('|:|', $cols)."\n";
 		} else
 			$file_string = '';
@@ -164,8 +164,8 @@ class FileSystem {
 		return FileSystem::file_put_contents($path, $file_string, 'w');
 	}
 
-	/* grab a data file & convert it to a 2D array using the passed column names, or use the ones from the file is none are pased */
-	function get_file_assoc($path, $cols=FALSE)
+	/* grab a data file & convert it to a 2D associative array using the passed column names, or use the ones from the file is none are pased */
+	function get_file_assoc($path, $keycol=FALSE, $cols=FALSE)
 	{
 		if(!is_readable($path))	//if we can't read it then bail
 			return array();
@@ -177,9 +177,12 @@ class FileSystem {
 		}
 		foreach($file as $line) {
 			$line_data	= array_combine($cols, explode('|:|', $line));
-			if(!empty($line_data))
-				array_push($out, $line_data);
-			else
+			if(!empty($line_data)) {
+				if(empty($keycol))
+					array_push($out, $line_data);
+				else
+					$out[$line_data[$keycol]] = $line_data;
+			} else
 				log_info("Line ($line) is empty ($line_data)");
 		}
 		return $out;

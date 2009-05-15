@@ -13,6 +13,7 @@ class ModuleTemplate {
 		$this->data_root	= $data_root;
 		$this->data_file	= $this->data_root.'/'.strtolower($this->get_my_class()).'.data';
 		$this->complex_data	= FALSE;
+		$this->data_key_column	= FALSE;
 		$this->data	= array();
 		$this->debug	= $debug;
 	}
@@ -27,7 +28,7 @@ class ModuleTemplate {
 
 	function get_data() {
 		if($this->complex_data)
-			$this->data = FileSystem::get_file_assoc($this->data_file);
+			$this->data = FileSystem::get_file_assoc($this->data_file, $this->data_key_column);
 		else
 			$this->data = FileSystem::get_file_rtrim($this->data_file);
 	}
@@ -292,9 +293,6 @@ class Module {
 			$info[rtrim($key)] = trim($value);
 		}
 		fclose($fh);
-
-		if(!empty($info['#dependencies']))
-			$info['#dependencies'] = str_getcsv($info['#dependencies']);
 
 		$info['#id']	= $module;
 		$info['#path']	= $file;
