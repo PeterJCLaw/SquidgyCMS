@@ -159,7 +159,10 @@ class FileSystem {
 			$file_string = '';
 
 		foreach($data as $line) {
-			$file_string .= implode('|:|', $line)."\n";
+			$line_arr = array();
+			foreach($cols as $col)	//ensure that they're all in the same order!
+				array_push($line_arr, $line[$col]);
+			$file_string .= implode('|:|', $line_arr)."\n";
 		}
 		return FileSystem::file_put_contents($path, $file_string, 'w');
 	}
