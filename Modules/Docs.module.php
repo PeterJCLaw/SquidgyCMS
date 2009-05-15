@@ -82,7 +82,7 @@ class AdminDocs extends Admin {
 		//$options = array('Everyone'=>USER_GUEST, );
 		foreach($paths as $path) {
 			$path  = Docs::fix_slashes($path);
-			if(!FileSystem::is_dir($path) || Docs::reserved_dir($path))
+			if(!Docs::is_dir($path) || Docs::reserved_dir($path))
 				continue;
 			$input = '<input type="checkbox"';
 			if(in_array($path, $this->data))
@@ -151,9 +151,21 @@ class Docs {	//parent class for useful functions
 		if(!in_array($prefix, $allowed_paths))
 			return array();
 		foreach($query_paths as $path)
-			if( in_array($prefix.'/'.$path, $allowed_paths) || FileSystem::is_file($prefix.'/'.$path) )
+			if( in_array($prefix.'/'.$path, $allowed_paths) || Docs::is_file($prefix.'/'.$path) )
 				array_push($out_paths, $path);
 		return $out_paths;
+	}
+
+	/* mask the standard is_dir function, using site_root as a prefix */
+	function is_dir($dir)
+	{
+		return is_dir($GLOBALS['site_root'].'/'.$dir);
+	}
+
+	/* mask the standard is_file function, using site_root as a prefix */
+	function is_file($file)
+	{
+		return is_file($GLOBALS['site_root'].'/'.$file);
 	}
 
 	/* This function reads ALL the items in a directory and returns an array with this information */
@@ -218,8 +230,8 @@ class Docs {	//parent class for useful functions
 					$item_sub_val = $li_insert = "";
 					$debug_info	.= "item=$item|item_id=$item_id|<br />\n";
 
-					if (FileSystem::is_file($item) || FileSystem::is_dir($item)) {
-						if (FileSystem::is_dir($item)) {	//if its a folder
+					if (Docs::is_file($item) || Docs::is_dir($item)) {
+						if (Docs::is_dir($item)) {	//if its a folder
 							$title			= "Go to $item_name";
 							$li_ins_class	= "FE_empty";
 							$item_sub_val	= Docs::file_tree($item, $path, $ajax, $tabs."		");
@@ -273,13 +285,13 @@ class Docs {	//parent class for useful functions
 
 		$href	= Docs::fix_slashes($item);
 
-		if(FileSystem::is_dir($item)) {
+		if(Docs::is_dir($item)) {
 			$image_stuff	= "FSPHP_Images/".($type == 'auto' ? Docs::whats_inside($item) : $type)."_folder$sm.png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
 			$href			= "?dir=".$href;
 			$alt			= "Folder image";
 			$title			= "Click to open folder";
 			$link_name		= Docs::nameFormat($file, 1, $line_len); //formats it for display
-		} elseif(FileSystem::is_file($item)) {
+		} elseif(Docs::is_file($item)) {
 			$name		= str_replace("_", " ", FileSystem::returnFileName($file)); //gives us just the name (no extension) of the image, without underscores
 			$link_name	= Docs::nameFormat($name, 1, $line_len); //formats it for display
 
@@ -537,8 +549,8 @@ ret;
 		if($a == $b)
 			return 0;
 
-		$a_type	= FileSystem::is_dir($a) ? 0 : FileSystem::returnFileExt($a);	//0 indicates a folder, else you're given the file extension
-		$b_type	= FileSystem::is_dir($b) ? 0 : FileSystem::returnFileExt($b);
+		$a_type	= Docs::is_dir($a) ? 0 : FileSystem::returnFileExt($a);	//0 indicates a folder, else you're given the file extension
+		$b_type	= Docs::is_dir($b) ? 0 : FileSystem::returnFileExt($b);
 
 		$ab_type_cp	= strcasecmp($a_type, $b_type);
 		$ab_cp		= strcasecmp($a, $b);
