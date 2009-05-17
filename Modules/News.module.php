@@ -8,6 +8,7 @@
 class AdminNews extends Admin {
 	function AdminNews() {
 		parent::__construct();
+		$this->complex_data = true;
 	}
 
 	function printFormAdmin() {
@@ -29,28 +30,29 @@ class AdminNews extends Admin {
 	}
 
 	function submit() {
-		global $debug_info, $content, $day, $month, $year;
+		$this->get_data();
+		global $content, $day, $month, $year;
 
 		$content	= str_replace(array("\n", "\r"), '', nl2br($content));	//fix the slashes and newlines
 		$timestamp	= mktime(0,0,0,$month, $day + 1, $year);
-		$output = "\n".time()."|:|$timestamp|:|$content";
+		array_push($this->data, array('added'=>time(), 'expires'=>$timestamp, 'content'=>$content));
 
-		return FileSystem::file_put_contents($this->data_file, $output, 'a');
+		return $this->put_data();
 	}
 }
 
 class BlockNews extends Block {
 	function BlockNews() {
 		parent::__construct();
+		$this->complex_data = true;
+		$this->get_data();
 	}
 	function block($args) {
 
 		if(!is_readable($this->data_file))
 			return '<span id="news" style="display: none;"> (The file was not readable)</span>';
 
-		$news	= FileSystem::get_file_assoc($this->data_file, array('added', 'expires', 'content'));	//read the info into an array, one element per line
-
-		if(empty($news))
+		if(empty($this->data))
 			return FALSE;
 
 		if(!empty($args)) {
@@ -67,11 +69,11 @@ class BlockNews extends Block {
 		if(empty($exp_format))
 			$exp_format	= $add_format;
 
-		multi2dSortAsc($news, $key);	//uses array_multisort
+		multi2dSortAsc($this->data, $key);	//uses array_multisort
 
-		log_info('News Block, news = ', $news);
+		log_info('News Block, news = ', $this->data);
 		$news_out	= '';
-		foreach($news as $val) {
+		foreach($this->data as $val) {
 			if($val['expires'] > time())
 				$news_out	.= '		<li title="Added: '.date($add_format, $val['added']).', Expires: '.date($exp_format, $val['expires']).'">'.$val['content']."</li>\n";
 		}
