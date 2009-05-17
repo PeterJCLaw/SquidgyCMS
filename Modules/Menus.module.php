@@ -12,63 +12,59 @@ class AdminMenus extends Admin {
 	}
 
 	function printFormAdmin() {
-		global	$debug, $debug_info;
+		$menu = 'primary';
+		$this->data_file  = $thi->data_root.'/'.strtolower($menu).'.menu';
 		$this->get_data();
-		multi2dSortAsc($this->data, 'title');
+		multi2dSortAsc($this->data, 'weight');
 		?>
-			<table id="admin_links_tbl" class="admin_tbl"><tr>
-				<th title="The link text - the text you see">Link Text:</th>
-				<th title="The link title - the text you see when you hover on the link" class="T M">Title:</th>
-				<th title="The URL that the link points to" class="T M">Link Target:</th>
-				<th title="Clear that row" class="T R">Clear:</th>
-			</tr><?php
-		$Link	= reset($this->data);
-		$i	= 0;
-		while(!empty($Link)) {	//cycle through each of the existing links
-			echo $this->make_Link_Row($i, $Link['text'], $Link['href'], $Link['title']);
-			$Link	= next($this->data);
-			$i++;
+<input name="menu" value="primary" type="hidden" />
+<table id="admin_menus_tbl" class="admin_tbl"><tr>
+	<th class="L" title="The link text - the text you see">Link Text:</th>
+	<th title="The link title - the text you see when you hover on the link">Link Title:</th>
+	<th title="The URL that the link points to">Link Target:</th>
+	<th title="Integers only, low numbers float above high numbers">Weight:</th>
+	<th class="R" title="Clear that row">Clear:</th>
+</tr><?php
+		foreach($this->data as $link) {	//cycle through each of the existing links
+			echo $this->make_link_row($i, $link['text'], $link['href'], $link['title'], $link['weight']);
 		}
-
-		for($j=0; $j<3; $j++, $i++) {	//add three blank rows on the end
-			echo $this->make_Link_Row($i);
+		$count = count($this->data);
+		for($j=0; $j<3; $j++) {	//add three blank rows on the end
+			echo $this->make_link_row($count+$j);
 		} ?>
-			</table>
+</table>
 <?php return;
 	}
 
-	function make_Link_Row($i, $text = '', $href = '', $title = '')
+	function make_link_row($i, $text = '', $href = '', $title = '', $weight='')
 	{
-		global $debug_info, $links_file;
-		$debug_info	.= "i = $i, text = '$text', href = '$href', title = '$title'\n<br />\n";
 		return '
-			<tr id="link_row_'.$i.'">
-				<td><input class="linkstext" name="text['.$i.']"'.(empty($text) ? '' : " value=\"$text\"").' type="text" size="20" /></td>
-				<td class="T M"><input class="linkstitle" name="title['.$i.']"'.(empty($title) ? '' : " value=\"$title\"").' type="text" size="35" /></td>
-				<td class="T M"><input class="linkshref" name="href['.$i.']"'.(empty($href) ? '' : " value=\"$href\"").' type="text" size="50" /></td>
-				<td class="R"><button type="button" onclick="clearRow(this);">Clear row</button></td>
-			</tr>';
+<tr id="menu_row_'.$i.'">
+	<td class="L"><input class="menustext" name="text['."$i]\" value=\"$text\"".' type="text" size="20" /></td>
+	<td><input class="menustitle" name="title['."$i]\" value=\"$title\"".' type="text" size="35" /></td>
+	<td><input class="menushref" name="href['."$i]\" value=\"$href\"".' type="text" size="50" /></td>
+	<td><input class="menusweight" name="weight['."$i]\" value=\"$weight\"".' type="text" maxlength="2" size="2" class="num" /></td>
+	<td class="R"><button type="button" onclick="clearRow(this);">Clear row</button></td>
+</tr>';
 	}
 
 	function submit() {
-		global $debug_info, $text, $href, $title;
+		global $debug_info, $text, $href, $title, $weight, $menu;
 
 		if(count($text) != count($href))
-			return "\nIncorrect parameter count";;
-
-		$link_list	= array();
+			return "\nIncorrect parameter count";
 
 		foreach($text as $key => $this_text) {
 			$this_href	= $href[$key];
 			$this_title	= empty($title[$key]) ? '' : $title[$key];
+			$this_weight	= empty($weight[$key]) ? 0 : $weight[$key];
 
-			if(!empty($this_text) && !empty($this_href))	//if its enabled get its weight & build the output
-				array_push($this->data, array('href'=>$this_href, 'text'=>$this_text, 'title'=>$this_title));
-
-			$debug_info	.= "\$this_href = '$this_href',	\$this_text	= '$this_text',	\$this_title	= '$this_title'\n<br />";
+			if(!empty($this_text) && !empty($this_href))	//if it's not blank save it
+				array_push($this->data, array('href'=>$this_href, 'text'=>$this_text, 'title'=>$this_title, 'weight'=>$this_weight));
 		}
+		$this->data_file  = $this->data_root.'/'.strtolower($menu).'.menu';
 		return $this->put_data();
-	}//*/
+	}
 }
 
 class BlockMenus extends Block {
@@ -78,27 +74,26 @@ class BlockMenus extends Block {
 	}
 
 	function block($args) {
+		list($menu) = $args;
+		$this->data_file  = $this->data_root.'/'.strtolower($menu).'.menu';
 		$this->get_data();
 		
 		if(empty($this->data))
 			return;
 		
-		multi2dSortAsc($this->data, 'title');
-		$Link	= reset($this->data);
-		$out	= "\n	<ul class=\"links_list\">";
+		multi2dSortAsc($this->data, 'weight');
+		$out	= "\n	<ul class=\"menu\" id=\"$menu\">";
 		$last	= count($this->data)-1;
 		$i	= 0;
 		
-		while(!empty($Link)) {
+		foreach($this->data as $link) {
 			$class	= ($last == 0 ? ' class="first last"' : ($i == 0 ? ' class="first"' : ($i == $last ? ' class="last"' : '')));
-			$title	= (empty($Link['title']) ? '' : ' title="'.$Link['title'].(strpos($Link['href'], 'http') === 0 ? ', External Link' : '').'"');
+			$title	= (empty($link['title']) ? '' : ' title="'.$link['title'].(strpos($link['href'], 'http') === 0 ? ', External link' : '').'"');
 			$out	.= '
-		<li'.$class.'><a href="'.$Link['href'].'"'.$title.'>'.$Link['text'].'</a></li>';
-			$Link	= next($this->data);
+		<li'.$class.'><a href="'.$link['href'].'"'.$title.'>'.$link['text'].'</a></li>';
 			$i++;
 		}
-		$out	.="\n	</ul>";
-		return $out;
+		return $out."\n	</ul>";
 	}
 }
 ?>
