@@ -24,6 +24,7 @@ class AdminModules extends Admin {
 
 		foreach($module_list_grouped as $package => $sub_list) {
 ?>
+<input type="submit" class="f_right" value="Reload Module List" name="submit" />
 <table id="<?php echo str_replace(' ', '_', $package); ?>" class="modules">
 	<caption><h4><?php echo $package; ?></h4></caption>
 	<tr>
@@ -110,7 +111,10 @@ class AdminModules extends Admin {
 	}
 
 	function submit() {
-		global $sect;
+		global $sect, $submit;
+		
+		if($submit == 'Reload Module List')
+			return $this->reload_module_list();
 
 		if(!empty($sect))
 			foreach($sect as $id => $tmpval) {

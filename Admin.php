@@ -58,6 +58,8 @@ $debug_info	.= "enabled_modules = ".print_r($enabled_modules, true)."\n<br />\n"
 foreach($enabled_modules as $module) {
 	$path = Module::get_path($module);
 
+	if($path === FALSE)
+		continue;
 	require_once($path);
 
 	$class_name	= "Admin$module";
