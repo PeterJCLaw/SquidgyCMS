@@ -116,10 +116,6 @@ function get(type, orig)
 
 function switch_tabs(cur_div, mode)
 {
-	console.log('cur_div:')
-	console.dir(cur_div);
-	console.log('mode:')
-	console.dir(mode);
 	if(typeof cur_div == 'undefined') {
 		if('' != location.hash)
 			cur_div	= window.cur_div	= location.hash.substr(1);
