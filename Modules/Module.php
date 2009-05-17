@@ -316,15 +316,11 @@ class Module {
 	}
 
 	function list_enabled($include_required_modules = FALSE) {
-		$enabled_modules = is_readable($GLOBALS['admin_file']) ? FileSystem::get_file_rtrim($GLOBALS['admin_file']) : array();
-
-		if($include_required_modules) {
-			$module_list	= Module::list_all_with_info();
-			$grouped_list	= group_array_by_key($module_list, '#package');
-			foreach($grouped_list['Core - required'] as $core)
-				array_push($enabled_modules, $core['#id']);
-
-		}
+		$modules_info = is_readable($GLOBALS['admin_file']) ? FileSystem::get_file_assoc($GLOBALS['admin_file'], '#id') : array();
+		$enabled_modules = array();
+		foreach($modules_info as $id => $info)
+			if(!empty($info['enabled']) || ($include_required_modules && $info['#package'] == 'Core - required'))
+				array_push($enabled_modules, $id);
 
 		return $enabled_modules;
 	}
