@@ -13,7 +13,7 @@ class AdminMenus extends Admin {
 
 	function printFormAdmin() {
 		$menu = 'primary';
-		$this->data_file  = $thi->data_root.'/'.strtolower($menu).'.menu';
+		$this->data_file  = $this->data_root.'/'.strtolower($menu).'.menu';
 		$this->get_data();
 		multi2dSortAsc($this->data, 'weight');
 		?>
