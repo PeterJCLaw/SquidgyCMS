@@ -1,13 +1,14 @@
 <?php
-#name = Event
+#name = Events
 #description = Enables the creation and display of events
 #package = Core - optional
 #type = content
 ###
 
-class AdminEvent extends Admin {
-	function AdminEvent() {
+class AdminEvents extends Admin {
+	function AdminEvents() {
 		parent::__construct();
+		$this->complex_data = true;
 	}
 
 	function printFormAdmin() { ?>
@@ -39,6 +40,7 @@ class AdminEvent extends Admin {
 
 	function submit()
 	{
+		$this->get_data();
 		global $start_hour, $start_minute, $start_day, $start_month, $start_year, $finish_hour, $finish_minute, $finish_day, $finish_month, $finish_year;
 		global $content, $event_title, $header_link, $debug_info, $mail_webmsater_on_event;
 
@@ -54,18 +56,11 @@ class AdminEvent extends Admin {
 		if(!empty($error))	//if there's an error then bail
 			return $error;
 
-		if(!is_readable($this->data_file))
-			return "\nEvent file not readable";
-
-		if(!is_writable($this->data_file))
-			return "\nEvent file not writeable";
-
 		$content	= str_replace(array("\n", "\r"), '', nl2br(stripslashes($content)));	//fix the slashes and newlines
 		$start_time		= mktime($start_hour, $start_minute, 0, $start_month, $start_day, $start_year);
 		$finish_time	= mktime($finish_hour, $finish_minute, 0, $finish_month, $finish_day, $finish_year);
 
-		$output = "\n".time()."|:|$start_time|:|$finish_time|:|".htmlspecialchars($event_title)."|:|$content";
-
+		array_push($this->data , array('time'=>time(), 'start'=>$start_time, 'finish'=>$finish_time, 'title'=>htmlspecialchars($event_title), 'content'=>$content));
 
 		$debug_info .= "\$start_time=$start_time\n<br />\$finish_time=$finish_time\n<br />\n";
 
@@ -80,23 +75,24 @@ class AdminEvent extends Admin {
 		}
 
 		//now we output the stuff we just organised & return
-		return FileSystem::file_put_contents($this->data_file, $output, 'a');
+		return $this->put_data();
 	}
 
 }
 
-class BlockEvent extends Block {
-	function BlockEvent() {
+class BlockEvents extends Block {
+	function BlockEvents() {
 		parent::__construct();
+		$this->complex_data = true;
 	}
 
 	function block($args)
 	{
 		global $debug_info;
 
-		$events	= FileSystem::get_file_assoc($this->data_file, array('time', 'start', 'finish', 'title', 'content'));
+		$this->get_data();
 
-		if(empty($events))
+		if(empty($this->data))
 			return '<div id="events" class="gen_txt">No Upcomoing Events<span style="display: none;"> (The file was not readable)</span>.</div>';
 
 		if(empty($args))
@@ -104,13 +100,12 @@ class BlockEvent extends Block {
 		else
 			list($date_format)	= $args;
 
-		multi2dSortAsc($events, 'start');	//uses array_multisort
+		multi2dSortAsc($this->data, 'start');	//uses array_multisort
 
 		$out	= '';
 		$debug_info	.= "args = $args, event_file = '$this->data_file', date_format = '$date_format'\n<br />\n";
 
-		foreach($events as $val)
-		{
+		foreach($this->data as $val) {
 			if($val['start'] > time())
 				$out	.= '	<h3 title="Added: '.date($date_format, $val['time']).'">'.$val['title'].'</h3>
 	<p class="time"><strong>Event Start:</strong>&nbsp;'.date($date_format, $val['start']).'</p>
