@@ -29,7 +29,7 @@ function load_admin()
 		window.cur_div	= location.hash.substr(1);
 	else
 		window.cur_div	= divList[0].id;
-	switch_tabs(window.cur_div);
+	switch_tabs(window.cur_div.substr(5));
 	return;
 }
 window.LOG	= add_loader(load_admin);
@@ -89,7 +89,7 @@ if(!empty($debug) && $debug > 1) {
 
 	foreach($_Admin_list as $module => $val) {
 		echo '
-			<li style="width: '.$toc_width.'%;" title="'.$val['desc'].'"><a title="'.$val['desc'].'" id="'.$module.'_link" href="#'.$module
+			<li style="width: '.$toc_width.'%;" title="'.$val['desc'].'"><a title="'.$val['desc'].'" id="Admin'.$module.'_link" href="#'.$module
 				.'" onclick="switch_tabs(\''.$module.'\', 0);">'.$val['section_human'].'</a></li>';
 	}
 ?>
@@ -99,7 +99,7 @@ if(!empty($debug) && $debug > 1) {
 <?php
 // loop through all the posible sections
 foreach($_Admin_list as $section => $val) {
-	echo "\n".'<div id="'.$section.'" class="admin_div"><h3 id="'.$section.'_h3">'.$val['section_human']."</h3>\n";
+	echo "\n".'<div id="Admin'.$section.'" class="admin_div"><h3 id="Admin'.$section.'_h3">'.$val['section_human']."</h3>\n";
 
 	if($ajax)
 		echo '<br />Loading Section...';

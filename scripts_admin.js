@@ -116,12 +116,17 @@ function get(type, orig)
 
 function switch_tabs(cur_div, mode)
 {
+	console.log('cur_div:')
+	console.dir(cur_div);
+	console.log('mode:')
+	console.dir(mode);
 	if(typeof cur_div == 'undefined') {
 		if('' != location.hash)
 			cur_div	= window.cur_div	= location.hash.substr(1);
 		else
 			cur_div	= window.cur_div	= divList[0].id;
 	}
+	var cur_id = 'Admin'+cur_div;
 
 	if(typeof mode == 'undefined')
 		mode	= 0;
@@ -130,19 +135,19 @@ function switch_tabs(cur_div, mode)
 		for(var i=0; i<divList.length; i++) {	//switch to the correct div
 			if($(divList[i].id+'_h3'))
 				$(divList[i].id+'_h3').style.display	= 'none';
-			if(divList[i].id != cur_div)
+			if(divList[i].id != cur_id)
 			{
-				$(divList[i].id).style.display		= 'none';
+				divList[i].style.display		= 'none';
 				$(divList[i].id+'_link').className	= '';
 			} else {
-				$(divList[i].id).style.display		= '';
+				divList[i].style.display		= '';
 				$(divList[i].id+'_link').className	= 'got';
 			}
 		}
 
-		if(window.AJAX_enabled && $(cur_div+'_h3')) {	//if we need to and can do ajax stuff
+		if(window.AJAX_enabled && $(cur_id+'_h3')) {	//if we need to and can do ajax stuff
 			ajax('GET', "ajax.php", "type=admin&module="+cur_div+'&p='+PAGE+'&a='+ART, function(ajax_obj) {
-				$(cur_div).innerHTML	= ajax_obj.responseText;
+				$(cur_id).innerHTML	= ajax_obj.responseText;
 				switch_tabs(cur_div, 1);	//now go again, but skip the top stuff
 			} );
 			return;	//prevent the rest of the funciton running
@@ -161,10 +166,10 @@ function switch_tabs(cur_div, mode)
 	}
 
 	for(var i=0; i<hideList.length; i++) {	//hide stuff
-		$(hideList[i].id).style.display		= 'none';
+		hideList[i].style.display		= 'none';
 	}
 	for(i=0; i<showList.length; i++) {	//show stuff
-		$(showList[i].id).style.display		= '';
+		showList[i].style.display		= '';
 	}
 
 	document.title	= window.TITLE+' - '+cur_div;

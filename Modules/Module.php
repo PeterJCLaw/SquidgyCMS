@@ -180,7 +180,7 @@ class Admin extends ModuleTemplate {
 
 	function printFormHeader() {
 	global $debug; ?>
-<form id="<?php echo $this->section ?>_form" action="admin_handler.php" method="<? echo $debug ? 'get' : 'post'; ?>" onsubmit="return Validate_On_Admin_Submit(this)">
+<form id="Admin<?php echo $this->section ?>_form" action="admin_handler.php" method="<? echo $debug ? 'get' : 'post'; ?>" onsubmit="return Validate_On_Admin_Submit(this)">
 <div class="admin_form_head">
 	<span class="f_right JS_move">
 		<input type="submit" name="submit" value="Save - <?php echo $this->section_human; ?>" />
@@ -195,7 +195,7 @@ class Admin extends ModuleTemplate {
 <?php }
 
 	function printTextarea($text = '') { ?>
-	<textarea name="content" id="<?php echo $this->section; ?>_content" rows="12" cols="71"><?php echo htmlspecialchars(stripslashes($text)); ?></textarea>
+	<textarea name="content" id="Admin<?php echo $this->section; ?>_content" rows="12" cols="71"><?php echo htmlspecialchars(stripslashes($text)); ?></textarea>
 <?php }
 
 	function printFormFooter() { ?>
