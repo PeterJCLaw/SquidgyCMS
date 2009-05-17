@@ -39,7 +39,7 @@ location.hash.onchange	= switch_tabs;
 </script>
 SCRIPTS;
 
-	include 'Head.inc.php';
+include 'Head.inc.php';
 
 /* This is the actual page below this point */
 if(!$logged_in) {
@@ -50,22 +50,13 @@ if(!$logged_in) {
 
 include Users::file($username);
 
-if(is_readable($admin_file)) {	//get the list of wanted ones
-	$enabled_modules	= FileSystem::get_file_rtrim($admin_file);
-} else
-	$enabled_modules	= array();
+//get the list of wanted ones
+$enabled_modules	= Module::list_enabled(true);
 
-$debug_info	.= "enabled_modules = ".implode(", ", $enabled_modules)."\n<br />\n";
+$debug_info	.= "enabled_modules = ".print_r($enabled_modules, true)."\n<br />\n";
 
-$all_modules	= FileSystem::Filtered_File_List("Modules", ".module.php");
-
-foreach($all_modules as $module) {
-	$info = Module::get_info($module);
+foreach($enabled_modules as $module) {
 	$path = Module::get_path($module);
-
-	//if we don't want the module or it doesn't exist skip the rest
-	if($info['#package'] != 'Core - required' && !in_array($module, $enabled_modules) && $path !== FALSE)
-		continue;
 
 	require_once($path);
 
@@ -105,8 +96,7 @@ if(!empty($debug) && $debug > 1) {
 		<div id="admin_divs_holder">
 <?php
 // loop through all the posible sections
-foreach($_Admin_list as $section => $val)
-{
+foreach($_Admin_list as $section => $val) {
 	echo "\n".'<div id="'.$section.'" class="admin_div"><h3 id="'.$section.'_h3">'.$val['section_human']."</h3>\n";
 
 	if($ajax)
@@ -115,7 +105,6 @@ foreach($_Admin_list as $section => $val)
 		print_Admin_Section($val);
 
 	echo "\n</div>";
-
 }	//end foreach section in Admin-list
 ?>
 		</div><!-- end gen_txt div -->
@@ -129,6 +118,4 @@ foreach($_Admin_list as $section => $val)
 		window.ART	= '<?php echo empty($art_req) ? '' : $art_req; ?>';
 	//-->
 	</script>
-<?php
-	include 'Foot.inc.php';
-?>
+<?php include 'Foot.inc.php'; ?>
