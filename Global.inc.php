@@ -29,6 +29,7 @@ require_once($site_root."/config.inc.php");			//these files are now included in 
 /*load the required core modules*/
 require_once("Modules/FileSystem.php");
 require_once("Modules/Module.php");
+require_once("Modules/Content.module.php");
 require_once("Modules/Users.module.php");
 
 if($allow_logging)

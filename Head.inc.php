@@ -71,7 +71,7 @@ if($xml_mime==1)
 	header('Content-type: application/xhtml+xml');
 
 //actually print the header stuff
-echo SquidgyParser($template_file, 0, '[[Block::Site-Content]]').'
+echo content::SquidgyParser($template_file, 0, '[[Block::Site-Content]]').'
 	<div id="content" class="maincol">
 ';
 
