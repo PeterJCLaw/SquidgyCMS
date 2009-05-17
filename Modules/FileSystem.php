@@ -179,6 +179,8 @@ class FileSystem {
 			unset($file[0]);
 		}
 		foreach($file as $line) {
+			if(empty($line))
+				continue;
 			$line_data	= array_combine($cols, explode('|:|', $line));
 			if(!empty($line_data)) {
 				if(empty($keycol))
@@ -186,7 +188,7 @@ class FileSystem {
 				else
 					$out[$line_data[$keycol]] = $line_data;
 			} else
-				log_info("Line ($line) is empty ($line_data)");
+				log_info("File ($path) line ($line) is empty ($line_data)");
 		}
 		return $out;
 	}
