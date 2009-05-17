@@ -22,7 +22,7 @@ if(!is_readable($page_file)) {
 	</div>
 
 <?php } else {
-	echo SquidgyParser($page_file);
+	echo Content::SquidgyParser($page_file);
 }
 	include 'Foot.inc.php';
 ?>
