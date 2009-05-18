@@ -45,7 +45,7 @@ class BlockNewsletter extends Block {
 	function date($args)
 	{
 		global $debug_info, $site_root, $NewsPath;
-		list($when, $prefix, $postfix, $day)	= $args;
+		list($when, $prefix, $postfix, $day)	= array();
 		extract($args, EXTR_IF_EXISTS);
 
 		if(empty($when) || empty($prefix) || empty($postfix) || empty($day) || !is_dir($site_root.'/'.$NewsPath)) {
@@ -59,27 +59,26 @@ class BlockNewsletter extends Block {
 		$stamp		= (!is_int($when) ? strtotime($when) : $when );
 		$date		= date('Y-m-d', $stamp);
 		$year		= date('Y', $stamp);
-		$folder		= $site_root."$NewsPath/$year";
+		$folder		= $site_root."/$NewsPath/$year";
 		$file		= $folder."/".$prefix.$date.$postfix;
 
 		$debug_info	.= "\n\$date=$date\n<br />\$when=$when\n<br />\$year=$year\n<br />\$file=$file\n<br />\$stamp=$stamp\n<br />\n";
 
-		if(!file_exists($file))
-		{
-			$first_day	= $this->firstDay(array($year, $day));
-			if(is_dir($folder))
-				for($stamp = strtotime("-1 week", $stamp); $stamp >= $first_day; $stamp = strtotime("-1 week", $stamp))
-				{
-					$date	= date('Y-m-d', $stamp);
-					$file	= $folder."/".$prefix.$date.$postfix;
-					$debug_info	.= "\n\$file=$file\n<br />\$stamp=$stamp\n<br />\n";
-					if(file_exists($file))
-						return $file;
-				}
-			$file	= $this->date(array(strtotime("-1 week", $first_day), $prefix, $postfix, $day));
-		}
-
-		return $file;
+		if(file_exists($file))
+			return $file;
+			
+		$first_day	= $this->firstDay(array('year'=>$year, 'day'=>$day));
+		if(is_dir($folder)) {
+			for($stamp = strtotime("-1 week", $stamp); $stamp >= $first_day; $stamp = strtotime("-1 week", $stamp))
+			{
+				$date	= date('Y-m-d', $stamp);
+				$file	= $folder."/".$prefix.$date.$postfix;
+				$debug_info	.= "\n\$file=$file\n<br />\$stamp=$stamp\n<br />\n";
+				if(file_exists($file))
+					return $file;
+			}
+		} else
+			return $this->date(array('when'=>strtotime("-1 week", $first_day), 'prefix'=>$prefix, 'postfix'=>$postfix, 'day'=>$day));
 	}
 }
 ?>
