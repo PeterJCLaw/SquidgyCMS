@@ -28,8 +28,8 @@ function load_admin()
 	if('' != location.hash)
 		window.cur_div	= location.hash.substr(1);
 	else
-		window.cur_div	= divList[0].id;
-	switch_tabs(window.cur_div.substr(5));
+		window.cur_div	= divList[0].id.substr(5);
+	switch_tabs(window.cur_div);
 	return;
 }
 window.LOG	= add_loader(load_admin);
