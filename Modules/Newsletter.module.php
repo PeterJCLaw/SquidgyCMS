@@ -48,9 +48,9 @@ class BlockNewsletter extends Block {
 		list($when, $prefix, $postfix, $day)	= $args;
 		extract($args, EXTR_IF_EXISTS);
 
-		if(empty($when) || empty($prefix) || empty($postfix) || empty($day) || !is_dir($site_root.$NewsPath)) {
-			if(!is_dir($site_root.$NewsPath))
-				log_info('Directory does not exist', $site_root.$NewsPath);
+		if(empty($when) || empty($prefix) || empty($postfix) || empty($day) || !is_dir($site_root.'/'.$NewsPath)) {
+			if(!is_dir($site_root.'/'.$NewsPath))
+				log_info('Directory does not exist', $site_root.'/'.$NewsPath);
 			else
 				log_info('Insufficient information given to locate file', $args);
 			return "None";
