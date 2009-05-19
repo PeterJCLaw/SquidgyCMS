@@ -317,10 +317,12 @@ class Module {
 
 	function list_enabled($include_required_modules = FALSE) {
 		$modules_info = is_readable($GLOBALS['admin_file']) ? FileSystem::get_file_assoc($GLOBALS['admin_file'], '#id') : array();
+		if(empty($modules_info))
+			$modules_info = Module::list_all_with_info();
 		$enabled_modules = array();
-		foreach($modules_info as $id => $info)
+		foreach($modules_info as $info)
 			if(!empty($info['enabled']) || ($include_required_modules && $info['#package'] == 'Core - required'))
-				array_push($enabled_modules, $id);
+				array_push($enabled_modules, $info['#id']);
 
 		return $enabled_modules;
 	}
