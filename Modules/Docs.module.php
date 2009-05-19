@@ -286,7 +286,7 @@ class Docs {	//parent class for useful functions
 		$href	= Docs::fix_slashes($item);
 
 		if(Docs::is_dir($item)) {
-			$image_stuff	= "FSPHP_Images/".($type == 'auto' ? Docs::whats_inside($item) : $type)."_folder$sm.png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
+			$image_stuff	= "Modules/Docs/".($type == 'auto' ? Docs::whats_inside($item) : $type)."_folder$sm.png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
 			$href			= "?dir=".$href;
 			$alt			= "Folder image";
 			$title			= "Click to open folder";
@@ -321,7 +321,7 @@ class Docs {	//parent class for useful functions
 			} else {	//treat it as an ordinary file
 				$ext		= strtoupper(FileSystem::returnFileExt($item));
 
-				$image_stuff	= "FSPHP_Images/".(file_exists("FSPHP_Images/$ext.png") ? $ext : "UnknownFile").".png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
+				$image_stuff	= "Modules/Docs/".(file_exists("Modules/Docs/$ext.png") ? $ext : "UnknownFile").".png\" style=\"width: ${icon_width}px; height: ${icon_height}px";
 				$alt			= "$ext File";
 				$title			= "Click to download this $ext file";
 			}
@@ -403,8 +403,8 @@ ret;
 
 		//prep the navigation buttons
 		$nav	= '	<p class="center">
-		<a href="?"><img src="FSPHP_Images/home.png" style="width: 32px height: 32px" alt="Home" /></a>
-		<a href="?dir='.$up.'"><img src="FSPHP_Images/up.png" style="width: 32px height: 32px" alt="Up" /></a>
+		<a href="?"><img src="Modules/Docs/home.png" style="width: 32px height: 32px" alt="Home" /></a>
+		<a href="?dir='.$up.'"><img src="Modules/Docs/up.png" style="width: 32px height: 32px" alt="Up" /></a>
 	</p>
 ';
 
