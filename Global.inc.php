@@ -16,6 +16,8 @@ if(!empty($_POST))
 if(empty($site) || !is_readable("Sites/$site/config.inc.php")) {
 	if(is_readable("Sites/config.default.php"))
 		require_once("Sites/config.default.php");
+	elseif(is_readable("Sites/default/config.inc.php"))
+		$site = 'default';
 	else
 		exit('Invalid site requested.');
 }

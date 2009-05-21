@@ -16,9 +16,9 @@ class BlockSite extends Block {
 			return $base_href;
 		else
 			list($where)	= $args;
-		
+
 		if(strtolower($where) == 'theme')
-			return "$base_href/Sites/Custom_Themes/";
+			return "${base_href}Sites/Custom_Themes/";
 		else
 			return;
 	}
