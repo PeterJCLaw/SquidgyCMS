@@ -8,11 +8,14 @@
 class AdminPublish extends Admin {
 	function AdminPublish() {
 		parent::__construct('Manage website content', -1, -20);
+		$this->complex_data = true;
+		$this->data_key_column = 'id';
 	}
 
 	function printFormAdmin() { ?>
 <table class="admin_tbl"><tr>
 	<th title="Click on the page title link to edit the chunk">Edit chunk:</th>
+	<th title="A short name for the chunk" class="M">Alias:</th>
 	<th title="Tick the box to enable the chunk" class="M">Enable:</th>
 	<th title="Tick the box to delete the chunk, this cannot be undone" class="R">Delete:</th>
 </tr><?php
@@ -20,24 +23,26 @@ class AdminPublish extends Admin {
 		$chunks = FileSystem::Filtered_File_List($this->data_root, '.chunk');
 		natsort($chunks);
 		$check	= '<input type="checkbox" class="tick" name="';
-		foreach($chunks as $chunk) {
-			$del_box	= $enable_box	= $view_link	= '&nbsp;';
-			$title	= get_GEN_title($chunk);
-			$link	= '<a href="?p='.$chunk.'#Content" title="Edit the \''.$title.'\' chunk">'.$title.'</a>';
+		foreach($chunks as $chunk_id) {
+			$del_box	= $enable_box	= $alias_box	= $view_link	= '&nbsp;';
+			$title	= get_GEN_title($chunk_id);
+			$alias_box = '<input name="alias['.$chunk_id.']" value="'.$this->data[$chunk_id]['alias'].'" />';
+			$link	= '<a href="?p='.$chunk_id.'#Content" title="Edit the \''.$title.'\' chunk">'.$title.'</a>';
 
-			if($chunk != '1-Home') {
-				$del_box	= $check.'del['.$chunk.'.chunk]" title="delete this chunk, cannot be undone"/>';
-				if(in_array($chunk, $this->data))
+			if($chunk_id != '1-Home') {
+				$del_box	= $check.'del['.$chunk_id.']" title="delete this chunk, cannot be undone"/>';
+				if($this->data[$chunk_id]['enable'])
 					$on = ' checked="checked"';
 				else
 					$on = '';
-				$enable_box = $check.'publish['.$chunk.']"'.$on.' />';
+				$enable_box = $check.'enable['.$chunk_id.']"'.$on.' />';
 			} else
 				$enable_box = $check.'" disabled="disabled" checked="checked" />';
 
 			echo '
 <tr>
-	<td class="L">'.$link.'</td>
+	<td class="L">'.$link.'<input type="hidden" name="publish['.$chunk_id.']" value="1" /></td>
+	<td class="M">'.$alias_box.'</td>
 	<td class="M">'.$enable_box.'</td>
 	<td class="R">'.$del_box.'</td>
 </tr>';
@@ -46,26 +51,52 @@ class AdminPublish extends Admin {
 <?php return;
 	}
 
-	function submit() {
-		global $debug_info, $del, $publish, $links, $FSCMS_pages, $pages_file, $GEN_pages;
+	function submit($content=0) {
+		list($del, $publish, $enable, $alias) = array();
+		extract($_POST, EXTR_IF_EXISTS);
+		global $debug_info;
 		$error	= "";
 
 		if(!empty($del)) {
-			foreach($del as $file => $val) {
-				$err	= $this->delete_file("$this->data_root/$file");	//checks the readability then deletes the file, or returns an error
-				$error	.= (!empty($err) ? "$err Links to ($file) have not been changed" : $this->change_something_in_all_pages($file, 'File Deleted'));	//change the links to the file, if it was deleted
+			$this->get_data();
+			foreach($del as $chunk => $val) {
+				$err	= $this->delete_file("$this->data_root/$chunk.chunk");	//checks the readability then deletes the file, or returns an error
+				unset($this->data[$chunk]);
+				$this->put_data();
+				$error	.= (!empty($err) ? "$err Links to ($chunk) have not been changed" : $this->change_something_everywhere($chunk, 'File Deleted'));	//change the links to the file, if it was deleted
 			}
 		}
 
 		if(!empty($publish)) {
-			foreach($publish as $chunk => $val) {
-				if(!empty($val))
-					array_push($this->data, $chunk);
+			$this->data = array();
+			foreach($publish as $chunk_id => $v) {
+				array_push($this->data, array('id' => $chunk_id, 'enable' => empty($enable[$chunk_id]) ? 0 : 1, 'alias' => $alias[$chunk_id]));
 			}
 			$error	.= $this->put_data();
 		}
 
 		return $error;
-	}//*/
+	}
+
+	function change_something_everywhere($old, $new) {
+		$chunks = array();
+		foreach($this->data as $chunk)
+			array_push($chunks, $this->data_root.'/'.$chunk['id'].'.chunk');
+
+		array_push($chunks, $this->data_file);
+
+		$error	= "";
+		foreach($chunks as $chunk) {	//check if we can modify all the chunks
+			if(!is_writable($chunk))
+				return "\nUnable to change file id as file ($chunk) is not writeable - please inform the Webmaster\n<br />\n";
+		}
+		foreach($chunks as $chunk) {	//go through all the pages, replacing the old id with the new one, if its present
+			$content	= file_get_contents($chunk);
+			if(strpos($content, $old))
+				$error	.= FileSystem::file_put_contents($chunk, str_replace($old, $new, $content), 'w');
+		}
+		return $error;
+	}
+
 }
 ?>
