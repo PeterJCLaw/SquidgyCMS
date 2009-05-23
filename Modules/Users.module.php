@@ -93,7 +93,7 @@ class AdminUsers extends Admin {
 
 	function submit()
 	{
-		global $debug_info, $error, $username, $sect, $target, $job_list, $website_name_short, $webmaster_email, $admin_file;
+		global $debug_info, $error, $username, $target, $job_list, $website_name_short, $webmaster_email;
 
 		if(!empty($target))
 		{
@@ -110,19 +110,7 @@ class AdminUsers extends Admin {
 				send_mail("Webmaster", "$website_name_short Website Password Reset", "The following passwords have been reset successfully:\n\n$reset_list",
 					"From: $website_name_short Webmaster <$webmaster_email>");
 		}
-		$debug_info	.= "\$target=$target\n<br />\$sect=$sect\n<br />";
-		if(!empty($sect))
-		{
-			$toclist	= array();
-			foreach($sect as $sect_key => $tmpval)
-			{
-				if($tmpval)
-					array_push($toclist, $sect_key);
-
-				$debug_info	.= "\$sect[$sect_key]=$sect[$sect_key],	\$tmpval	= $tmpval\n<br />";
-			}
-			$error	.= FileSystem::file_put_contents($admin_file, implode("\n", $toclist), 'w');
-		}
+		$debug_info	.= "\$target=$target\n<br />";
 
 		return $error;
 	}

@@ -42,7 +42,6 @@ else {	//dummy functions to prevent errors
 	function show_log($t = '') { }
 }
 
-$admin_file	= "$data_root/admin.data";	//for the admin page - which sections to show
 $pages_file	= "$data_root/pages.data";	//for all pages - the main table of contents
 $template_file	= "Sites/Custom_Themes/$site.template";	//the site template
 

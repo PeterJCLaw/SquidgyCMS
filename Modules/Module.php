@@ -316,7 +316,8 @@ class Module {
 	}
 
 	function list_enabled($include_required_modules = FALSE) {
-		$modules_info = is_readable($GLOBALS['admin_file']) ? FileSystem::get_file_assoc($GLOBALS['admin_file'], '#id') : array();
+		$modules_file = $GLOBALS['data_root'].'/modules.data';
+		$modules_info = is_readable($modules_file) ? FileSystem::get_file_assoc($modules_file, '#id') : array();
 		if(empty($modules_info))
 			$modules_info = Module::list_all_with_info();
 		$enabled_modules = array();

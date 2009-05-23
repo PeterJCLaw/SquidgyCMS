@@ -9,7 +9,6 @@ class AdminModules extends Admin {
 	function AdminModules() {
 		parent::__construct();
 		$this->module_properties = array('#id', '#name', '#package', '#type', '#path', '#dependencies', '#description');
-		$this->data_file = $GLOBALS['admin_file'];
 		$this->complex_data = true;
 		$this->data_key_column = '#id';
 		$this->get_data();
