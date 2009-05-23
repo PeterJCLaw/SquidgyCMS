@@ -53,4 +53,12 @@
 #previewbox {
 	height: 120px;
 	width: 100px;
+	float: right;
 }
+
+#debugbox {
+	height: 220px;
+	width: 200px;
+	float: right;
+}
+
