@@ -81,7 +81,7 @@ ul.tick_list li	{ vertical-align: middle; line-height: 1.5em; display: block; fl
 .admin_form table.admin_tbl .R	{ border-left-width: 1px; border-right-width: 2px; text-align: center; }
 .admin_form table.admin_tbl input.num	{ }
 .admin_form table.admin_tbl input.tick	{ margin: 3px 6px; }
-.admin_form table.modules caption	{ margin: 0.2em 0 0.5em; font-weight: bold; text-align: center; }
+.admin_form table caption	{ margin: 0.2em 0 0.5em; font-weight: bold; text-align: center; }
 #admin_sect_tbl .L	{ padding-right: 16px; }
 #admin_sect_tbl .M	{ width: 350px; }
 #admin_sect_tbl .R	{ width: 80px; }
