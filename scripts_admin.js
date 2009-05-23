@@ -60,8 +60,7 @@ function add_article_row ()
 // Clear the contents of an entire table row
 function clearRow(thing)
 {
-	row	= thing.parentNode.parentNode;
-	input_list	= row.getElementsByTagName('input');
+	var input_list	= thing.parentNode.parentNode.getElementsByTagName('input');
 	for(var i=0; i<input_list.length; i++) {
 		input_list[i].value	= '';
 	}

@@ -26,7 +26,7 @@ class AdminModules extends Admin {
 ?>
 <input type="submit" class="f_right" value="Reload Module List" name="submit" />
 <table id="<?php echo str_replace(' ', '_', $package); ?>" class="modules">
-	<caption><h4><?php echo $package; ?></h4></caption>
+	<caption><?php echo $package; ?></caption>
 	<tr>
 		<th class="L">Enabled:</th><th>Module Name:</th><th class="R">Section Description:</th>
 	</tr><?php

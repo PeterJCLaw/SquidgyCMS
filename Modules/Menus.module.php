@@ -25,13 +25,14 @@ class AdminMenus extends Admin {
 	<th title="Integers only, low numbers float above high numbers">Weight:</th>
 	<th class="R" title="Clear that row">Clear:</th>
 </tr><?php
-		foreach($this->data as $link) {	//cycle through each of the existing links
-			echo $this->make_link_row($i, $link['text'], $link['href'], $link['title'], $link['weight']);
-		}
+		$i=0;
+		foreach($this->data as $link)	//cycle through each of the existing links
+			echo $this->make_link_row($i++, $link['text'], $link['href'], $link['title'], $link['weight']);
+
 		$count = count($this->data);
-		for($j=0; $j<3; $j++) {	//add three blank rows on the end
+		for($j=0; $j<3; $j++)	//add three blank rows on the end
 			echo $this->make_link_row($count+$j);
-		} ?>
+?>
 </table>
 <?php return;
 	}
@@ -39,11 +40,11 @@ class AdminMenus extends Admin {
 	function make_link_row($i, $text = '', $href = '', $title = '', $weight='')
 	{
 		return '
-<tr id="menu_row_'.$i.'">
+<tr class="'.($i % 2 == 0 ? 'even' : 'odd').'">
 	<td class="L"><input class="menustext" name="text['."$i]\" value=\"$text\"".' type="text" size="20" /></td>
 	<td><input class="menustitle" name="title['."$i]\" value=\"$title\"".' type="text" size="35" /></td>
 	<td><input class="menushref" name="href['."$i]\" value=\"$href\"".' type="text" size="50" /></td>
-	<td><input class="menusweight" name="weight['."$i]\" value=\"$weight\"".' type="text" maxlength="2" size="2" class="num" /></td>
+	<td><input class="menusweight num" name="weight['."$i]\" value=\"$weight\"".' type="text" maxlength="2" size="2" /></td>
 	<td class="R"><button type="button" onclick="clearRow(this);">Clear row</button></td>
 </tr>';
 	}
