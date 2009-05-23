@@ -20,7 +20,7 @@ class AdminModules extends Admin {
 
 	function printFormAdmin() {
 		$module_list_grouped	= group_array_by_key($this->data, '#package');
-		natsort($module_list_grouped);
+		ksort($module_list_grouped);
 
 		foreach($module_list_grouped as $package => $sub_list) {
 ?>

@@ -13,10 +13,10 @@ class AdminContent extends Admin {
 	function printFormAdmin() {
 		global $page_req;
 
-		$Chunks = FileSystem::Filtered_File_List($this->data_root, '.chunk');
-		natsort($Chunks);
+		$chunks = FileSystem::Filtered_File_List($this->data_root, '.chunk');
+		natsort($chunks);
 
-		if(!empty($page_req) && in_array($page_req, $Chunks)) {
+		if(!empty($page_req) && in_array($page_req, $chunks)) {
 			$content	= file_get_contents("$this->data_root/$page_req.chunk");
 			$chunk_title	= get_GEN_title($page_req);
 			$chunk_id	= $chunk_req;
@@ -30,7 +30,7 @@ class AdminContent extends Admin {
 				<th><label for="chunk_title" title="The title of the chunk">Chunk Title:</label></th>
 				<td><input  value="<?php echo $chunk_title; ?>" class="text" name="chunk_title" id="chunk_title" title="The title of the page" /></td>
 			</tr><tr>
-				<?php $this->print_select_cells($Chunks, $page_req); ?>
+				<?php $this->print_select_cells($chunks, $page_req); ?>
 			</tr></table>
 <?php
 		$this->printTextarea($content);
