@@ -97,7 +97,7 @@ class BlockMenus extends Block {
 			$class	= ($last == 0 ? ' class="first last"' : ($i == 0 ? ' class="first"' : ($i == $last ? ' class="last"' : '')));
 			$title	= (empty($link['title']) ? '' : ' title="'.$link['title'].(strpos($link['href'], 'http') === 0 ? ', External link' : '').'"');
 			$out	.= '
-		<li'.$class.'><a href="'.$link['href'].'"'.$title.'>'.$link['text'].'</a></li>';
+		<li'.$class.'><a href="'.($link['href'] == '<home>' ? $GLOBALS['base_href'] : $link['href']).'"'.$title.'>'.$link['text'].'</a></li>';
 			$i++;
 		}
 		return $out."\n	</ul>";
