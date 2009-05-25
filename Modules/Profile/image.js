@@ -6,6 +6,8 @@ function refresh_preview(top,left,height,width) {
 }
 
 function click(e) {
+	var out = 'CLICK:';
+	$('debugbox').innerHTML = out
 	if(!e)
 		e = window.event;
 
@@ -15,7 +17,6 @@ function click(e) {
 	_MOUSE_X = e.pageX;
 	_MOUSE_Y = e.pageY;
 
-	var out = 'spam';
 	out += '<br />pageX:' + _MOUSE_X + '<br />pageY:' + _MOUSE_Y;
 
 	$('debugbox').innerHTML = out+'<br /><span id="jam"></span>';
@@ -36,6 +37,8 @@ function click(e) {
 }
 
 function move(e) {
+	var out = 'MOVE:';
+	$('jam').innerHTML = out
 	if(!e)
 		e = window.event;
 
@@ -45,7 +48,7 @@ function move(e) {
 	var left = e.pageX - _MOUSE_X;
 	var top = e.pageY - _MOUSE_Y;
 
-	var out = 'originTop:' + originTop + '<br />top:' + top + '<br />originLeft:' + originLeft + '<br />left:' + left;
+	out += '<br />originTop:' + originTop + '<br />top:' + top + '<br />originLeft:' + originLeft + '<br />left:' + left;
 	$('jam').innerHTML = out;
 
 	var select_top = originTop + top;
@@ -86,5 +89,5 @@ function move(e) {
 
 add_loader( function() { $('previewbox').style.backgroundImage = 'url('+$('srcImg').src+')'; });
 
-var _MOUSE_X,_MOUSE_Y,originTop,originLeft,originHeight,originWidth;
+var _MOUSE_X,_MOUSE_Y,_TARGET,originTop,originLeft,originHeight,originWidth;
 
