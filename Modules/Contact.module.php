@@ -55,7 +55,7 @@ SCRIPTS;
 
 
 	function block($args) {
-		global $debug, $MailingList, $job_list;
+		global $debug, $MailingList, $job_list, $website_name_long, $website_name_short;
 		$debug_link = $debug ? '?debug=1' : '';
 		$tickboxes = $this->tickboxes($job_list, "right");
 		$subject = empty($_GET['subject']) ? '' : 'value="'.$_GET['subject'].'"';
@@ -86,7 +86,7 @@ OUT;
 			$out .= <<<OUTML
 					<td colspan="2" class="center">
 						<input class="tick" type="checkbox" name="mailing_list" id="mailing_list" value="mail" />
-						<label for="mailing_list">Please include me in the <?php echo "<abbr title=\"$website_name_long\">$website_name_short</abbr>"; ?> mailing list.</label>
+						<label for="mailing_list">Please include me in the <abbr title="$website_name_long">$website_name_short</abbr> mailing list.</label>
 					</td>
 				</tr><tr>
 OUTML;
