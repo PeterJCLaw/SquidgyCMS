@@ -1,5 +1,7 @@
 <?php
-include 'Global.inc.php';
+require_once('Global.inc.php');
+
+list($base_href) = get_page_basics();
 
 //figure out which page they want, this returns the id
 $page_info = Site::get_requested_id_and_alias();
