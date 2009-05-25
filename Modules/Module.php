@@ -310,8 +310,12 @@ class Module {
 		return FALSE;
 	}
 
+	function list_all() {
+		return FileSystem::Filtered_File_List("Modules", ".module.php");
+	}
+
 	function list_all_with_info() {
-		return array_map(array('Module','get_info'), FileSystem::Filtered_File_List("Modules", ".module.php"));
+		return array_map(array('Module','get_info'), Module::list_all());
 	}
 
 	function list_enabled($include_required_modules = FALSE) {
