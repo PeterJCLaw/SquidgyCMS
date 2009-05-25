@@ -2,6 +2,7 @@
 	//Peter's functions
 
 /* These functions are currently still reliant on info_name() and email(), which are elsewhere */
+$username = $_POST['username'];
 
 /* This function prints the logon form on any page its needed */
 function print_logon_form()
@@ -76,7 +77,9 @@ function check_pass($username, $login_pass)
 /* This function compares the user to the list in the array $users_arr that's in config.inc.php then logs them in, and creates the cookie etc */
 function user_login()
 {
-	global $debug_info, $username, $login_pass, $job_list, $remember_me, $cookie_name, $base_href;
+	list($login_pass, $remember_me) = array();
+	extract($_POST, EXTR_IF_EXISTS);
+	global $debug_info, $username, $job_list, $cookie_name, $base_href;
 	$email_list	= array();
 
 	foreach($job_list as $key => $value) {	//make a list of their usernames - all are lowacase versions of their email uniques
