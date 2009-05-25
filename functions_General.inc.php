@@ -1,4 +1,14 @@
 <?php
+/* add a biit of JS to the page */
+function add_script($type, $src) {
+	global $script_files, $script_code;
+	if($type == 'file' && !in_array($src, $script_files))
+		array_push($script_files, $src);
+	elseif($type == 'code')
+		$script_code .= "\n$src";
+	return;
+}
+
 /* This function groups array elements by one property of those elements */
 function has_method($class, $method) {
 	if(!class_exists($class))
@@ -189,42 +199,6 @@ function send_mail($to, $subject, $message, $headers)
 		."\$headers=$headers\n<br />\$separate_emails=".($separate_emails ? "True" : "False")."\n<br />\n[/send_mail]\n";
 
 	return mail($_to_, $subject, $message, $headers);
-}
-
-/* This function prints the tickboxes */
-function print_tickboxes($item_list, $tick_side = '')
-{
-	global $target, $debug_info, $whole_com_elem_id;
-	$left = FALSE;
-	if($tick_side == "left")	//if in doubt it goes on the right
-		$left = TRUE;
-
-	echo "	<ul class=\"tick_list ".($left ? 'left' : 'right')."\">\n";
-
-	$mini_group	= in_array("Committee", $item_list);
-
-	for($i = 0, $count = 0; $i < count($item_list); $i++)	//spit as many items as there are
-	{
-		if($item_list[$i] == "Committee")
-			$item	= "Whole Committee";
-		else
-			$item	= $item_list[$i];
-
-		$check_it	= (($target == $item || ($target == "Whole Committee" && $i < $whole_com_elem_id)) ? ' checked="checked"' : "");
-		$onclick	= ($i <= $whole_com_elem_id ? ' onchange="group_tick_2(this)" onclick="group_tick_2(this)"' : "");
-		$w_style	= ($i == $whole_com_elem_id ? ' style="font-weight: bold;" id="_Whole_label" for="_Whole"' : "");
-		$_whole	= ($i == $whole_com_elem_id ? ' id="_Whole"' : "");
-
-		$debug_info	.= "\$check_it = $check_it\n<br />\$item = $item\n<br />\$target = $target\n<br />\$i = $i\n<br />\$whole_com_elem_id = $whole_com_elem_id\n<br />\n";
-
-		echo "		<li><label$w_style>".($left ? '' : $item).'
-			<input class="'.($onclick != ''? 'tick_1 ' : '').'tick" type="checkbox" name="target['.$item."]\"$onclick$check_it$_whole />"
-				.($left ? $item : "")."\n		</label></li>\n";
-
-	}
-
-	echo "	</ul>\n";
-	return;
 }
 
 /* This function prints the success item on the admin page */

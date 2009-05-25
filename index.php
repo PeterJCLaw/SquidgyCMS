@@ -8,6 +8,8 @@ $page_info = Site::get_requested_id_and_alias();
 $page_alias = $page_info['alias'];
 $page_id = $page_info['id'];
 $content = '';
+$script_files = array();
+$script_code = '';
 
 if($page_id == 'admin') {
 	$page_head_title	= "$website_name_short - Administration";	//the page title
@@ -47,6 +49,18 @@ MSG;
 			$page_head_title	= "$website_name_short - $chunk_title";	//the page title (in the head section)
 			$page_heading	= $chunk_title;	//the title shown at the top of the page
 		}
+		$page_scripts = '';
+		foreach($script_files as $file)
+			$page_scripts .= '<script type="text/javascript" src="'.$file.'"></script>';
+		if(!empty($script_code))
+			$page_scripts .= <<<PGSCRPT
+<script type="text/javascript">
+<!-- hide from non js browsers
+$script_code
+//-->
+</script>
+PGSCRPT;
+
 	}
 }
 

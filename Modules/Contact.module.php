@@ -5,22 +5,19 @@
 #type = content
 ###
 
-$page_scripts	= <<<SCRIPTS
-<script type="text/javascript" src="scripts.js"></script>
-<script type="text/javascript">
-<!-- hide from non js browsers
+class BlockContact extends Block {
+	function BlockContact() {
+		parent::__construct();
+		$SCRIPT	= <<<SCRIPTS
 function init() {
 	window.LOG	+= "\\ninitialising";
 	setfocus(document.getElementById('from_name'));
 	document.getElementById('c_submit').disabled	= "";
 }
 window.LOG	= add_loader(init);
-//-->
-</script>
 SCRIPTS;
-class BlockContact extends Block {
-	function BlockContact() {
-		parent::__construct();
+		add_script('file', 'scripts.js');
+		add_script('code', $SCRIPT);
 	}
 
 	/* This function returns the tickboxes */
@@ -58,9 +55,10 @@ class BlockContact extends Block {
 
 
 	function block($args) {
-		global $debug, $MailingList;
-		$tickboxes = $this->tickboxes($job_list, "right");
+		global $debug, $MailingList, $job_list;
 		$debug_link = $debug ? '?debug=1' : '';
+		$tickboxes = $this->tickboxes($job_list, "right");
+		$subject = empty($_GET['subject']) ? '' : 'value="'.$_GET['subject'].'"';
 		$out = <<<OUT
 <form method="post" action="mail_handler.php$debug_link" id="contact_form" onreset="init()" onsubmit="return Validate_On_Contact_Submit(this)">
 <table id="contact_tbl">
@@ -78,7 +76,7 @@ $tickboxes
 		<td><input id="from_email" name="from_email" class="text_in" type="text" /></td>
 	</tr><tr>
 		<th><label for="subject">Subject</label></th>
-		<td><input id="subject" name="subject" class="text_in" type="text"<?php echo empty($subject) ? '' : " value=\"$subject\""; ?> /></td>
+		<td><input id="subject" name="subject" class="text_in" type="text"$subject /></td>
 	</tr><tr>
 		<th><label for="message">Message</label></th>
 		<td><textarea id="message" name="message" class="text_in" rows="6" cols="51"></textarea></td>
