@@ -30,8 +30,7 @@ SCRIPTS;
 /* This is the actual page below this point */
 if(!$logged_in) {
 	print_logon_form();
-	include "Foot.inc.php";
-	exit();
+	return;
 }
 
 include Users::file($username);
