@@ -91,9 +91,9 @@ class AdminUsers extends Admin {
 		return FileSystem::file_put_contents($file, $new_file_contents, 'w');
 	}
 
-	function submit()
-	{
-		global $debug_info, $error, $username, $target, $job_list, $website_name_short, $webmaster_email;
+	function submit($content=0) {
+		$target = $_POST['target'];
+		global $debug_info, $username, $job_list, $website_name_short, $webmaster_email;
 
 		if(!empty($target))
 		{

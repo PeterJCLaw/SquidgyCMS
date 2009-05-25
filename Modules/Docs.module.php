@@ -96,9 +96,8 @@ class AdminDocs extends Admin {
 </table>
 <?php }
 
-	function submit() {
-		global $enable;
-		foreach($enable as $path => $enabled) {
+	function submit($content=0) {
+		foreach($_POST['enable'] as $path => $enabled) {
 			if($enabled)
 				array_push($this->data, $path);
 		}

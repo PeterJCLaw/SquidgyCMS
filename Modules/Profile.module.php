@@ -12,7 +12,7 @@ class AdminProfile extends Admin {
 	}
 
 	function printFormAdmin() {
-		global $debug_info, $username, $site_root;
+		global $debug_info, $username;
 		include Users::file($username);
 		$debug_info	.= "name = '$name', image_path = '$image_path', gender = '$gender', spiel = '$spiel'\n<br />\n";
 ?>
@@ -58,9 +58,10 @@ class AdminProfile extends Admin {
 		return;
 	}
 
-	function submit()
-	{
-		global $new_name, $n_gender, $content, $username, $new_pass, $old_pass, $confirm_pass, $photo, $debug_info, $site_root;
+	function submit($content=0) {
+		list($new_name, $n_gender, $new_pass, $old_pass, $confirm_pass, $photo) = array();
+		extract($_POST, EXTR_IF_EXISTS);
+		global$debug_info, $username;
 
 		$content	= addslashes($content);	//they get removed by the handler
 		$new_name	= addslashes(stripslashes($new_name));	//they get added when sent

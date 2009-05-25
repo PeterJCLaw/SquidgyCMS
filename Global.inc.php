@@ -10,9 +10,6 @@ if(!empty($_COOKIE))
 if(!empty($_GET))
 	extract($_GET, EXTR_OVERWRITE);
 
-if(!empty($_POST))
-	extract($_POST, EXTR_OVERWRITE);
-
 if(empty($site) || !is_readable("Sites/$site/config.inc.php")) {
 	if(is_readable("Sites/config.default.php"))
 		require_once("Sites/config.default.php");

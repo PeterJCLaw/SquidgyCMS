@@ -195,7 +195,7 @@ class Admin extends ModuleTemplate {
 <?php }
 
 	function printTextarea($text = '') { ?>
-	<textarea name="content" id="Admin<?php echo $this->section; ?>_content" rows="12" cols="71"><?php echo htmlspecialchars(stripslashes($text)); ?></textarea>
+	<textarea name="admin_content" id="Admin<?php echo $this->section; ?>_content" rows="12" cols="71"><?php echo htmlspecialchars(stripslashes($text)); ?></textarea>
 <?php }
 
 	function printFormFooter() { ?>
