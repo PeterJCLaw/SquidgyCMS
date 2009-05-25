@@ -16,7 +16,7 @@ class AdminNews extends Admin {
 			<table><tr>
 			<th>Valid Until:</th><td>
 				<?php
-				list($day, $month, $year) = split("[./-]",date("j.n.Y", strtotime('+7 days')));
+				list($day, $month, $year) = split(".",date("j.n.Y", strtotime('+7 days')));
 
 				$debug_info .= "\$day=$day,	\$month=$month,	\$year=$year\n<br />\n";
 
@@ -29,9 +29,10 @@ class AdminNews extends Admin {
 		return;
 	}
 
-	function submit() {
+	function submit($content=0) {
+		list($day, $month, $year) = array();
+		extract($_POST, EXTR_IF_EXISTS);
 		$this->get_data();
-		global $content, $day, $month, $year;
 
 		$content	= str_replace(array("\n", "\r"), '', nl2br($content));	//fix the slashes and newlines
 		$timestamp	= mktime(0,0,0,$month, $day + 1, $year);

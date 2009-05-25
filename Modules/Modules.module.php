@@ -110,8 +110,9 @@ class AdminModules extends Admin {
 		return $adminPass && $blockPass;
 	}
 
-	function submit() {
-		global $sect, $submit;
+	function submit($content=0) {
+		list($sect, $submit) = array();
+		extract($_POST, EXTR_IF_EXISTS);
 		
 		if($submit == 'Reload Module List')
 			return $this->reload_module_list();

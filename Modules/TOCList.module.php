@@ -59,8 +59,10 @@ class AdminTOCList extends Admin {
 <?php return;
 	}
 
-	function submit() {
-		global $debug_info, $alias, $enable, $weight, $links, $FSCMS_pages, $pages_file, $GEN_pages;
+	function submit($content=0) {
+		list($alias, $enable, $weight, $links) = array();
+		extract($_POST, EXTR_IF_EXISTS);
+		global $debug_info, $FSCMS_pages, $pages_file, $GEN_pages;
 		$error	= "";
 
 		if(!empty($enable)) {

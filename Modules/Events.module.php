@@ -38,12 +38,13 @@ class AdminEvents extends Admin {
 		return;
 	}
 
-	function submit()
-	{
-		$this->get_data();
-		global $start_hour, $start_minute, $start_day, $start_month, $start_year, $finish_hour, $finish_minute, $finish_day, $finish_month, $finish_year;
-		global $content, $event_title, $header_link, $debug_info, $mail_webmsater_on_event;
+	function submit($content=0) {
+		list($start_hour, $start_minute, $start_day, $start_month, $start_year) = array();
+		list($finish_hour, $finish_minute, $finish_day, $finish_month, $finish_year, $event_title, $header_link) = array();
+		extract($_POST, EXTR_IF_EXISTS);
+		global $debug_info, $mail_webmsater_on_event;
 
+		$this->get_data();
 		$error	= "";
 
 		if(empty($content))

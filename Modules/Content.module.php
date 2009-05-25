@@ -37,9 +37,10 @@ class AdminContent extends Admin {
 		return;
 	}
 
-	function submit()
-	{
-		global $content, $chunk_title, $chunk_id, $header_link, $debug_info;
+	function submit($content=0) {
+		list($chunk_title, $chunk_id, $header_link) = array();
+		extract($_POST, EXTR_IF_EXISTS);
+		global $debug_info;
 
 		$error	= "";
 

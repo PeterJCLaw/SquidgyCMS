@@ -52,8 +52,10 @@ class AdminMenus extends Admin {
 </tr>';
 	}
 
-	function submit() {
-		global $debug_info, $text, $href, $title, $weight, $menu_name;
+	function submit($content=0) {
+		list($text, $href, $title, $weight, $menu_name) = array();
+		extract($_POST, EXTR_IF_EXISTS);
+		global $debug_info;
 		
 		foreach($menu_name as $menu_id => $new_name) {
 			if(count($text[$menu_id]) != count($href[$menu_id]))
