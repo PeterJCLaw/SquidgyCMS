@@ -19,6 +19,9 @@ class AdminModules extends Admin {
 	}
 
 	function printFormAdmin() {
+		if(array_keys($this->data) != Module::list_all())
+			$this->reload_module_list();
+			
 		$module_list_grouped	= group_array_by_key($this->data, '#package');
 		ksort($module_list_grouped);
 
@@ -26,10 +29,10 @@ class AdminModules extends Admin {
 ?>
 <input type="submit" class="f_right" value="Reload Module List" name="submit" />
 <table id="<?php echo str_replace(' ', '_', $package); ?>" class="modules">
-	<caption><?php echo $package; ?></caption>
-	<tr>
-		<th class="L">Enabled:</th><th>Module Name:</th><th class="R">Section Description:</th>
-	</tr><?php
+<caption><?php echo $package; ?></caption>
+<tr>
+	<th class="L">Enabled:</th><th>Module Name:</th><th class="R">Section Description:</th>
+</tr><?php
 			$i = 1;
 			foreach($sub_list as $val) {
 				$description	= $val['#description'];
@@ -49,10 +52,10 @@ class AdminModules extends Admin {
 				$sect_box	= '<input type="checkbox" class="tick" name="sect['."$id]\" id=\"_enable_$id\"$checked />";
 
 				echo "<tr class=\"$odd_even\">
-		<td class=\"L\">$sect_box</td>
-		<td><label for=\"_enable_$id\">".$val['#name']."</label></td>
-		<td class=\"R\">$description</td>
-	</tr>";
+	<td class=\"L\">$sect_box</td>
+	<td><label for=\"_enable_$id\">".$val['#name']."</label></td>
+	<td class=\"R\">$description</td>
+</tr>";
 			}
 ?>
 
@@ -118,8 +121,8 @@ class AdminModules extends Admin {
 			return $this->reload_module_list();
 
 		if(!empty($sect))
-			foreach($sect as $id => $tmpval) {
-				if($tmpval && $this->verify_module($id))
+			foreach($this->data as $id => $info) {
+				if(!empty($sect[$id]) && $this->verify_module($id))
 					$this->data[$id]['enabled'] = 1;
 				else
 					$this->data[$id]['enabled'] = 0;
