@@ -10,72 +10,56 @@ class AdminUsers extends Admin {
 		parent::__construct(-1, 20);
 	}
 
-	function printPass() {
-		$GLOBALS['target'] = "";
-		echo "\n<h4>Reset Passwords:</h4>";
-		print_tickboxes($GLOBALS['job_list'], "right");
-		return;
-	}
-
-	function printUsers() {
+	function printFormAdmin() {
 		global $job_list; ?>
-		<h4>Manage Users:</h4>
-			<table id="admin_users_tbl" class="admin_tbl"><tr>
-				<th title="Their Committee Position" class="L">User:</th>
-				<th title="Their Displayed Name" class="M">Name:</th>
-				<th title="Integers only, low numbers float above high numbers, zero and null values will not appear in the list" class="T M">Weight:</th>
-				<th title="Tick the box to delete the page, this cannot be undone" class="T R">Delete:</th>
-			</tr><?php
+<table id="admin_users_tbl" class="admin_tbl"><tr>
+	<th title="Their Committee Position" class="L">User:</th>
+	<th title="Their Displayed Name" class="M">Name:</th>
+	<th title="Tick the box to reset the user's password, this cannot be undone" class="T M">Reset Password:</th>
+	<th title="Tick the box to delete the user, this cannot be undone" class="T R">Delete:</th>
+</tr><?php
 		foreach($job_list as $Person) {
 			if(in_array($Person, array('Committee', 'Chaplain')))
 				continue;
 
 			include user_file($Person);
 
-			$del_box	= '<input type="checkbox" class="tick" name="del['.$Person.'.comm.php]" />';
-			$weight_box	= '<input name="weight['.$Person.']"'.(empty($job_list[$Person]['weight']) ? '' : ' value="'.$job_list[$Person]['weight'].'"').' type="text" maxlength="2" size="2" class="num" />';
+			$del_box	= '<input type="checkbox" class="tick" name="del['.$Person.']" />';
+			$reset_box	= '<input type="checkbox" class="tick" name="reset['.$Person.']" />';
 
 			echo '
-			<tr>
-				<td class="L">'.$Person.'</td>
-				<td class="M">'.$name.'</td>
-				<td class="T M">'.$weight_box.'</td>
-				<td class="T R">'.$del_box.'</td>
-			</tr>';
+<tr>
+	<td class="L">'.$Person.'</td>
+	<td class="M">'.$name.'</td>
+	<td class="T M">'.$reset_box.'</td>
+	<td class="T R">'.$del_box.'</td>
+</tr>';
 		}
-			echo '
-			<tr>
-				<td class="L">New User:</td>
-				<td class="R" colspan="3"><input name="new_user" type="text" /></td>
-			</tr>';
+		echo '
+<tr>
+	<td class="L">New User:</td>
+	<td class="R" colspan="4"><input name="new_user" type="text" /></td>
+</tr>';
 		?>
-			</table>
+</table>
 	<?php
 		return;
 	}
 
-	function printFormAdmin() {
-		$this->printPass();
-		$this->printUsers();
-		return;
-	}
-
-	function reset_pass($who)
-	{
-		global $debug_info, $job_list, $error, $website_name_short, $webmaster_email;
+	function reset_pass($who) {
+		global $debug_info, $website_name_short, $webmaster_email;
 
 		$file	= Users::file($who);	//convert to a filename type and include
 		include $file;
-		$error .= $this->change_user_file($pass_hash, md5("password"), $file);
+		$error = $this->change_user_file($pass_hash, md5('password'), $file);
 		send_mail(email($who), "$who: $website_name_short Website Password Reset", "Dear ".$who
 			.",\n\nYour password for the $website_name_long website has been reset to 'password' (without the quotes)."
 			."\n\nIf you did not request this and you have not just been elected to the committee then please email the Webmaster ($webmaster_email) and report this error."
 			."\n\n$website_name_short Webmaster", "From: $website_name_short Webmaster <$webmaster_email>");
-		return;
+		return $error;
 	}
 
-	function change_user_file($old_val, $new_val, $file)
-	{
+	function change_user_file($old_val, $new_val, $file) {
 		global $debug_info;
 
 		$old_val	= "= \"".$old_val;
@@ -91,28 +75,58 @@ class AdminUsers extends Admin {
 		return FileSystem::file_put_contents($file, $new_file_contents, 'w');
 	}
 
+	function delete_user($id) {
+		return unlink(Users::file($id));
+	}
+
 	function submit($content=0) {
-		$target = $_POST['target'];
-		global $debug_info, $username, $job_list, $website_name_short, $webmaster_email;
+		list($reset, $del) = array();
+		extract($_POST, EXTR_IF_EXISTS);
+		global $debug_info, $username, $website_name_short, $webmaster_email;
 
-		if(!empty($target))
-		{
-			foreach($job_list[$i] as $job)	//cycle through everyone you might want to reset the password of
-			{
-				if((!empty($target[$job]) || !empty($target["Whole Committee"])) && !in_array(strtolower($job), array("chaplain", "committee")))	//if theres a match then include them on the to line
-				{
-					$this->reset_pass($job);
-					$reset_list	.= "$job\n";
+		$reset_list = $reset_error = $del_list = $del_error = '';
+
+		if(!empty($reset)) {
+			foreach($reset as $user => $val) {
+				if(!empty($val)) {
+					$reset_error = $this->reset_pass($user);
+					if(empty($reset_error))
+						$reset_list .= "\n$user";
+					else
+						$reset_error .= "\n$user";
 				}
-				$debug_info	.= "\$target[$job]=$target[$job]\n<br />";
 			}
-			if(empty($error) || $debug)
-				send_mail("Webmaster", "$website_name_short Website Password Reset", "The following passwords have been reset successfully:\n\n$reset_list",
-					"From: $website_name_short Webmaster <$webmaster_email>");
+			if(!empty($reset_error))
+				$reset_error = "\n\nThe following Users' passwords failed: \n$reset_error";
+			$subject['reset'] = "Password Reset";
+			$body['reset'] = "The following passwords have been reset successfully:\n\n$reset_list $reset_error";
 		}
-		$debug_info	.= "\$target=$target\n<br />";
 
-		return $error;
+		if(!empty($del)) {
+			foreach($del as $user => $val) {
+				if(!empty($val) && $this->delete_user($user))
+					$del_list .= "\n$user";
+				elseif(!empty($val))
+					$del_error .= "\n$user";
+			}
+			if(!empty($del_error))
+				$del_error = "\n\nThe following Users' passwords failed: \n$del_error";
+			$subject['del'] = "Deletion";
+			$body['del'] = "The following users have been deleted successfully:\n\n$del_list $del_error";
+		}
+
+		if(!empty($subject['del']) && !empty($subject['reset'])) {
+			$subject = implode(' and ', $subject);
+			$body = implode("\n\n", $body);
+		} else {
+			$subject = implode('', $subject);
+			$body = implode('', $body);
+		}
+
+		send_mail("Webmaster", "$website_name_short Website User $subject", $body,
+				"From: $website_name_short Webmaster <$webmaster_email>");
+
+		return $reset_error.$del_error;
 	}
 }
 

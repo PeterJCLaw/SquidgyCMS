@@ -180,7 +180,7 @@ class Admin extends ModuleTemplate {
 
 	function printFormHeader() {
 	global $debug; ?>
-<form id="Admin<?php echo $this->section ?>_form" action="admin_handler.php" method="<? echo $debug ? 'get' : 'post'; ?>" onsubmit="return Validate_On_Admin_Submit(this)">
+<form id="Admin<?php echo $this->section ?>_form" action="admin_handler.php<? echo $debug ? '?debug=1' : ''; ?>" method="<? echo $debug ? 'get' : 'post'; ?>" onsubmit="return Validate_On_Admin_Submit(this)">
 <div class="admin_form_head">
 	<span class="f_right JS_move">
 		<input type="submit" name="submit" value="Save - <?php echo $this->section_human; ?>" />
@@ -188,8 +188,7 @@ class Admin extends ModuleTemplate {
 		<input type="reset" value="Reset - <?php echo $this->section_human; ?>" />
 	</span>
 	<?php echo $this->sect_title; ?>:
-	<input type="hidden" name="debug" value="<?php echo $debug; ?>" />
-	<input type="hidden" name="type" value="<?php echo $this->section_human; ?>" />
+	<input type="hidden" name="type" value="<?php echo $this->section; ?>" />
 </div>
 <div class="admin_form">
 <?php }
@@ -311,8 +310,12 @@ class Module {
 		return FALSE;
 	}
 
+	function list_all() {
+		return FileSystem::Filtered_File_List("Modules", ".module.php");
+	}
+
 	function list_all_with_info() {
-		return array_map(array('Module','get_info'), FileSystem::Filtered_File_List("Modules", ".module.php"));
+		return array_map(array('Module','get_info'), Module::list_all());
 	}
 
 	function list_enabled($include_required_modules = FALSE) {
