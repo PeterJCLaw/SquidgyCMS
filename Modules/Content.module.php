@@ -78,7 +78,7 @@ class BlockContent extends Block {
 	function BlockContent() {
 		parent::__construct();
 	}
-	
+
 	function replace_one($old, $new, $target) {
 		$pos = strpos($target, $old);
 		if($pos === FALSE)
@@ -100,7 +100,7 @@ class BlockContent extends Block {
 		}
 		return 'Foo[[Block::Content-Chunk]]GaFoo[[Block::Content-Chunk]]Gamm';
 	}
-	
+
 	function UseTemplate($args) {
 		$template = $this->getTemplate($args['template']);
 		if($template == FALSE)
@@ -111,7 +111,7 @@ class BlockContent extends Block {
 		}
 		return $template;
 	}
-	
+
 	function Chunk($args) {
 		list($chunk) = $args;
 		$file = "$this->data_root/".$chunk.".chunk";
@@ -220,6 +220,19 @@ class Content {
 			$i+=9;
 		}
 		return $page;
+	}
+
+	function get_file_from_id($id) {
+		if($id === FALSE)
+			return FALSE;
+		$path = $GLOBALS['data_root'].'/'.$id.'.chunk';
+		if(is_file($path) && is_readable($path))
+			return $path;
+		return FALSE;
+	}
+
+	function get_title_from_id($id) {
+		return urldecode(substr($id, strpos($id, "-")+1));
 	}
 }
 ?>
