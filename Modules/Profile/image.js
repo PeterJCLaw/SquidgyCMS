@@ -27,7 +27,7 @@ function click(e) {
 	originHeight = $('grabbox').offsetHeight;
 	originWidth = $('grabbox').offsetWidth;
 
-	_TARGET = e.originalTarget;
+	_TARGET = e.target;
 
 	if(e.type == 'mousedown')
 		window.onmousemove = move;
