@@ -80,8 +80,8 @@ function move(e) {
 			left = 0;
 		}
 	}
-	var prev_top = originTop + top - 3;
-	var prev_left = originLeft + left - 3;
+	var prev_top = originTop + top - 5;
+	var prev_left = originLeft + left - 5;
 
 	refresh_preview(prev_top,prev_left,$('grabbox').offsetHeight,$('grabbox').offsetWidth);
 //*/
