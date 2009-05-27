@@ -10,15 +10,15 @@ class AdminUsers extends Admin {
 		parent::__construct(-1, 20);
 	}
 
-	function printFormAdmin() {
-		global $job_list; ?>
+	function printFormAdmin() { ?>
 <table id="admin_users_tbl" class="admin_tbl"><tr>
 	<th title="Their Committee Position" class="L">User:</th>
 	<th title="Their Displayed Name" class="M">Name:</th>
 	<th title="Tick the box to reset the user's password, this cannot be undone" class="T M">Reset Password:</th>
 	<th title="Tick the box to delete the user, this cannot be undone" class="T R">Delete:</th>
 </tr><?php
-		foreach($job_list as $Person) {
+		$user_list = Users::list_all();
+		foreach($user_list as $Person) {
 			if(in_array($Person, array('Committee', 'Chaplain')))
 				continue;
 
@@ -127,6 +127,12 @@ class AdminUsers extends Admin {
 				"From: $website_name_short Webmaster <$webmaster_email>");
 
 		return $reset_error.$del_error;
+	}
+}
+
+class Users {
+	function list_all() {
+		return FileSystem::Filtered_File_List($GLOBALS['site_root'].'/Users/', '.user.php');
 	}
 }
 ?>
