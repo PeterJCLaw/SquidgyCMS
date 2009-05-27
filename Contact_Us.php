@@ -20,7 +20,7 @@ SCRIPTS;
 					<td colspan="2" class="center">
 					<span class="f_right">All fields are required</span>
 					<h4>Send an email to the Committee</h4>
-						<?php print_tickboxes($job_list, "right"); ?>
+						<?php print_tickboxes(Users::list_all(), "right"); ?>
 					</td>
 				</tr><tr>
 					<th><label for="from_name">Name</label></th>

@@ -64,27 +64,12 @@ if(has_method('FileSystem', "filtered_file_list")) {
 	//make the page and article arrays
 	$GEN_pages	= FileSystem::Filtered_File_List($data_root, ".page");
 	$GEN_art	= FileSystem::Filtered_File_List($data_root, ".article");
-
-	// make a list of committee members whose information is available
-	$debug_info .= "building \$joblist\n<br />\n";
-	$job_list	= FileSystem::Filtered_File_List("$site_root/Users", ".user.php");
-	array_push($job_list, "Committee");
-	foreach($job_list as $key => $value)
-		$job_list[$key]	= str_replace(".", " ", $value);
-
-	$whole_com_elem_id	= array_search("Committee", $job_list);
 } else {
 	$GEN_pages	= array();
 	$GEN_art	= array();
-	$job_list	= array();
 }
 
 $FSCMS_pages	= array('Contact_Us.php');	//the ones that the the system provides
 
-$logged_in	= FALSE;	//just in case
-
-if(!empty($logout))
-	user_logout();
-
-$logged_in	= user_login();
+$_SITE_USER	= new UserLogin();
 ?>
