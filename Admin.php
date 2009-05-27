@@ -42,8 +42,8 @@ SCRIPTS;
 include 'Head.inc.php';
 
 /* This is the actual page below this point */
-if(!$logged_in) {
-	print_logon_form();
+if(!$_SITE_USER->has_auth(USER_SIMPLE)) {
+	$_SITE_USER->print_logon_form();
 	include "Foot.inc.php";
 	exit();
 }
