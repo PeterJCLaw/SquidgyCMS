@@ -129,10 +129,4 @@ class AdminUsers extends Admin {
 		return $reset_error.$del_error;
 	}
 }
-
-class Users {
-	function file($n) {
-		return user_file($n);
-	}
-}
 ?>
