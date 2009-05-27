@@ -31,6 +31,10 @@ class User {
 		return $this->__construct($id);
 	}
 
+	function validate_id($id) {
+		return is_file($this->file) && is_readable($this->file);
+	}
+
 	function file($n) {
 		return $GLOBALS['site_root'].'/Users/'.info_name($n).'.user.php';
 	}
@@ -72,18 +76,12 @@ class User {
 }
 
 class UserLogin extends User {
-	/* This function compares the user to the list in the array $users_arr that's in config.inc.php then logs them in, and creates the cookie etc */
+	/* This function initiates the object, logs the user in if appropriate and creates the cookie etc */
 	function UserLogin() {
 		$this->logged_in = FALSE;
 		list($login_pass, $remember_me) = array();
 		extract($_POST, EXTR_IF_EXISTS);
-		global $debug_info, $username, $job_list, $cookie_name, $base_href;
-		$email_list	= array();
-
-		foreach($job_list as $key => $value) {	//make a list of their usernames - all are lowacase versions of their email uniques
-			$email_list[$key]	= strtolower(email($value));	//make them all lowercase
-			$debug_info	.= "\$email_list[$key]=".$email_list[$key]."\n<br />";
-		}
+		global $debug_info, $username, $cookie_name, $base_href;
 
 		$debug_info	.= "(user_login)\$username=$username\n<br />\n";
 
@@ -108,17 +106,22 @@ class UserLogin extends User {
 			}
 		}
 
-		if(!in_array($username, array("committee", "chaplain")) && in_array($username, $email_list)) {	//if they're loggin in for the first time this session, 'committee' and 'chaplain' don't have logins
-			if(check_pass($username, $login_pass) && $login_pass != '') {
-				if($remember_me)
-					setcookie($cookie_name, $username, time()+(60*60*24)*100, $base_href);	//expire in 100 days
-				else
-					$_SESSION['user']	= $username;
+		if($this->validate_id($username) && !empty($login_pass) && check_pass($login_pass)) {	//if they have a valid id and pass login checks
+			if(!empty($remember_me))
+				setcookie($cookie_name, $username, time()+(60*60*24)*100, $base_href);	//expire in 100 days
+			else
+				$_SESSION['user']	= $username;
 
-				$debug_info	.= "\$username=$username\n<br />\n";
-				$this->logged_in = true;
-			}
+			$debug_info	.= "\$username=$username\n<br />\n";
+			$this->logged_in = true;
 		}
+
+		parent::__construct($username);
+	}
+
+	/* This function checks that the user is logged in and has the required auth level */
+	function has_auth() {
+		return $this->logged_in && parent::has_auth();
 	}
 
 	/* This function logs the user out */
@@ -139,17 +142,9 @@ class UserLogin extends User {
 		return;
 	}
 
-	/* This function compares the password to the list in the array $users_arr that's in config.inc.php */
-	function check_pass($username, $login_pass) {
-		global $debug_info, $site_root;
-		$debug_info	.= "(check_pass)\$username=$username\n<br />\n";
-
-		include $this->data_file;
-
-		if($pass_hash == md5($login_pass))
-			return TRUE;
-		else
-			return FALSE;
+	/* This function compares the password passed to the known one */
+	function check_pass($pwd) {
+		return $this->pass_hash == md5($pwd);
 	}
 }
 ?>
