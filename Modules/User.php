@@ -41,8 +41,7 @@ class User {
 
 
 	/* This function prints the logon form on any page its needed */
-	function print_logon_form()
-	{
+	function print_logon_form() {
 		global $username, $debug_info;
 
 		$debug_info	.= "(login_form)\$username=$username\n<br />\n";
@@ -122,36 +121,35 @@ class UserLogin extends User {
 		}
 	}
 
-/* This function logs the user out */
-function logout() {
-	global $debug, $debug_info, $username, $referrer, $success, $website_name, $cookie_name, $base_href;
+	/* This function logs the user out */
+	function logout() {
+		global $debug, $debug_info, $username, $referrer, $success, $website_name, $cookie_name, $base_href;
 
-	session_start();	//start the php session - neccesary i think
+		session_start();	//start the php session - neccesary i think
 
-	$_SESSION['user'] = $username = "";	//unset all indications of the user being logged in
-	if(isset($_COOKIE[$cookie_name]))
-		setcookie($cookie_name, "", time()-7200, $base_href);	//set a blank cookie that has already expired
+		$_SESSION['user'] = $username = "";	//unset all indications of the user being logged in
+		if(isset($_COOKIE[$cookie_name]))
+			setcookie($cookie_name, "", time()-7200, $base_href);	//set a blank cookie that has already expired
 
-	$ref	= str_replace("success=1", "", $referrer);
-	$ref	= str_replace("success=0", "", $ref);
-	$ref	= str_replace("logout=1", "", $ref);
-	$debug_info	.= "User has been logged out\n<br />\$ref=$ref\n<br />\n";
-	header("Location: $ref");
-	return;
-}
+		$ref	= str_replace("success=1", "", $referrer);
+		$ref	= str_replace("success=0", "", $ref);
+		$ref	= str_replace("logout=1", "", $ref);
+		$debug_info	.= "User has been logged out\n<br />\$ref=$ref\n<br />\n";
+		header("Location: $ref");
+		return;
+	}
 
-/* This function compares the password to the list in the array $users_arr that's in config.inc.php */
-function check_pass($username, $login_pass)
-{
-	global $debug_info, $site_root;
-	$debug_info	.= "(check_pass)\$username=$username\n<br />\n";
+	/* This function compares the password to the list in the array $users_arr that's in config.inc.php */
+	function check_pass($username, $login_pass) {
+		global $debug_info, $site_root;
+		$debug_info	.= "(check_pass)\$username=$username\n<br />\n";
 
-	include $this->data_file;
+		include $this->data_file;
 
-	if($pass_hash == md5($login_pass))
-		return TRUE;
-	else
-		return FALSE;
-}
+		if($pass_hash == md5($login_pass))
+			return TRUE;
+		else
+			return FALSE;
+	}
 }
 ?>
