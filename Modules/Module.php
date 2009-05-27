@@ -57,15 +57,17 @@ class Admin extends ModuleTemplate {
 */
 	function __construct($grouping = 0, $weight = 0) {
 		parent::__construct();
-		if(!$GLOBALS['logged_in']) {
-			print_logon_form();
+		global $_SITE_USER;
+		if(!$_SITE_USER->is_logged_in() || !$_SITE_USER->has_auth(USER_SIMPLE)) {
+			if($_SITE_USER->is_logged_in())
+				echo 'You do not have sufficient priviledges to view this page.';
+			else
+				$_SITE_USER->print_logon_form();
 			exit();
 		}
 
 		if(!isset($this->no_submit))
 			$this->no_submit	= FALSE;
-		$this->grouping	= $grouping;
-		$this->weight	= $weight;
 		$this->section	= $this->get_my_class();
 		$this->section_human	= ucwords(str_replace("_", " ", $this->section));
 

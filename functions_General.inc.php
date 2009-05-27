@@ -248,16 +248,11 @@ function print_success($success)
 	return $out;
 }
 
-/* This function returns the first word in a string */
-function first_name($name)
+/* This function returns the first word in a string using split as a delimiter */
+function first_word($str, $split=' ')
 {
-	global $debug_info;
-	$tmp = explode(" ", $name);
-		$debug_info .= "(first_name)\$tmp=$tmp,	\$name=$name\n<br />\n";
-	if($tmp == $name)
-		return $name;
-	else
-		return $tmp[0];
+	$arr = explode($split, $str, 1);
+	return $arr[0];
 }
 
 /* This function returns the name of the persons info file */
