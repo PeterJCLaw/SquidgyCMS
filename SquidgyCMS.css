@@ -40,7 +40,7 @@ ul.tick_list li	{ vertical-align: middle; line-height: 1.5em; display: block; fl
 .user_name	{ float: left; }
 
 /* Login Pages */
-#login_fail	{ color: red; margin-bottom: 4px; }
+#login_fail	{ color: red; margin-bottom: 4px; font-size: 1.17em; }
 #login	{ margin: 0 auto; }
 #login th	{ font-weight: normal; text-align: right; padding-right: 7px; }
 #login td	{ text-align: center; }
