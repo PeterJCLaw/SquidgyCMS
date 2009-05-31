@@ -131,16 +131,4 @@ class AdminModules extends Admin {
 		return $this->put_data();
 	}
 }
-
-class BlockModules extends Block {
-	function BlockModules() {
-		parent::__construct();
-	}
-	function block($args) {
-
-		if(!is_readable($this->data_file))
-			return '<span id="news" style="display: none;"> (The file was not readable)</span>';
-
-	}
-}
 ?>
