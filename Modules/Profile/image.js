@@ -14,6 +14,15 @@ function click(e) {
 	e.preventDefault();
 	e.stopPropagation();
 
+	if(e.type == 'mousedown') {
+		window.onmousemove = move;
+		window.onmouseup = click;
+	} else {
+		window.onmousemove = null;
+		window.onmouseup = null;
+		return;
+	}
+
 	_MOUSE_X = e.pageX;
 	_MOUSE_Y = e.pageY;
 
@@ -28,12 +37,7 @@ function click(e) {
 	originWidth = $('grabbox').offsetWidth;
 
 	_TARGET = e.target;
-
-	if(e.type == 'mousedown')
-		window.onmousemove = move;
-	else
-		window.onmousemove = null;
-//*/
+	return;
 }
 
 function move(e) {
@@ -49,7 +53,6 @@ function move(e) {
 	var top = e.pageY - _MOUSE_Y;
 
 	out += '<br />originTop:' + originTop + '<br />top:' + top + '<br />originLeft:' + originLeft + '<br />left:' + left;
-	$('jam').innerHTML = out;
 
 	var select_top = originTop + top;
 	var select_left = originLeft + left;
@@ -87,6 +90,20 @@ function move(e) {
 				top = 0;
 		}
 	}
+
+	if(_TARGET.id != 'grabbox' && fixedRatio != false) {
+		box_ratio = $('grabbox').offsetHeight / $('grabbox').offsetWidth;
+
+		if(box_ratio > fixedRatio)
+			$('grabbox').style.height = $('grabbox').offsetWidth*fixedRatio  + 'px';
+		else if(box_ratio < fixedRatio)
+			$('grabbox').style.width = $('grabbox').offsetHeight/fixedRatio  + 'px';
+
+		new_box_ratio = $('grabbox').offsetHeight / $('grabbox').offsetWidth;
+		out += '<br />fixedRatio:' + fixedRatio + '<br />box_ratio:' + box_ratio + '<br />new_box_ratio:' + new_box_ratio;
+	}
+
+	$('jam').innerHTML = out;
 	var prev_top = originTop + top - 5;
 	var prev_left = originLeft + left - 5;
 
@@ -97,4 +114,5 @@ function move(e) {
 add_loader( function() { $('previewbox').style.backgroundImage = 'url('+$('srcImg').src+')'; });
 
 var _MOUSE_X,_MOUSE_Y,_TARGET,originTop,originLeft,originHeight,originWidth;
+var fixedRatio = false; // 1.2;	//float: height/width; false: free shaping
 
