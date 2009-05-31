@@ -91,18 +91,22 @@ class BlockMenus extends Block {
 			return;
 
 		multi2dSortAsc($this->data, 'weight');
-		$out	= "\n	<ul class=\"menu\" id=\"$menu-menu\">";
+		$out	= "\n<ul class=\"menu\" id=\"$menu-menu\">";
 		$last	= count($this->data)-1;
 		$i	= 0;
 
 		foreach($this->data as $link) {
+			if($link['href'] == '<menu>') {
+				$link_html = '[[Block::Menus-block::'.$link['text'].']]';
+			} else {
+				$title	= (empty($link['title']) ? '' : ' title="'.$link['title'].(strpos($link['href'], 'http') === 0 ? ', External link' : '').'"');
+				$link_html = '<a href="'.($link['href'] == '<home>' ? $GLOBALS['base_href'] : $link['href']).'"'.$title.'>'.$link['text'].'</a>';
+			}
 			$class	= ($last == 0 ? ' class="first last"' : ($i == 0 ? ' class="first"' : ($i == $last ? ' class="last"' : '')));
-			$title	= (empty($link['title']) ? '' : ' title="'.$link['title'].(strpos($link['href'], 'http') === 0 ? ', External link' : '').'"');
-			$out	.= '
-		<li'.$class.'><a href="'.($link['href'] == '<home>' ? $GLOBALS['base_href'] : $link['href']).'"'.$title.'>'.$link['text'].'</a></li>';
+			$out	.= "\n	<li$class>$link_html</li>";
 			$i++;
 		}
-		return $out."\n	</ul>";
+		return $out."\n</ul>";
 	}
 }
 ?>
