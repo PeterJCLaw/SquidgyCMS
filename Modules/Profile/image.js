@@ -79,6 +79,13 @@ function move(e) {
 			$('grabbox').style.width = originWidth + left  + 'px';
 			left = 0;
 		}
+
+		if(classes.length < 3) {	//not a corner
+			if(classes[0] == 'n' || classes[0] == 's')
+				left = 0;
+			else if(classes[0] == 'e' || classes[0] == 'w')
+				top = 0;
+		}
 	}
 	var prev_top = originTop + top - 5;
 	var prev_left = originLeft + left - 5;
