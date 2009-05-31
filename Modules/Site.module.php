@@ -52,9 +52,9 @@ HeadOne;
 	}
 
 	function EditLogoutLinks($args) {
-		global $logged_in, $page_edit_link, $page_req, $page_n, $base_href;
+		global $_SITE_USER, $page_edit_link, $page_req, $page_n, $base_href;
 
-		if(!$logged_in)
+		if(!$_SITE_USER->is_logged_in())
 			return FALSE;
 		$out	= '
 	<ul id="EditLogoutLinks" class="menu">';
