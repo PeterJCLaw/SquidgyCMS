@@ -11,8 +11,7 @@ class AdminThemes extends Admin {
 	}
 
 	function printFormAdmin() {
-		$this->get_data();
-		list($site_theme) = $this->data;
+		$site_theme = Themes::get_site_theme();
 		$category['Core']	= FileSystem::Filtered_File_List('Themes', '.template');
 		$category['Custom']	= FileSystem::Filtered_File_List('Sites/Custom_Themes', '.template');
 		foreach($category as $package => $themes) {
@@ -35,11 +34,8 @@ class AdminThemes extends Admin {
 	<td class=\"R\">$radio_box</td>
 </tr>";
 			}
-?>
-
-</table>
-<?php
 		}
+		echo '</table>';
 		return;
 	}
 
@@ -63,6 +59,24 @@ class BlockThemes extends Block {
 		if(!is_readable($this->data_file))
 			return '<span id="themesblah" style="display: none;"> (The file was not readable)</span>';
 
+	}
+}
+
+class Themes {
+	function get_site_theme() {
+		$file = $GLOBALS['data_root'].'/themes.data';
+		if(!is_file($file) || !is_readable($file))
+			return FALSE;
+		$fh = fopen($file, 'r');
+		$theme = trim(fgets($fh));
+		fclose($fh);
+		return $theme;
+	}
+	function get_site_template() {
+		$site_theme = Themes::get_site_theme();
+		list($package, $theme) = explode('|', $site_theme, 2);
+		$file = "Themes/$theme.template";
+		return $package == 'Custom' ? 'Sites/Custom_'.$file : $file;
 	}
 }
 ?>
