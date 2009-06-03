@@ -344,7 +344,7 @@ ret;
 	/* This function shows the icons or images for the file or image browsing pages */
 	function file_grid($request, $type = "auto", $icon_size = 3)
 	{
-		global $ImagePath, $NewsPath, $FilePath, $itemsPerPage, $itemsInRow, $numberOfRows, $adapted_from, 	$cacheDir, $maxWidth, $maxHeight;
+		global $ImagePath, $itemsPerPage, $itemsInRow, $numberOfRows, $adapted_from, 	$cacheDir, $maxWidth, $maxHeight;
 		global $who_copyright, $website_name_short, $copy_email_text, $copy_recipient, $copy_recip_gender, $copy_follow_text, $copy_fol_txt_img;
 		global $nostalgic_images_footer, $n_i_f_link, $n_i_f_date_added;
 

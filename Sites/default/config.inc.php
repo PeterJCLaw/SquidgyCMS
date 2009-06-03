@@ -25,11 +25,9 @@
 
 	/* Variables that you may need to modify */
 
-	$abuseReports	= false;				// if you want to be emailed if someone tries to abuse the script
+	$abuseReports	= FALSE;				// if you want to be emailed if someone tries to abuse the script
 	$email			= "email@example.com";	// your email address
-	$SitePath		= "Sites/default/";		// the releative path to the image directory. Must not start with .. or / -- use symlinks to get around this if a problem
 	$ImagePath		= "Photos";		// the releative path to the image directory. Must not start with .. or / -- use symlinks to get around this if a problem
-	$FilePath		= "Files";		// the releative path to the restriceted files directory. Must not start with .. or / -- use symlinks to get around this if a problem
 	$NewsPath		= "Newsletters";	// the releative path to the news directory. Must not start with .. or / -- use symlinks to get around this if a problem
 	$itemsInRow		= 4;			// how many items in each row
 	$numberOfRows	= 6;			// the number of rows per page -- does not work yet
