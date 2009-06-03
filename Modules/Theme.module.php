@@ -2,7 +2,7 @@
 #name = Theme
 #description = Enables site theming
 #package = Core - required
-#type = system
+#type = content
 ###
 
 class AdminTheme extends Admin {
