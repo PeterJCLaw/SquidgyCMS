@@ -54,11 +54,11 @@ class BlockThemes extends Block {
 	function BlockThemes() {
 		parent::__construct();
 	}
-	function block($args) {
-
-		if(!is_readable($this->data_file))
-			return '<span id="themesblah" style="display: none;"> (The file was not readable)</span>';
-
+	function root($args) {
+		$site_theme = Themes::get_site_theme();
+		list($package, $theme) = explode('|', $site_theme, 2);
+		$root = "Themes/";
+		return '[[Block::Site-BaseHREF]]'.($package == 'Custom' ? 'Sites/Custom_'.$root : $root);
 	}
 }
 
