@@ -1,28 +1,28 @@
 <?php
-#name = Themes
-#description = Enables management of site themes
+#name = Theme
+#description = Enables site theming
 #package = Core - required
 #type = system
 ###
 
-class AdminThemes extends Admin {
-	function AdminThemes() {
+class AdminTheme extends Admin {
+	function AdminTheme() {
 		parent::__construct();
 	}
 
 	function printFormAdmin() {
-		$site_theme = Themes::get_site_theme();
-		$category['Core']	= FileSystem::Filtered_File_List('Themes', '.template');
-		$category['Custom']	= FileSystem::Filtered_File_List('Sites/Custom_Themes', '.template');
-		foreach($category as $package => $themes) {
+		$site_theme = Theme::get_site_theme();
+		$category['Core']	= FileSystem::Filtered_File_List('Theme', '.template');
+		$category['Custom']	= FileSystem::Filtered_File_List('Sites/Custom_Theme', '.template');
+		foreach($category as $package => $theme) {
 ?>
-<table id="<?php echo $package.'Themes'; ?>" class="themes">
-<caption><?php echo $package.' Themes'; ?></caption>
+<table id="<?php echo $package.'Theme'; ?>" class="theme">
+<caption><?php echo $package.' Theme'; ?></caption>
 <tr>
 	<th class="L">Theme Name:</th><th class="R">Enabled:</th>
 </tr><?php
 			$i = 1;
-			foreach($themes as $theme) {
+			foreach($theme as $theme) {
 				$odd_even	= $i % 2 == 1 ? 'odd' : 'even';
 				$id	= "$package|$theme";
 				$i++;
@@ -50,21 +50,21 @@ class AdminThemes extends Admin {
 	}
 }
 
-class BlockThemes extends Block {
-	function BlockThemes() {
+class BlockTheme extends Block {
+	function BlockTheme() {
 		parent::__construct();
 	}
 	function root($args) {
-		$site_theme = Themes::get_site_theme();
+		$site_theme = Theme::get_site_theme();
 		list($package, $theme) = explode('|', $site_theme, 2);
-		$root = "Themes/";
+		$root = "Theme/";
 		return '[[Block::Site-BaseHREF]]'.($package == 'Custom' ? 'Sites/Custom_'.$root : $root);
 	}
 }
 
-class Themes {
+class Theme {
 	function get_site_theme() {
-		$file = $GLOBALS['data_root'].'/themes.data';
+		$file = $GLOBALS['data_root'].'/theme.data';
 		if(!is_file($file) || !is_readable($file))
 			return FALSE;
 		$fh = fopen($file, 'r');
@@ -73,11 +73,11 @@ class Themes {
 		return $theme;
 	}
 	function get_site_template() {
-		$site_theme = Themes::get_site_theme();
+		$site_theme = Theme::get_site_theme();
 		list($package, $theme) = explode('|', $site_theme, 2);
 		if(empty($theme))
 			$theme = 'BeSquidgy';
-		$file = "Themes/$theme.template";
+		$file = "Theme/$theme.template";
 		return $package == 'Custom' ? 'Sites/Custom_'.$file : $file;
 	}
 }
