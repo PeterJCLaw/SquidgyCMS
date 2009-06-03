@@ -11,6 +11,14 @@ class AdminStatus extends Admin {
 	}
 
 	function printFormAdmin() {
+		$this->things_to_check = array('User', 'Data');
+		sort($this->things_to_check);
+		$this->get_status();
+		echo '<dl>';
+		foreach($this->data as $thing => $value) {
+			echo "<dt>$thing</dt><dd>$value</dd>";
+		}
+		echo '</dl>';
 	}
 
 	function get_status() {
@@ -21,11 +29,11 @@ class AdminStatus extends Admin {
 	}
 
 	function UserStatus() {
-		$this->DirStatus('Users', $this->site_root.'/Users');
+		$this->DirStatus('Users Folder', $this->site_root.'/Users');
 	}
 
 	function DataStatus() {
-		$this->DirStatus('Data', $this->data_root);
+		$this->DirStatus('Data Folder', $this->data_root);
 	}
 
 	function DirStatus($store, $path) {
