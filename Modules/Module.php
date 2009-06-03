@@ -33,13 +33,6 @@ class ModuleTemplate {
 			$this->data = FileSystem::get_file_rtrim($this->data_file);
 	}
 
-	function put_data() {
-		if($this->complex_data)
-			return FileSystem::put_file_assoc($this->data_file, $this->data, true);
-		else
-			return FileSystem::file_put_contents($this->data_file, implode("\n",$this->data), 'w');
-	}
-
 	function get_info() {
 		$a['class']	= $this->get_my_class();
 		return $a;
@@ -47,6 +40,13 @@ class ModuleTemplate {
 }
 
 class Admin extends ModuleTemplate {
+
+	function put_data() {
+		if($this->complex_data)
+			return FileSystem::put_file_assoc($this->data_file, $this->data, true);
+		else
+			return FileSystem::file_put_contents($this->data_file, implode("\n",$this->data), 'w');
+	}
 
 	var $section;	//php <5
 	var $sect_title;
