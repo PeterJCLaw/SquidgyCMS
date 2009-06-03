@@ -102,7 +102,6 @@ HeadOne;
 
 	function Footer($args) {
 		global $who_copyright, $website_name_short, $website_name_long, $SquidgyCMS_version;
-		include "$this->site_root/Users/Webmaster.user.php";
 		list($full)	= $args;
 		$out	= '';
 		if(!empty($full) && $full == 'full')
@@ -112,8 +111,8 @@ HeadOne;
 	All trademarks remain the property of their legal owners.
 	<br />
 	Broken Links? Feedback? Please
-	<a href="Contact_Us.php?subject='.$website_name_short.'%20Website&amp;target=Webmaster" title="Send '.$gender.' an email using our contact form">email</a>
-	the <a href="Committee#Webmaster" title="Who the heck is '.($gender == 'him' ? 'he' : 'she').' anyway?">Webmaster</a>.
+	<a href="Contact_Us.php?subject='.$website_name_short.'%20Website&amp;target=Webmaster" title="Send them an email using our contact form">email</a>
+	the <a href="Committee#Webmaster" title="Who the heck is that?">Webmaster</a>.
 	Valid <a href="http://validator.w3.org/check/referer" title="HTML Validation Page, External link">XHTML</a>
 	and <a href="http://jigsaw.w3.org/css-validator/check/referer" title="CSS Validation Page, External link">CSS</a>.
 	<br />
