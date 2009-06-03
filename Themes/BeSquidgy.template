@@ -6,8 +6,8 @@
 <meta name="description" content="{{A description of the site}}" />
 <meta name="keywords" content="{{Some keywords that match the site}}" />
 [[Block::Site-Head]]
-<link rel="shortcut icon" href="[[Block::Themes-root]]BeSquidgy.ico" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="[[Block::Themes-root]]BeSquidgy.css"/>
+<link rel="shortcut icon" href="[[Block::Theme-root]]BeSquidgy.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="[[Block::Theme-root]]BeSquidgy.css"/>
 </head>
 <body>
 <div id="top"></div>
