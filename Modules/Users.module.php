@@ -18,19 +18,16 @@ class AdminUsers extends Admin {
 	<th title="Tick the box to delete the user, this cannot be undone" class="T R">Delete:</th>
 </tr><?php
 		$user_list = Users::list_all();
-		foreach($user_list as $Person) {
-			if(in_array($Person, array('Committee', 'Chaplain')))
-				continue;
+		foreach($user_list as $id) {
+			$User = new User($id);
 
-			include user_file($Person);
-
-			$del_box	= '<input type="checkbox" class="tick" name="del['.$Person.']" />';
-			$reset_box	= '<input type="checkbox" class="tick" name="reset['.$Person.']" />';
+			$del_box	= '<input type="checkbox" class="tick" name="del['.$id.']" />';
+			$reset_box	= '<input type="checkbox" class="tick" name="pass_reset['.$id.']" />';
 
 			echo '
 <tr>
-	<td class="L">'.$Person.'</td>
-	<td class="M">'.$name.'</td>
+	<td class="L">'.$id.'</td>
+	<td class="M">'.$User->name.'</td>
 	<td class="T M">'.$reset_box.'</td>
 	<td class="T R">'.$del_box.'</td>
 </tr>';
@@ -80,14 +77,14 @@ class AdminUsers extends Admin {
 	}
 
 	function submit($content=0) {
-		list($reset, $del) = array();
+		list($pass_reset, $del) = array();
 		extract($_POST, EXTR_IF_EXISTS);
 		global $debug_info, $username, $website_name_short, $webmaster_email;
 
 		$reset_list = $reset_error = $del_list = $del_error = '';
 
-		if(!empty($reset)) {
-			foreach($reset as $user => $val) {
+		if(!empty($pass_reset)) {
+			foreach($pass_reset as $user => $val) {
 				if(!empty($val)) {
 					$reset_error = $this->reset_pass($user);
 					if(empty($reset_error))
