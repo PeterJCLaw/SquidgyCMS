@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="style.css" type="text/css" />
 <p>
-<abbr title"The All Squidgy Content Management System">SquidgyCMS</abbr> uses single file modules to build sites.
+<abbr title="The All Squidgy Content Management System">SquidgyCMS</abbr> uses single file modules to build sites.
 Core modules are all stored in the top level Modules directory, and custom ones can be installed by simply adding their module file to the Sites/Custom_Modules directory.
 SquidgyCMS will automatically detect their presence, perform <strong>very</strong> basic functionality checks and add them to the list of available modules.
 </p><p>
@@ -11,6 +11,21 @@ Additionally the module file may contain the a static class of the same name as 
 Each module must have a unique ID which is used as part of the file name.
 The ID may only contain alpha-numeric characters or underscores.
 The full file name of a module file is <code><em>moduleID</em>.module.PHP</code>
+</p>
+<h2>The Module Descriptor:</h2>
+<p>
+Each module file must have a module descriptor.
+This froms the top few lines of the file, and is used to show information about the module to users.
+It is made up of a series of lines that are #-comments and are configuration file style lines.
+<h3>Required keys:</h3>
+<dl>
+	<dt>#name</dt>
+		<dd>The human presented name of the module</dd>
+	<dt>#description</dt>
+		<dd>A description of the module that is shown to the user</dd>
+	<dt>#package</dt>
+		<dd>This is the package of the module - can be anything escept <code>Core - required</code> or <code>Core - optional</code> as these are reserve for modules that are part of a core installation.</dd>
+</dl>
 </p>
 
 <h2>The Block object:</h2>
@@ -55,6 +70,8 @@ Modules that are implemented by the parent, and can be used in the modules:
 		<dd>This prints two select boxes that enable the user to select a time</dd>
 	<dt>genDateSelector()</dt>
 		<dd>This prints three select boxes that enable the user to select a date, these are also corrected appropriately for days in each month including February during leap years</dd>
+	<dt>$this->put_data()</dt>
+		<dd>Save the data in <var>$this->data</var> to the data file</dd>
 </dl>
 
 <h2>Common Module Methods and Properties:</h2>
@@ -69,7 +86,5 @@ There are a number of methods common to all module classes (be they block or adm
 		<dd>If the data that this modules stores is complex then this can be used to signify which column (string, column name) of the data is used as the key for that row</dd>
 	<dt>$this->get_data()</dt>
 		<dd>Load the modules previously saved data from the data file into <var>$this->data</var></dd>
-	<dt>$this->put_data()</dt>
-		<dd>Save the data in <var>$this->data</var> to the data file</dd>
 </dl>
 
