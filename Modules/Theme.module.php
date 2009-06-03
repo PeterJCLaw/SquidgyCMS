@@ -17,7 +17,11 @@ class AdminTheme extends Admin {
 		foreach($category as $package => $themes) {
 ?>
 <table id="<?php echo $package.'Theme'; ?>" class="theme">
-<caption><?php echo $package.' Theme'; ?></caption>
+<caption><?php echo $package.' Themes'; ?></caption>
+<?	if(empty($themes)) {
+	echo '<tr><td colspan="2">No Themes found in this category</td></tr>';
+	continue;
+} ?>
 <tr>
 	<th class="L">Theme Name:</th><th class="R">Enabled:</th>
 </tr><?php
@@ -66,7 +70,7 @@ class Theme {
 	function get_site_theme() {
 		$file = $GLOBALS['data_root'].'/theme.data';
 		if(!is_file($file) || !is_readable($file))
-			return FALSE;
+			return 'Core|BeSquidgy';
 		$fh = fopen($file, 'r');
 		$theme = trim(fgets($fh));
 		fclose($fh);
