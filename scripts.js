@@ -70,24 +70,24 @@ function toggle_FE(child_ul, parent_li)
 }
 
 // Tick (or untick) items as a group
-function group_tick_2(thing)
+function group_tick_2(thing, all_id)
 {
 	var state	= thing.checked;
-	var tick_list	= get_Sub_Class_Elements('', thing.className);
-	if(thing.id == '_Whole') {
+	var tick_list	= get_Sub_Class_Elements(this.form, thing.className);
+	if(thing.id == all_id) {
 		for(var i=0; i<tick_list.length; i++) {
 			tick_list[i].checked	= state;
 		}
 		window.LOG	+= "\nWhole group being ticked";
 	} else {
 		for(var count = 0, i = 0; i<tick_list.length; i++) {
-			if(tick_list[i].id != '_Whole' && tick_list[i].checked)
+			if(tick_list[i].id != all_id && tick_list[i].checked)
 				count++;
 		}
 		if(count == tick_list.length-1)
-			$('_Whole').checked	= true;
+			$(all_id).checked	= true;
 		else
-			$('_Whole').checked	= false;
+			$(all_id).checked	= false;
 		window.LOG	+= "\ncount = "+count+", length = "+tick_list.length;
 	}
 	return;

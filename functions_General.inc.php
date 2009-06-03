@@ -191,39 +191,38 @@ function send_mail($to, $subject, $message, $headers)
 	return mail($_to_, $subject, $message, $headers);
 }
 
-/* This function prints the tickboxes */
-function print_tickboxes($item_list, $tick_side = '')
+/* This function prints tickboxes which can be linked to an all box */
+function print_tickboxes($item_list, $ticked_list, $all_box=FALSE, $tick_side = '')
 {
-	global $target, $debug_info, $whole_com_elem_id;
+	global $debug_info;
+	if(!is_arraY($ticked_list))
+		$ticked_list = array();
+
 	$left = FALSE;
 	if($tick_side == "left")	//if in doubt it goes on the right
 		$left = TRUE;
 
-	echo "	<ul class=\"tick_list ".($left ? 'left' : 'right')."\">\n";
+	$onclick	= empty($all_box) ? '' : ' onchange="group_tick_2(this, \'_all\')" onclick="group_tick_2(this, \'_all\')"';
+	if(in_array('_all', $ticked_list))
+		$check_it	= 'checked="checked" ';
 
-	$mini_group	= in_array("Committee", $item_list);
+	echo '<ul class="tick_list '.($left ? 'left' : 'right')."\">\n";
 
-	for($i = 0, $count = 0; $i < count($item_list); $i++)	//spit as many items as there are
-	{
-		if($item_list[$i] == "Committee")
-			$item	= "Whole Committee";
-		else
-			$item	= $item_list[$i];
+	foreach($item_list as $item) {	//spit as many items as there are
+		if(in_array($item, $ticked_list))
+			$check_it	= 'checked="checked" ';
 
-		$check_it	= (($target == $item || ($target == "Whole Committee" && $i < $whole_com_elem_id)) ? ' checked="checked"' : "");
-		$onclick	= ($i <= $whole_com_elem_id ? ' onchange="group_tick_2(this)" onclick="group_tick_2(this)"' : "");
-		$w_style	= ($i == $whole_com_elem_id ? ' style="font-weight: bold;" id="_Whole_label" for="_Whole"' : "");
-		$_whole	= ($i == $whole_com_elem_id ? ' id="_Whole"' : "");
-
-		$debug_info	.= "\$check_it = $check_it\n<br />\$item = $item\n<br />\$target = $target\n<br />\$i = $i\n<br />\$whole_com_elem_id = $whole_com_elem_id\n<br />\n";
-
-		echo "		<li><label$w_style>".($left ? '' : $item).'
-			<input class="'.($onclick != ''? 'tick_1 ' : '').'tick" type="checkbox" name="target['.$item."]\"$onclick$check_it$_whole />"
-				.($left ? $item : "")."\n		</label></li>\n";
-
+		echo "	<li><label>".($left ? '' : $item).'
+		<input class="'.(empty($all_box) ? '' : 'tick_1 ').'tick" type="checkbox" name="target['.$item."]\"$onclick $check_it/>"
+			.($left ? $item : '')."\n	</label></li>\n";
 	}
 
-	echo "	</ul>\n";
+	if(!empty($all_box))
+		echo '	<li><label id="_all_label" for="_all"><strong>'.($left ? '' : $all_box).'
+		<input class="tick_1 tick" type="checkbox" name="target[_all]" id="_all"'."$onclick $check_it/>"
+			.($left ? $all_box : '')."\n	</strong></label></li>\n";
+
+	echo "</ul>\n";
 	return;
 }
 

@@ -29,7 +29,7 @@ require_once("Modules/FileSystem.php");
 require_once("Modules/Module.php");
 require_once("Modules/User.php");
 require_once("Modules/Content.module.php");
-require_once("Modules/Themes.module.php");
+require_once("Modules/Theme.module.php");
 require_once("Modules/Users.module.php");
 
 if($allow_logging)
@@ -41,7 +41,7 @@ else {	//dummy functions to prevent errors
 }
 
 $pages_file	= "$data_root/pages.data";	//for all pages - the main table of contents
-$template_file = Themes::get_site_template();	//the site template
+$template_file = Theme::get_site_template();	//the site template
 
 $SquidgyCMS_version	= 0.01;
 

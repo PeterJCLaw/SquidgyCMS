@@ -11,16 +11,7 @@ class BlockSite extends Block {
 	}
 
 	function BaseHREF($args) {
-		global $base_href;
-		if(empty($args))
-			return $base_href;
-		else
-			list($where)	= $args;
-
-		if(strtolower($where) == 'theme')
-			return "${base_href}Sites/Custom_Themes/";
-		else
-			return;
+		return $GLOBALS['base_href'];
 	}
 
 	function Head($args) {
