@@ -12,9 +12,9 @@ class AdminTheme extends Admin {
 
 	function printFormAdmin() {
 		$site_theme = Theme::get_site_theme();
-		$category['Core']	= FileSystem::Filtered_File_List('Theme', '.template');
-		$category['Custom']	= FileSystem::Filtered_File_List('Sites/Custom_Theme', '.template');
-		foreach($category as $package => $theme) {
+		$category['Core']	= FileSystem::Filtered_File_List('Themes', '.template');
+		$category['Custom']	= FileSystem::Filtered_File_List('Sites/Custom_Themes', '.template');
+		foreach($category as $package => $themes) {
 ?>
 <table id="<?php echo $package.'Theme'; ?>" class="theme">
 <caption><?php echo $package.' Theme'; ?></caption>
@@ -22,7 +22,7 @@ class AdminTheme extends Admin {
 	<th class="L">Theme Name:</th><th class="R">Enabled:</th>
 </tr><?php
 			$i = 1;
-			foreach($theme as $theme) {
+			foreach($themes as $theme) {
 				$odd_even	= $i % 2 == 1 ? 'odd' : 'even';
 				$id	= "$package|$theme";
 				$i++;
@@ -57,7 +57,7 @@ class BlockTheme extends Block {
 	function root($args) {
 		$site_theme = Theme::get_site_theme();
 		list($package, $theme) = explode('|', $site_theme, 2);
-		$root = "Theme/";
+		$root = "Themes/";
 		return '[[Block::Site-BaseHREF]]'.($package == 'Custom' ? 'Sites/Custom_'.$root : $root);
 	}
 }
@@ -77,7 +77,7 @@ class Theme {
 		list($package, $theme) = explode('|', $site_theme, 2);
 		if(empty($theme))
 			$theme = 'BeSquidgy';
-		$file = "Theme/$theme.template";
+		$file = "Themes/$theme.template";
 		return $package == 'Custom' ? 'Sites/Custom_'.$file : $file;
 	}
 }
