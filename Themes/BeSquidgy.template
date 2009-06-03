@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={{utf-8}}" />
+<meta name="author" content="{{You!}}" />
+<meta name="description" content="{{A description of the site}}" />
+<meta name="keywords" content="{{Some keywords that match the site}}" />
+[[Block::Site-Head]]
+<link rel="shortcut icon" href="./BeSquidgy.ico" type="image/x-icon" /><!-- ./ == [[Block::Site-BaseHREF::theme]] -->
+<link rel="stylesheet" type="text/css" href="./BeSquidgy.css"/>
+</head>
+<body>
+<div id="top"></div>
+<div id="header"></div>
+<table id="main_tbl">
+	<tr>
+		<td id="left_cell" rowspan="2">
+			[[Block::Site-TOCLinks]]
+			[[Block::Site-EditLogoutLinks]]
+		</td>
+		<td id="main_cell" colspan="2">
+			[[Block::Site-Content]]
+		</td>
+	</tr><tr>
+		<td id="spacer" />
+		<td id="copy_cell">
+			Broken Links? Feedback? Please <a href="{{link to the contact page}}" title="Send us an email">email us</a>.
+			<br />
+			&copy; {{YOU!}}. All trademarks remain the property of their legal owners.
+			Valid <a href="http://validator.w3.org/check/referer" title="Validation Page (External link)"><abbr title="Extensible Hypertext Markup Language">XHTML</abbr></a>
+			and <a href="http://jigsaw.w3.org/css-validator/check/referer" title="Validation Page (External link)"><abbr title="Cascading Style Sheets">CSS</abbr></a>.
+			<br />
+
+			The views expressed are solely those of the author and are not necessarily the opinions of the
+			<a href="http://www.soton.ac.uk" title="Have a look at their site (External Link)">University of Southampton</a>
+			or
+			<a href="http://www.ecs.soton.ac.uk" title="Have a look at their site (External Link)"><abbr title="Department of Electronics and Computer Science">ECS<abbr></a>.
+		</td>
+	</tr>
+</table>
+<div id="footer"></div>
+</body>
+</html>

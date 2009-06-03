@@ -76,7 +76,7 @@ class Themes {
 		$site_theme = Themes::get_site_theme();
 		list($package, $theme) = explode('|', $site_theme, 2);
 		if(empty($theme))
-			$theme = 'default';
+			$theme = 'BeSquidgy';
 		$file = "Themes/$theme.template";
 		return $package == 'Custom' ? 'Sites/Custom_'.$file : $file;
 	}

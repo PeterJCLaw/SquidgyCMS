@@ -1,0 +1,50 @@
+/* CSS Document */
+html	{ font-family: Arial, Helvetica, sans-serif; background-color: #DCCDE4; }
+body	{ margin: 0 40px; padding: 0 10px; background-color: #D7EAD2; }
+p	{ margin: 0; }
+img	{ border: none; }
+table	{ border-collapse: collapse; }
+input	{ font-family: Verdana, Arial, Helvetica, sans-serif; }
+.left	{ text-align: left; }
+.center	{ text-align: center; }
+.right	{ text-align: right; }
+.f_left	{ float: left; }
+.f_right	{ float: right; }
+.bold	{ font-weight: bold; }
+.border	{ border: 2px solid green; }
+
+a	{ text-decoration: none; color: blue; }
+a:visited	{ text-decoration: none; color: purple; }
+a:hover, a:visited:hover, a:active	{ text-decoration: none; color: red; }
+
+#header	{ border-bottom: 1px solid black; height: 104px; margin: 0 0 10px; }
+#All_Squidgy	{ margin: 0 0 15px 9px; }
+#Home_of	{ margin: 31px 15px 0 0; }
+
+#top, #footer	{ margin: 0 -10px; background-repeat: repeat-x; }
+#top	{ background-image: url('PurpleTopGreenBottom.png'); height: 50px; background-position: top; }
+#footer	{ background-image: url('GreenTopPurpleBottom.png'); height: 100px; background-position: bottom; }
+
+#main_tbl	{ width: 100%; }
+#left_cell	{ padding: 3px 3px 10px; border-right: 1px solid black; width: 15em; vertical-align: top; }
+#main_cell	{ padding: 3px 13px 15px; vertical-align: top; }
+#copy_cell	{ padding: 10px 13px; border-top: 1px solid black; text-align: center; font-size: 0.8em; height: 1%; }
+#spacer	{ width: 10px; }
+
+#file_image_copy	{ margin: 0 0 17px; }
+
+/* mode list on the left hand side, all pages */
+#left_cell ul.menu	{ margin: 0 8px 6px 1px; padding-bottom: 9px; padding-left: 15px; border-bottom: 1px solid black; }
+#left_cell ul.menu li	{ line-height: 1.2em; list-style: none; padding: 0; margin: 0; font-size: 1.1em; }
+
+/* contact me form */
+#contact_tbl	{ width: 590px; border: none; margin-left: 60px; }
+#contact_tbl th	{ width: 125px; line-height: 1.6em; vertical-align: top; text-align: right; padding-right: 8px; }
+#contact_tbl .text_in	{ width: 401px; font-family: Verdana, Arial, Helvetica, sans-serif; margin-left: 1px; }
+#reset, #submit	{ width: 238px; margin: 2px 0 0 3px; line-height: 1.6em; padding: 0; font-family: Tahoma, sans-serif; }
+
+/* Login Pages */
+#login_fail	{ color: red; float: left; padding-left: 130px; }
+#login	{ width: 600px; }
+#login th	{ font-weight: normal; text-align: right; width: 230px; }
+#login td input { width: 200px; margin: 1px; }
