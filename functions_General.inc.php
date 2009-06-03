@@ -261,12 +261,6 @@ function info_name($name)
 	return email(ucwords(strtolower(str_replace(".", " ", $name))));	//email copes with webmaster and those with spaces in
 }
 
-/* This function returns the path to the user's data file */
-function user_file($n)
-{
-	return User::file($n);
-}
-
 /* This function converts a job title into an email add-in */
 function email($job)
 {
