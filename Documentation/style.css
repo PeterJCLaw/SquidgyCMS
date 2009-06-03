@@ -1,4 +1,5 @@
 code, dt	{ font-family: monospace; font-size: 1.25em; }
 code, dt	{ margin-top: 0.2em; }
+code.block	{ display: block; margin-left: 12px; }
 dd	{ margin-left: 25px; display: block; font-size: 0..95em; }
 

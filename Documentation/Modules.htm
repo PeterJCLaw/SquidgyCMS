@@ -10,7 +10,7 @@ Additionally the module file may contain the a static class of the same name as 
 </p><p>
 Each module must have a unique ID which is used as part of the file name.
 The ID may only contain alpha-numeric characters or underscores.
-The full file name of a module file is <code><em>moduleID</em>.module.PHP</code>
+The full file name of a module file is <code><var>moduleID</var>.module.php</code>
 </p>
 <h2>The Module Descriptor:</h2>
 <p>
@@ -20,23 +20,23 @@ It is made up of a series of lines that are #-comments and are configuration fil
 <h3>Required keys:</h3>
 <dl>
 	<dt>#name</dt>
-		<dd>The human presented name of the module</dd>
+		<dd>The human presented name of the module.</dd>
 	<dt>#description</dt>
-		<dd>A description of the module that is shown to the user</dd>
+		<dd>A description of the module that is shown to the user.</dd>
 	<dt>#package</dt>
 		<dd>This is the package of the module - can be anything escept <code>Core - required</code> or <code>Core - optional</code> as these are reserve for modules that are part of a core installation.</dd>
 </dl>
 </p>
 
 <h2>The Block object:</h2>
-This is a PHP4 compatible object which extends the main Block object, it is this that SquidgyCMS will instantiate then call against to generate blocks on the user pages.
+This is a <acronym title="recursive acronym for PHP: Hypertext Preprocessor">PHP</acronym>4 compatible object which extends the main Block object, it is this that SquidgyCMS will instantiate then call against to generate blocks on the user pages.
 <h3>Naming</h3>
-It must be named <code>Block<em>moduleID</em></code> where <em>moduleID</em> is the ID of your module.
+It must be named <code>Block<var>moduleID</var></code> where <var>moduleID</var> is the ID of your module.
 <h3>Methods</h3>
 Your block object <strong>must</strong> have the following methods to be a valid module:
 <dl>
-	<dt>Block<em>moduleID</em>()</dt>
-		<dd>This is the method called when the object is instantiated, and must contain a call to <code>parent::__construct()</code></dd>
+	<dt>Block<var>moduleID</var>()</dt>
+		<dd>This is the method called when the object is instantiated, and must contain a call to <code>parent::__construct()</code>.</dd>
 </dl>
 It is expecteed that your object will also contain other methods which match the calls made by users via the <a href="SquidgyML.htm"><abbr title="Squidgy CMS Markup Language">SquidgyML</abbr></a>.
 
@@ -44,34 +44,38 @@ It is expecteed that your object will also contain other methods which match the
 <h2>The Admin object:</h2>
 This is a PHP4 compatible object which extends the main Admin object, it is this that SquidgyCMS will instantiate then call against to generate the administration section for your module.
 <h3>Naming</h3>
-It must be named <code>Admin<em>moduleID</em></code> where <em>moduleID</em> is the ID of your module.
+It must be named <code>Admin<var>moduleID</var></code> where <var>moduleID</var> is the ID of your module.
 <h3>Methods</h3>
 Your admin object <strong>must</strong> have the following methods to be a valid module:
 <dl>
-	<dt>Admin<em>moduleID</em>()</dt>
-		<dd>This is the method called when the object is instantiated, and must contain a call to <code>parent::__construct()</code></dd>
+	<dt>Admin<var>moduleID</var>()</dt>
+		<dd>This is the method called when the object is instantiated, and must contain a call to <code>parent::__construct()</code>.</dd>
 	<dt>printAdminForm()</dt>
-		<dd>This is the method called to generate the contents of the admin page form</dd>
+		<dd>This is the method called to generate the contents of the admin page form.</dd>
 	<dt>submit(<var>$content</var>=0)</dt>
-		<dd>This is the method called by the page handling the form submission, <var>$content</var> will be passed only if it's not empty and in this case it will have been cleaned to remove PHP tags and extra slashes</dd>
+		<dd>
+			This is the method called by the page handling the form submission,
+			<var>$content</var> will be passed only if it's not empty and in this case it will have been cleaned to remove PHP tags and extra slashes.
+			Other form variables should be locally extracted from the PHP superglobal <var>$_POST</var> array.
+		</dd>
 </dl>
 Methods that are implemented by the parent, and should not be overridden:
 <dl>
 	<dt>printFormHeader()</dt>
 		<dd>This creates the top of the form setting the correct module type inputs for submission etc.</dd>
 	<dt>printFormFooter()</dt>
-		<dd>This creates the bottom of the form</dd>
+		<dd>This creates the bottom of the form.</dd>
 </dl>
 Modules that are implemented by the parent, and can be used in the modules:
 <dl>
 	<dt>printTextarea()</dt>
-		<dd>This prints a textarea that will submit a large body of text to the <var>$content</var> variable passed to the submit function</dd>
+		<dd>This prints a textarea that will submit a large body of text to the <var>$content</var> variable passed to the submit function.</dd>
 	<dt>genTimeSelector()</dt>
-		<dd>This prints two select boxes that enable the user to select a time</dd>
+		<dd>This prints two select boxes that enable the user to select a time.</dd>
 	<dt>genDateSelector()</dt>
-		<dd>This prints three select boxes that enable the user to select a date, these are also corrected appropriately for days in each month including February during leap years</dd>
+		<dd>This prints three select boxes that enable the user to select a date, these are also corrected appropriately for days in each month including February during leap years.</dd>
 	<dt>$this->put_data()</dt>
-		<dd>Save the data in <var>$this->data</var> to the data file</dd>
+		<dd>Save the data in <var>$this->data</var> to the data file.</dd>
 </dl>
 
 <h2>Common Module Methods and Properties:</h2>
@@ -79,12 +83,12 @@ There are a number of methods common to all module classes (be they block or adm
 <h3>Module Data</h3>
 <dl>
 	<dt><var>$this->complex_data</var> = FALSE</dt>
-		<dd>This property specifies whether the data stored by the module is a 2D associative array (<var>$this->complex_data</var> = true) or a simple array</dd>
+		<dd>This property specifies whether the data stored by the module is a 2D associative array (<var>$this->complex_data</var> = true) or a simple array.</dd>
 	<dt><var>$this->data</var> = array()</dt>
-		<dd>This is an (associative) array of the data available to the module</dd>
+		<dd>This is an (associative) array of the data available to the module.</dd>
 	<dt><var>$this->data_key_column</var> = FALSE</dt>
-		<dd>If the data that this modules stores is complex then this can be used to signify which column (string, column name) of the data is used as the key for that row</dd>
+		<dd>If the data that this modules stores is complex then this can be used to signify which column (string, column name) of the data is used as the key for that row.</dd>
 	<dt>$this->get_data()</dt>
-		<dd>Load the modules previously saved data from the data file into <var>$this->data</var></dd>
+		<dd>Load the modules previously saved data from the data file into <var>$this->data</var>.</dd>
 </dl>
 
