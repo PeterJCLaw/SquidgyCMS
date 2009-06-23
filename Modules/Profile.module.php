@@ -12,32 +12,30 @@ class AdminProfile extends Admin {
 	}
 
 	function printFormAdmin() {
-		global $debug_info, $username;
-		include User::file($username);
-		$debug_info	.= "name = '$name', image_path = '$image_path', gender = '$gender', spiel = '$spiel'\n<br />\n";
+		global $debug_info;
+		$user = new UserProfile($GLOBALS['_SITE_USER']->id);
+		$debug_info	.= "user = '".print_r($user, true);"'\n<br />\n";
 ?>
 <table><tr>
 	<th><label for="new_name" title="Your name as you would like it to appear on the site">Name:</label></th>
 	<td colspan="2">
-		<input class="text" type="text" id="new_name" name="new_name" value="<?php echo stripslashes($name); ?>" title="Your name as you would like it to appear on the site" />
+		<input class="text" type="text" id="new_name" name="new_name" value="<?php echo $user->name; ?>" title="Your name as you would like it to appear on the site" />
 	</td>
 	<td rowspan="5" id="pic_cell">
-		<a id="pic_preview_link" href="<?php echo Profile::get_image($image_path, 'orig'); ?>" title="Your image preview">
-			<img id="pic_preview" src="<?php echo Profile::get_image($image_path); ?>" title="Your image preview, click to view larger" alt="Your image preview" width="75px" height="90px" />
+		<a id="pic_preview_link" href="<?php echo $user->get_image('orig'); ?>" title="Your image preview">
+			<img id="pic_preview" src="<?php echo $user->get_image(); ?>" title="Your image preview, click to view larger" alt="Your image preview" width="75px" height="90px" />
 		</a>
 	</td>
 </tr><tr>
 	<th><label for="photo_change" title="Change your picture">Picture:</label></th>
 	<td>
-		<select id="photo_change" name="photo" title="Change your picture" onchange="change_pic(this.value)">
-		<?php echo $this->photo_select($image_path); ?>
-		</select>
+		<?php echo $this->photo_select($user->image_path); ?>
 	</td>
 	<td rowspan="4" id="gender_cell">
-		<input type="radio" class="radio" id="gender_male" name="n_gender" value="him" <?php echo ($gender == "him" ? "checked=\"checked\" " : ""); ?>/>
+		<input type="radio" class="radio" id="gender_male" name="n_gender" value="him" <?php echo ($user->gender == "him" ? "checked=\"checked\" " : ""); ?>/>
 		<label for="gender_male">Male</label>
 		<br />
-		<input type="radio" class="radio" id="gender_female" name="n_gender" value="her" <?php echo ($gender == "her" ? "checked=\"checked\" " : ""); ?>/>
+		<input type="radio" class="radio" id="gender_female" name="n_gender" value="her" <?php echo ($user->gender == "her" ? "checked=\"checked\" " : ""); ?>/>
 		<label for="gender_female">Female</label>
 	</td>
 </tr><tr id="pass_0" style="display: none;">
@@ -54,30 +52,16 @@ class AdminProfile extends Admin {
 	<td><input class="text" type="password" id="confirm_pass" name="confirm_pass"  title="Only fill in if changing your password" /></td>
 </tr></table>
 <?php
-		$this->printTextarea($spiel);
+		$this->printTextarea($user->spiel);
 		return;
 	}
 
 	/*this function generates the photo select box*/
 	function photo_select($curr_img) {
-		global $debug_info, $site_root;
-		$img_list	= FileSystem::Filtered_File_List("$site_root/Users", ".jpg");
-		$selected	= '" selected="selected';
+		global $debug_info;
+		$img_list	= FileSystem::Filtered_File_List("$this->site_root/Users", ".jpg");
 		$debug_info .= "\$curr_img=$curr_img\n<br />\n";
-		$out	= "";
-
-		foreach($img_list as $image) {
-			if($image == 'Unknown')	//this is the default image
-				continue;
-			$debug_info .= "\$image=$image\n<br />\n";
-			if($image == str_replace(".jpg", "", $curr_img)) {
-				$out	.= "<option value=\"$image$selected\">$image</option>\n				";
-				$selected = '';
-			} else
-				$out	.= "<option value=\"$image\">$image</option>\n				";
-		}
-		$out	.= "<option value=\"none$selected\">None</option>\n";
-		return $out;
+		return $this->get_selectbox('photo" id="photo_change" title="Change your picture" onchange="change_pic(this.value);', $img_list, str_replace(".jpg", "", $curr_img));
 	}
 
 	function submit($content=0) {
@@ -152,7 +136,7 @@ class UserProfile extends User {
 		parent::__construct($id);
 	}
 
-	/* This function determines if the profile picture is valid, if it is it returns it, else returns a stand in image */
+	/* This function determines if the profile picture is valid, if so it returns it's path, else returns the path to a stand in image */
 	function get_image($type = 'thumb') {
 		global $site_root;
 		//check that we've been passed a sane image, correct it if not
