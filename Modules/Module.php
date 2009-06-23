@@ -178,6 +178,20 @@ class Admin extends ModuleTemplate {
 			</td>
 <?php	}
 
+	function get_selectbox($name, $item_list, $selected=FALSE, $type='list') {
+		$retval = "<select name=\"$name\">\n";
+		if($type === 'list')
+			$item_list = array_combine($item_list, $item_list);
+		foreach($item_list as $item => $val) {
+			if($val == $selected)
+				$sel	= ' selected="selected"';
+			else
+				$sel	= '';
+			$retval .= " 	<option$sel value=\"$val\">$item</option>\n";
+		}
+		return $retval."</select>\n";
+	}
+
 	function printFormHeader() {
 	global $debug; ?>
 <form id="Admin<?php echo $this->section ?>_form" action="admin_handler.php<? echo $debug ? '?debug=1' : ''; ?>" method="<? echo $debug ? 'get' : 'post'; ?>" onsubmit="return Validate_On_Admin_Submit(this)">
