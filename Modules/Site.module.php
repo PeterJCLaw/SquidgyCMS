@@ -15,7 +15,8 @@ class BlockSite extends Block {
 	}
 
 	function Head($args) {
-		global $page_scripts, $page_head_title, $page_n, $logged_in, $scripts_need_login, $base_href;
+		global $page_scripts, $page_head_title, $page_n, $scripts_need_login, $base_href;
+		$logged_in = $GLOBALS['_SITE_USER']->is_logged_in();
 		if(empty($page_scripts) || (!empty($scripts_need_login) && !$logged_in))
 			$page_scripts	= '';
 		$out	= <<<HeadOne

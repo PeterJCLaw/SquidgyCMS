@@ -27,7 +27,7 @@ class FSPHP{
  */
 function dirList ($directory)
 {
-	global $logged_in, $show_all;
+	global $show_all;
 
 	$results = array();
 	$handler = opendir($directory);
@@ -42,7 +42,7 @@ function dirList ($directory)
 				array_push($results, $file);
 			}
 			else
-			if(is_dir($file_path) && ($file[0] != ".") && (!ignore_file($file) || $show_all) && (!secure_dir($file) || $logged_in))
+			if(is_dir($file_path) && ($file[0] != ".") && (!ignore_file($file) || $show_all) && !secure_dir($file))
 			{
 				array_push($results, $file);
 			}

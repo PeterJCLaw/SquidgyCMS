@@ -38,7 +38,7 @@ class FileSystem {
 		if(!is_dir($dir) || !is_readable($dir))
 			return $results;
 
-		global $logged_in, $this_dir, $show_all;
+		global $this_dir, $show_all;
 		$this_dir = $dir;
 		$handler = opendir($dir);
 
@@ -88,9 +88,9 @@ class FileSystem {
 	/* This function takes in the file name and retruns true or false depending on whether it's been declared secure (in config.inc) */
 	function secure_dir($file)
 	{
-		global $secure_folders, $logged_in;
+		global $secure_folders;
 
-		if(!is_dir($file) || $logged_in)	//if its not a directory or they're logged in
+		if(!is_dir($file) || $GLOBALS['_SITE_USER']->is_logged_in();)	//if its not a directory or they're logged in
 			return FALSE;
 
 		if(is_array($secure_folders))

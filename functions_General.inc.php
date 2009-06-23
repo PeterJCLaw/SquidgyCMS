@@ -131,7 +131,7 @@ function cmp_by_filename_id($a, $b)
 /* get the next id for the appropriate item */
 function get_next_id($where, $filter)
 {
-	global $page_file, $logged_in, $debug_info;
+	global $debug_info;
 
 	$list	= FileSystem::Filtered_File_List($where, $filter);
 
