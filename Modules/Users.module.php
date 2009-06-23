@@ -12,22 +12,29 @@ class AdminUsers extends Admin {
 
 	function printFormAdmin() { ?>
 <table id="admin_users_tbl" class="admin_tbl"><tr>
-	<th title="Their Committee Position" class="L">User:</th>
-	<th title="Their Displayed Name" class="M">Name:</th>
+	<th title="Their user id" class="L">User:</th>
+	<th title="Their displayed name" class="M">Name:</th>
+	<th title="Their administrative priviledges" class="M">Priviledges:</th>
 	<th title="Tick the box to reset the user's password, this cannot be undone" class="T M">Reset Password:</th>
 	<th title="Tick the box to delete the user, this cannot be undone" class="T R">Delete:</th>
 </tr><?php
 		$user_list = Users::list_all();
+		global $USER_LEVELS;
+		foreach(array_keys($USER_LEVELS) as $level) {
+			$level_options[ucwords(strtolower(substr($level, 5)))] = $level;
+		}
 		foreach($user_list as $id) {
 			$User = new User($id);
 
 			$del_box	= '<input type="checkbox" class="tick" name="del['.$id.']" />';
 			$reset_box	= '<input type="checkbox" class="tick" name="pass_reset['.$id.']" />';
+			$level_box	= $this->get_selectbox('rights', $level_options, array_search($User->auth_level, $USER_LEVELS), 0);
 
 			echo '
 <tr>
 	<td class="L">'.$id.'</td>
 	<td class="M">'.$User->name.'</td>
+	<td class="M">'.$level_box.'</td>
 	<td class="T M">'.$reset_box.'</td>
 	<td class="T R">'.$del_box.'</td>
 </tr>';
