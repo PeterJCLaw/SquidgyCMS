@@ -80,7 +80,7 @@ class AdminUsers extends Admin {
 	}
 
 	function delete_user($id) {
-		return unlink(Users::file($id));
+		return unlink(User::file($id));
 	}
 
 	function submit($content=0) {
