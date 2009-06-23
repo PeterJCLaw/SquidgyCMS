@@ -13,7 +13,7 @@ class AdminProfile extends Admin {
 
 	function printFormAdmin() {
 		global $debug_info, $username;
-		include Users::file($username);
+		include User::file($username);
 		$debug_info	.= "name = '$name', image_path = '$image_path', gender = '$gender', spiel = '$spiel'\n<br />\n";
 ?>
 <table><tr>
@@ -30,7 +30,7 @@ class AdminProfile extends Admin {
 	<th><label for="photo_change" title="Change your picture">Picture:</label></th>
 	<td>
 		<select id="photo_change" name="photo" title="Change your picture" onchange="change_pic(this.value)">
-		<?php echo Profile::photo_select($image_path); ?>
+		<?php echo $this->photo_select($image_path); ?>
 		</select>
 	</td>
 	<td rowspan="4" id="gender_cell">
@@ -56,6 +56,28 @@ class AdminProfile extends Admin {
 <?php
 		$this->printTextarea($spiel);
 		return;
+	}
+
+	/*this function generates the photo select box*/
+	function photo_select($curr_img) {
+		global $debug_info, $site_root;
+		$img_list	= FileSystem::Filtered_File_List("$site_root/Users", ".jpg");
+		$selected	= '" selected="selected';
+		$debug_info .= "\$curr_img=$curr_img\n<br />\n";
+		$out	= "";
+
+		foreach($img_list as $image) {
+			if($image == 'Unknown')	//this is the default image
+				continue;
+			$debug_info .= "\$image=$image\n<br />\n";
+			if($image == str_replace(".jpg", "", $curr_img)) {
+				$out	.= "<option value=\"$image$selected\">$image</option>\n				";
+				$selected = '';
+			} else
+				$out	.= "<option value=\"$image\">$image</option>\n				";
+		}
+		$out	.= "<option value=\"none$selected\">None</option>\n";
+		return $out;
 	}
 
 	function submit($content=0) {
@@ -148,31 +170,6 @@ class UserProfile extends User {
 			$path	= "Site_Images/Unknown.jpg";
 
 		return $path;
-	}
-}
-
-//utilities class for Profile things
-class Profile {
-	/*this function generates the photo select box*/
-	function photo_select($curr_img) {
-		global $debug_info, $site_root;
-		$img_list	= FileSystem::Filtered_File_List("$site_root/Users", ".jpg");
-		$selected	= '" selected="selected';
-		$debug_info .= "\$curr_img=$curr_img\n<br />\n";
-		$out	= "";
-
-		foreach($img_list as $image) {
-			if($image == 'Unknown')	//this is the default image
-				continue;
-			$debug_info .= "\$image=$image\n<br />\n";
-			if($image == str_replace(".jpg", "", $curr_img)) {
-				$out	.= "<option value=\"$image$selected\">$image</option>\n				";
-				$selected = '';
-			} else
-				$out	.= "<option value=\"$image\">$image</option>\n				";
-		}
-		$out	.= "<option value=\"none$selected\">None</option>\n";
-		return $out;
 	}
 }
 ?>
