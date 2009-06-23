@@ -90,7 +90,7 @@ class FileSystem {
 	{
 		global $secure_folders;
 
-		if(!is_dir($file) || $GLOBALS['_SITE_USER']->is_logged_in();)	//if its not a directory or they're logged in
+		if(!is_dir($file) || $GLOBALS['_SITE_USER']->is_logged_in())	//if its not a directory or they're logged in
 			return FALSE;
 
 		if(is_array($secure_folders))
