@@ -7,11 +7,10 @@
 
 /* These functions are currently still reliant on info_name() and email(), which are elsewhere */
 
-define(USER_ADMIN, 5);
-define(USER_DEVEL, 4);
-define(USER_EDITOR, 3);
-define(USER_SIMPLE, 2);
-define(USER_GUEST, 1);
+$USER_LEVELS = array('USER_ADMIN' => 5, 'USER_DEVELOPER' => 4, 'USER_EDITOR' => 3, 'USER_SIMPLE' => 2, 'USER_GUEST' => 1);
+foreach($USER_LEVELS as $U_level => $U_val) {
+	define($U_level, $U_val);
+}
 
 class User {
 	function __construct($id) {
@@ -32,7 +31,7 @@ class User {
 		$this->gender = $gender;
 		$this->spiel = $spiel;
 		$this->name = $name;
-		$this->auth_level = $auth_level;
+		$this->auth_level = empty($auth_level) ? USER_GUEST : $auth_level;
 	}
 
 	function User($id) {
