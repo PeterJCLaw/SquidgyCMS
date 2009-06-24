@@ -323,9 +323,9 @@ function email_link($text, $gender, $address, $subject, $cc, $bcc, $body)
 		$out_val	.=  "body=$body";
 	}
 
-	if($gender == "0" && isset($job))
+	if($gender == "0")
 	{
-		include user_file($job);
+		$gender = 'them';
 	}
 
 	$out_val	.=  "\" title=\"Send $gender an email\">$text</a>";
