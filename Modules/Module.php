@@ -330,8 +330,13 @@ class Module {
 		return FileSystem::Filtered_File_List("Modules", ".module.php");
 	}
 
-	function list_all_with_info() {
-		return array_map(array('Module','get_info'), Module::list_all());
+	function list_all_with_info($force_reload=FALSE) {
+		$modules_file = $GLOBALS['data_root'].'/modules.data';
+		$modules_info = is_readable($modules_file) ? FileSystem::get_file_assoc($modules_file, '#id') : array();
+		if(empty($modules_info) || $force_reload !== FALSE)
+			return array_map(array('Module','get_info'), Module::list_all());
+		else
+			return $modules_info;
 	}
 
 	function list_enabled($include_required_modules = FALSE) {
