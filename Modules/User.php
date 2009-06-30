@@ -163,9 +163,11 @@ class UserLogin extends User {
 	function logout() {
 		global $debug_info, $username, $referrer, $cookie_name, $base_href;
 
-		$_SESSION['user'] = $username = "";	//unset all indications of the user being logged in
+		$_SESSION['hash'] = $_SESSION['user'] = $username = "";	//unset all indications of the user being logged in
 		if(isset($_COOKIE[$cookie_name]))
 			setcookie($cookie_name, "", time()-7200, $base_href);	//set a blank cookie that has already expired
+		if(isset($_COOKIE[$cookie_name.'_hash']))
+			setcookie($cookie_name.'_hash', "", time()-7200, $base_href);
 
 		$ref	= str_replace("success=1", "", $referrer);
 		$ref	= str_replace("success=0", "", $ref);
