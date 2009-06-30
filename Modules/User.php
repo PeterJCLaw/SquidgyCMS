@@ -54,6 +54,21 @@ class User {
 		return $this->auth_level >= $level;
 	}
 
+	function has_auth_type($type) {
+		switch($type) {
+			case 'system':
+				return FALSE;
+			case 'admin':
+				$level = USER_ADMIN;
+				break;
+			case 'content':
+				$level = USER_EDITOR;
+				break;
+			default:
+				$level = USER_SIMPLE;
+		}
+		return $this->has_auth($level);
+	}
 
 	/* This function prints the logon form on any page its needed */
 	function print_logon_form() {
