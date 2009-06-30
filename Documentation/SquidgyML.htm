@@ -1,5 +1,33 @@
-Squidgy<acronym title="Content Management System">CMS</acronym> uses a combination of <acronym title="HyperText Markup Language">HTML</acronym> and a custom markup which is similar to that used on wikis.
-A detailed <acronym title="HyperText Markup Language">HTML</acronym> reference will not be provided here, but <a href="http://www.w3schools.com/default.asp" title="W3Schools Online Web Tutorials">w3schools</a> provide bery good <a href="http://www.w3schools.com/web/web_html.asp" title="HTML Primer">tutorials</a> and <a href="http://www.w3schools.com/tags/default.asp" title="HTML 4.01 and XHTML 1.0 Reference">references</a>.
+<link rel="stylesheet" href="style.css" type="text/css" />
 
-<h4><abbr title="Squidgy CMS Markup Language">SquidgyML</abbr></h4>
-The Squidgy<acronym title="Content Management System">CMS</acronym> Markup Language is the method by which site users can use pre-defined Blocks in their pages.
+<abbr title="The All Squidgy Content Management System">SquidgyCMS</abbr> uses a combination of <acronym title="HyperText Markup Language">HTML</acronym> and a custom markup which is similar to that used on wikis.
+A detailed HTML reference will not be provided here, but <a href="http://www.w3schools.com/default.asp" title="W3Schools Online Web Tutorials">w3schools</a> provide bery good <a href="http://www.w3schools.com/web/web_html.asp" title="HTML Primer">tutorials</a> and <a href="http://www.w3schools.com/tags/default.asp" title="HTML 4.01 and XHTML 1.0 Reference">references</a>.
+
+<h4><abbr title="SquidgyCMS Markup Language">SquidgyML</abbr></h4>
+The SquidgyCMS Markup Language is the method by which site users can use pre-defined Blocks in their pages.
+
+<p>
+Simple blocks are inserted by using the following syntax:
+<code class="block">[[Block::<var>moduleID</var>-<var>blockTitle</var>]]</code>
+</p><p>
+More complex blocks can require that you provide some information, this is specified as follows:
+<code class="block">[[Block::<var>moduleID</var>-<var>blockTitle</var>::<var>dataString</var>]]</code>
+</p>
+Where:
+<dl>
+	<dt><var>moduleID</var></dt>
+		<dd>This is the ID of the module (note that this may be diferent from its name.</dd>
+	<dt><var>blockTitle</var></dt>
+		<dd>This is the title of the block that you wish to insert.</dd>
+	<dt><var>dataString</var></dt>
+		<dd>
+			This can be either a single piece of information or a more complex data structure.
+			In the latter case the following syntax is used:
+			<code class="block">{<var>key1</var>:<var>value1</var>|<var>key2</var>:<var>value2</var>}</code>
+			Any number of key/value pairs are allowed, though in the case that only one is given the pair separator can be removed:
+			<code class="block">{<var>key</var>:<var>value</var>}</code>
+			The keys to use will be specified by the module, as will likely values.
+		</dd>
+</dl>
+
+
