@@ -108,6 +108,11 @@ class UserLogin extends User {
 		$this->logged_in = FALSE;
 		global $debug_info, $cookie_name, $base_href;
 
+		if(!empty($_GET['logout'])) {	//do a logout if requested
+			$this->logout();
+			return;
+		}
+
 		if(!empty($_COOKIE[$cookie_name]) && !empty($_COOKIE[$cookie_name.'_hash'])) {	//cookie session - recover stuff from the cookie
 			$username = $_COOKIE[$cookie_name];
 			$hash = $_COOKIE[$cookie_name.'_hash'];
@@ -156,9 +161,7 @@ class UserLogin extends User {
 
 	/* This function logs the user out */
 	function logout() {
-		global $debug, $debug_info, $username, $referrer, $success, $website_name, $cookie_name, $base_href;
-
-		session_start();	//start the php session - neccesary i think
+		global $debug_info, $username, $referrer, $cookie_name, $base_href;
 
 		$_SESSION['user'] = $username = "";	//unset all indications of the user being logged in
 		if(isset($_COOKIE[$cookie_name]))
