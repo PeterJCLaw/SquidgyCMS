@@ -20,44 +20,42 @@ SCRIPTS;
 		add_script('code', $SCRIPT);
 	}
 
-	/* This function returns the tickboxes */
-	function tickboxes($item_list, $tick_side = '') {
-		global $target, $debug_info, $whole_com_elem_id;
+	/* This function provides tickboxes which can be linked to an all box */
+	function get_tickboxes($item_list, $ticked_list, $all_box=FALSE, $tick_side = '') {
+		if(!is_array($ticked_list))
+			$ticked_list = array();
+
 		$left = FALSE;
 		if($tick_side == "left")	//if in doubt it goes on the right
 			$left = TRUE;
 
-		$out = "<ul class=\"tick_list ".($left ? 'left' : 'right')."\">\n";
+		$onclick	= empty($all_box) ? '' : ' onchange="group_tick_2(this, \'_all\')" onclick="group_tick_2(this, \'_all\')"';
+		if(in_array('_all', $ticked_list))
+			$check_it	= 'checked="checked" ';
 
-		$mini_group	= in_array("Committee", $item_list);
+		$out = '<ul class="tick_list '.($left ? 'left' : 'right')."\">\n";
 
-		for($i = 0, $count = 0; $i < count($item_list); $i++) {	//spit as many items as there are
-			if($item_list[$i] == "Committee")
-				$item	= "Whole Committee";
-			else
-				$item	= $item_list[$i];
+		foreach($item_list as $item) {	//spit as many items as there are
+			if(in_array($item, $ticked_list))
+				$check_it	= 'checked="checked" ';
 
-			$check_it	= (($target == $item || ($target == "Whole Committee" && $i < $whole_com_elem_id)) ? ' checked="checked"' : "");
-			$onclick	= ($i <= $whole_com_elem_id ? ' onchange="group_tick_2(this)" onclick="group_tick_2(this)"' : "");
-			$w_style	= ($i == $whole_com_elem_id ? ' style="font-weight: bold;" id="_Whole_label" for="_Whole"' : "");
-			$_whole	= ($i == $whole_com_elem_id ? ' id="_Whole"' : "");
-
-			$debug_info	.= "\$check_it = $check_it\n<br />\$item = $item\n<br />\$target = $target\n<br />\$i = $i\n<br />\$whole_com_elem_id = $whole_com_elem_id\n<br />\n";
-
-			$out .= "	<li><label$w_style>".($left ? '' : $item).'
-		<input class="'.($onclick != ''? 'tick_1 ' : '').'tick" type="checkbox" name="target['.$item."]\"$onclick$check_it$_whole />"
-					.($left ? $item : "")."\n		</label></li>\n";
-
+			$out .= "	<li><label>".($left ? '' : $item).'
+			<input class="'.(empty($all_box) ? '' : 'tick_1 ').'tick" type="checkbox" name="target['.$item."]\"$onclick $check_it/>"
+				.($left ? $item : '')."\n	</label></li>\n";
 		}
+
+		if(!empty($all_box))
+			$out .= '	<li><label id="_all_label" for="_all"><strong>'.($left ? '' : $all_box).'
+			<input class="tick_1 tick" type="checkbox" name="target[_all]" id="_all"'."$onclick $check_it/>"
+				.($left ? $all_box : '')."\n	</strong></label></li>\n";
 
 		return $out."</ul>\n";
 	}
 
-
 	function block($args) {
 		global $debug, $MailingList, $job_list, $website_name_long, $website_name_short;
 		$debug_link = $debug ? '?debug=1' : '';
-		$tickboxes = $this->tickboxes($job_list, "right");
+		$tickboxes = $this->get_tickboxes($job_list, 0, 'Whole Committee', "right");
 		$subject = empty($_GET['subject']) ? '' : 'value="'.$_GET['subject'].'"';
 		$out = <<<OUT
 <form method="post" action="mail_handler.php$debug_link" id="contact_form" onreset="init()" onsubmit="return Validate_On_Contact_Submit(this)">
