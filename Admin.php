@@ -54,6 +54,7 @@ if(!$_SITE_USER->is_logged_in() || !$_SITE_USER->has_auth(USER_SIMPLE)) {
 }
 
 //get the list of wanted ones
+$module_info	= Module::list_all_with_info();
 $enabled_modules	= Module::list_enabled(true);
 
 $debug_info	.= "enabled_modules = ".print_r($enabled_modules, true)."\n<br />\n";
@@ -61,7 +62,7 @@ $debug_info	.= "enabled_modules = ".print_r($enabled_modules, true)."\n<br />\n"
 foreach($enabled_modules as $module) {
 	$path = Module::get_path($module);
 
-	if($path === FALSE)
+	if($path === FALSE || !$_SITE_USER->has_auth_type($module_info[$module]['type']))
 		continue;
 	require_once($path);
 
