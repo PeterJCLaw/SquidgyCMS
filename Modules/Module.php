@@ -333,9 +333,10 @@ class Module {
 	function list_all_with_info($force_reload=FALSE) {
 		$modules_file = $GLOBALS['data_root'].'/modules.data';
 		$modules_info = is_readable($modules_file) ? FileSystem::get_file_assoc($modules_file, '#id') : array();
-		if(empty($modules_info) || $force_reload !== FALSE)
-			return array_map(array('Module','get_info'), Module::list_all());
-		else
+		if(empty($modules_info) || $force_reload !== FALSE) {
+			$all_list = Module::list_all();
+			return array_combine($all_list, array_map(array('Module','get_info'), $all_list));
+		} else
 			return $modules_info;
 	}
 
