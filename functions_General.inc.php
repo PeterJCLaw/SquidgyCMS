@@ -250,7 +250,7 @@ function print_success($success)
 /* This function returns the first word in a string using split as a delimiter */
 function first_word($str, $split=' ')
 {
-	$arr = explode($split, $str, 1);
+	$arr = explode($split, $str, 2);
 	return $arr[0];
 }
 
