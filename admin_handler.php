@@ -3,9 +3,12 @@
 
 $header_link	=	$error	= "";
 
-if(!$logged_in) {
-	include "Head.inc.php";
-	print_logon_form();
+//check that they're logged in and have the authority to view the page
+if(!$_SITE_USER->is_logged_in() || !$_SITE_USER->has_auth(USER_SIMPLE)) {
+	if($_SITE_USER->is_logged_in())
+		echo 'You do not have sufficient priviledges to view this page.';
+	else
+		$_SITE_USER->print_logon_form();
 	include "Foot.inc.php";
 	exit();
 }

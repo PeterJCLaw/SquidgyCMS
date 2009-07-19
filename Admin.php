@@ -28,14 +28,18 @@ window.TITLE	= document.title;
 SCRIPTS;
 
 /* This is the actual page below this point */
-if(!$logged_in) {
-	print_logon_form();
+
+//check that they're logged in and have the authority to view the page
+if(!$_SITE_USER->is_logged_in() || !$_SITE_USER->has_auth(USER_SIMPLE)) {
+	if($_SITE_USER->is_logged_in())
+		echo 'You do not have sufficient priviledges to view this page.';
+	else
+		$_SITE_USER->print_logon_form();
 	return;
 }
 
-include Users::file($username);
-
 //get the list of wanted ones
+$module_info	= Module::list_all_with_info();
 $enabled_modules	= Module::list_enabled(true);
 
 $debug_info	.= "enabled_modules = ".print_r($enabled_modules, true)."\n<br />\n";
@@ -43,7 +47,7 @@ $debug_info	.= "enabled_modules = ".print_r($enabled_modules, true)."\n<br />\n"
 foreach($enabled_modules as $module) {
 	$path = Module::get_path($module);
 
-	if($path === FALSE)
+	if($path === FALSE || !$_SITE_USER->has_auth_type($module_info[$module]['type']))
 		continue;
 	require_once($path);
 
@@ -64,7 +68,7 @@ if(!empty($debug) && $debug > 1) {
 ?>
 	<div id="admin">
 		<div class="admin_head">
-			<span class="f_left" id="welcome">Welcome, <?php echo first_name($name); ?></span>
+			<span class="f_left" id="welcome">Welcome, <?php echo $_SITE_USER->get_first_name(); ?></span>
 <?php if(isset($success)) echo print_success($success)."\n"; ?>
 		</div>
 		<p>Please note that only changes to the one form that you submit will be saved.</p>

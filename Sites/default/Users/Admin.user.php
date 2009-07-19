@@ -10,4 +10,6 @@ $spiel	= 'Use this space to talk about yourself.<br />This may well be made publ
 
 $name	= 'Your name, as you would likke it displayed';
 
+$auth_level = USER_ADMIN;
+
 ?>

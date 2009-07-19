@@ -62,7 +62,7 @@ switch ($page_n)	//page name
 $debug_info	.= @"page_req = '$page_req', this_page = '$this_page'\n<br />\n";
 
 $target = ucwords(str_replace("_", " ", $target));	//for the contact us or admin page
-if(!in_array($target, $job_list) || $target == "Committee")
+if(empty($target) || $target == "Committee")
 	$target	= "Whole Committee";
 
 $referrer	= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $page_n.".php";
