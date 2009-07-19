@@ -80,7 +80,7 @@ class AdminModules extends Admin {
 	function reload_module_list() {
 		$old_data = $this->data;
 		$this->data = array();
-		$info = Module::list_all_with_info();
+		$info = Module::list_all_with_info(true);
 		foreach($info as $module) {
 			foreach($this->module_properties as $col) {
 				if(empty($module[$col]))

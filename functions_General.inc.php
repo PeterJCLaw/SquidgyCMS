@@ -131,7 +131,7 @@ function cmp_by_filename_id($a, $b)
 /* get the next id for the appropriate item */
 function get_next_id($where, $filter)
 {
-	global $page_file, $logged_in, $debug_info;
+	global $debug_info;
 
 	$list	= FileSystem::Filtered_File_List($where, $filter);
 
@@ -247,28 +247,17 @@ function print_success($success)
 	return $out;
 }
 
-/* This function returns the first word in a string */
-function first_name($name)
+/* This function returns the first word in a string using split as a delimiter */
+function first_word($str, $split=' ')
 {
-	global $debug_info;
-	$tmp = explode(" ", $name);
-		$debug_info .= "(first_name)\$tmp=$tmp,	\$name=$name\n<br />\n";
-	if($tmp == $name)
-		return $name;
-	else
-		return $tmp[0];
+	$arr = explode($split, $str, 2);
+	return $arr[0];
 }
 
 /* This function returns the name of the persons info file */
 function info_name($name)
 {
 	return email(ucwords(strtolower(str_replace(".", " ", $name))));	//email copes with webmaster and those with spaces in
-}
-
-/* This function returns the path to the user's data file */
-function user_file($n)
-{
-	return $GLOBALS['site_root'].'/Users/'.info_name($n).'.user.php';
 }
 
 /* This function converts a job title into an email add-in */
@@ -334,9 +323,9 @@ function email_link($text, $gender, $address, $subject, $cc, $bcc, $body)
 		$out_val	.=  "body=$body";
 	}
 
-	if($gender == "0" && isset($job))
+	if($gender == "0")
 	{
-		include user_file($job);
+		$gender = 'them';
 	}
 
 	$out_val	.=  "\" title=\"Send $gender an email\">$text</a>";

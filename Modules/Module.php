@@ -57,15 +57,17 @@ class Admin extends ModuleTemplate {
 */
 	function __construct($grouping = 0, $weight = 0) {
 		parent::__construct();
-		if(!$GLOBALS['logged_in']) {
-			print_logon_form();
+		global $_SITE_USER;
+		if(!$_SITE_USER->is_logged_in() || !$_SITE_USER->has_auth(USER_SIMPLE)) {
+			if($_SITE_USER->is_logged_in())
+				echo 'You do not have sufficient priviledges to view this page.';
+			else
+				$_SITE_USER->print_logon_form();
 			exit();
 		}
 
 		if(!isset($this->no_submit))
 			$this->no_submit	= FALSE;
-		$this->grouping	= $grouping;
-		$this->weight	= $weight;
 		$this->section	= $this->get_my_class();
 		$this->section_human	= ucwords(str_replace("_", " ", $this->section));
 
@@ -328,8 +330,14 @@ class Module {
 		return FileSystem::Filtered_File_List("Modules", ".module.php");
 	}
 
-	function list_all_with_info() {
-		return array_map(array('Module','get_info'), Module::list_all());
+	function list_all_with_info($force_reload=FALSE) {
+		$modules_file = $GLOBALS['data_root'].'/modules.data';
+		$modules_info = is_readable($modules_file) ? FileSystem::get_file_assoc($modules_file, '#id') : array();
+		if(empty($modules_info) || $force_reload !== FALSE) {
+			$all_list = Module::list_all();
+			return array_combine($all_list, array_map(array('Module','get_info'), $all_list));
+		} else
+			return $modules_info;
 	}
 
 	function list_enabled($include_required_modules = FALSE) {

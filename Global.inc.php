@@ -22,12 +22,12 @@ $site_root	= "Sites/$site";
 $data_root	= "$site_root/Data";
 
 require_once("functions_FSPHP.inc.php");	//contains the File System PHP Gallery functions (both mine and the original ones)
-require_once("functions_login.inc.php");	//contains the login functions
 require_once("functions_General.inc.php");	//contains my general functions - the file system gallery ones are now separate
 require_once($site_root."/config.inc.php");			//these files are now included in all the cathsoc pages since I'm using lots of functions
 /*load the required core modules*/
 require_once("Modules/FileSystem.php");
 require_once("Modules/Module.php");
+require_once("Modules/User.php");
 require_once("Modules/Content.module.php");
 require_once("Modules/Theme.module.php");
 require_once("Modules/Users.module.php");
@@ -65,27 +65,12 @@ if(has_method('FileSystem', "filtered_file_list")) {
 	//make the page and article arrays
 	$GEN_pages	= FileSystem::Filtered_File_List($data_root, ".page");
 	$GEN_art	= FileSystem::Filtered_File_List($data_root, ".article");
-
-	// make a list of committee members whose information is available
-	$debug_info .= "building \$joblist\n<br />\n";
-	$job_list	= FileSystem::Filtered_File_List("$site_root/Users", ".user.php");
-	array_push($job_list, "Committee");
-	foreach($job_list as $key => $value)
-		$job_list[$key]	= str_replace(".", " ", $value);
-
-	$whole_com_elem_id	= array_search("Committee", $job_list);
 } else {
 	$GEN_pages	= array();
 	$GEN_art	= array();
-	$job_list	= array();
 }
 
 $FSCMS_pages	= array('Contact_Us.php');	//the ones that the the system provides
 
-$logged_in	= FALSE;	//just in case
-
-if(!empty($logout))
-	user_logout();
-
-$logged_in	= user_login();
+$_SITE_USER	= new UserLogin();
 ?>
