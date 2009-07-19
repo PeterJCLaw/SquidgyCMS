@@ -15,7 +15,7 @@
 <table id="main_tbl">
 	<tr>
 		<td id="left_cell" rowspan="2">
-			[[Block::Site-TOCLinks]]
+			[[Block::Menus-block::{Primary}]]
 			[[Block::Site-EditLogoutLinks]]
 		</td>
 		<td id="main_cell" colspan="2">
