@@ -90,6 +90,19 @@ class AdminUsers extends Admin {
 
 		$reset_list = $reset_error = $del_list = $del_error = '';
 
+		if(!empty($del)) {
+			foreach($del as $user => $val) {
+				if(!empty($val) && $this->delete_user($user))
+					$del_list .= "\n$user";
+				elseif(!empty($val))
+					$del_error .= "\n$user";
+			}
+			if(!empty($del_error))
+				$del_error = "\n\nThe following Users' passwords failed: \n$del_error";
+			$subject['del'] = "Deletion";
+			$body['del'] = "The following users have been deleted successfully:\n\n$del_list $del_error";
+		}
+
 		if(!empty($pass_reset)) {
 			foreach($pass_reset as $user => $val) {
 				if(!empty($val)) {
@@ -104,19 +117,6 @@ class AdminUsers extends Admin {
 				$reset_error = "\n\nThe following Users' passwords failed: \n$reset_error";
 			$subject['reset'] = "Password Reset";
 			$body['reset'] = "The following passwords have been reset successfully:\n\n$reset_list $reset_error";
-		}
-
-		if(!empty($del)) {
-			foreach($del as $user => $val) {
-				if(!empty($val) && $this->delete_user($user))
-					$del_list .= "\n$user";
-				elseif(!empty($val))
-					$del_error .= "\n$user";
-			}
-			if(!empty($del_error))
-				$del_error = "\n\nThe following Users' passwords failed: \n$del_error";
-			$subject['del'] = "Deletion";
-			$body['del'] = "The following users have been deleted successfully:\n\n$del_list $del_error";
 		}
 
 		if(!empty($subject['del']) && !empty($subject['reset'])) {
