@@ -18,7 +18,7 @@ ErrorDocument 500 ${install_root}index.php?id=500
 	RewriteEngine on
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule ^(.*)$ ${install_root}index.php?page_req=$1 [L,QSA]
+	RewriteRule ^(.*)$ ${install_root}index.php?s=$1 [L,QSA]
 </IfModule>
 
 HTA;

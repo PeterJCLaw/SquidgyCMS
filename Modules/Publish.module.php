@@ -12,13 +12,16 @@ class AdminPublish extends Admin {
 		$this->data_key_column = 'id';
 	}
 
-	function printFormAdmin() { ?>
+	function printFormAdmin() {
+		$home_found = FALSE;
+		$output = <<<OUT
 <table class="admin_tbl"><tr>
 	<th title="Click on the page title link to edit the chunk">Edit chunk:</th>
 	<th title="A short name for the chunk" class="M">Alias:</th>
 	<th title="Tick the box to enable the chunk" class="M">Enable:</th>
 	<th title="Tick the box to delete the chunk, this cannot be undone" class="R">Delete:</th>
-</tr><?php
+</tr>
+OUT;
 		$this->get_data();
 		$chunks = FileSystem::Filtered_File_List($this->data_root, '.chunk');
 		natsort($chunks);
@@ -29,24 +32,28 @@ class AdminPublish extends Admin {
 			$alias_box = '<input name="alias['.$chunk_id.']" value="'.$this->data[$chunk_id]['alias'].'" />';
 			$link	= '<a href="?p='.$chunk_id.'#Content" title="Edit the \''.$title.'\' chunk">'.$title.'</a>';
 
-			if($chunk_id != '1-Home') {
-				$del_box	= $check.'del['.$chunk_id.']" title="delete this chunk, cannot be undone"/>';
-				if($this->data[$chunk_id]['enable'])
-					$on = ' checked="checked"';
-				else
-					$on = '';
-				$enable_box = $check.'enable['.$chunk_id.']"'.$on.' />';
-			} else
-				$enable_box = $check.'" disabled="disabled" checked="checked" />';
+			$del_box	= $check.'del['.$chunk_id.']" title="delete this chunk, cannot be undone"/>';
+			if($this->data[$chunk_id]['enable'])
+				$on = ' checked="checked"';
+			else
+				$on = '';
+			$enable_box = $check.'enable['.$chunk_id.']"'.$on.' />';
 
-			echo '
+			if($this->data[$chunk_id]['alias'] == '<home>')
+				$home_found = true;
+
+			$output .= '
 <tr>
 	<td class="L">'.$link.'<input type="hidden" name="publish['.$chunk_id.']" value="1" /></td>
 	<td class="M">'.$alias_box.'</td>
 	<td class="M">'.$enable_box.'</td>
 	<td class="R">'.$del_box.'</td>
 </tr>';
-		} ?>
+		}
+		if(!$home_found)
+			echo '<p id="error" style="margin: 3px; padding: 7px; background-color: #FFB6C1;">No homepage was detected! Please set the alias of one chunk to <em>&lt;home&gt;</em>.</p>';
+		echo $output;
+?>
 </table>
 <?php return;
 	}
@@ -98,5 +105,12 @@ class AdminPublish extends Admin {
 		return $error;
 	}
 
+}
+
+class Publish {
+	function get_alias_from_id($id) {
+		$info = FileSystem::get_file_assoc($GLOBALS['data_root'].'/publish.data', 'id');
+		return $info[$id]['alias'];
+	}
 }
 ?>

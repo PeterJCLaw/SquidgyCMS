@@ -51,5 +51,5 @@ else {
 if(!empty($error) || $debug)
 	include "handler.php";
 else
-	header("Location: Admin.php?success=1$header_link");
+	header("Location: Admin?success=1$header_link");
 ?>

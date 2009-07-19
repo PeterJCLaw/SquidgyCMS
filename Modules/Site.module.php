@@ -33,9 +33,9 @@ HeadOne;
 	}
 
 	function PageTitle($args) {
-		global $page_heading, $page_n;
+		global $page_heading, $page_id;
 
-		if(!empty($args) && $page_n == 'Home') {
+		if(!empty($args) && Publish::get_alias_from_id($page_id) == '<home>') {
 			list($front)	= $args;
 			return str_replace('<front>', $page_heading, str_replace('<theme>', $this->BaseHREF(array('theme')), $front));
 		}
@@ -72,6 +72,7 @@ HeadOne;
 	}
 
 	function TOCLinks($args) {
+		return 'JAM!';
 		global $Site_TOClist, $Clean_URLs, $base_href;
 		$out	= '
 	<ul id="TOClinks" class="menu">
@@ -125,6 +126,30 @@ HeadOne;
 			$debug_info = "\n<br />\n<div id=\"debug\">\n\$debug_info={\n<br />".(empty($debug_info) ? '' : $debug_info)."\n<br />}<br />\n</div>\n";
 			return "\n<br />\n<div id=\"error\">\n\$error='".(empty($error) ? '' : nl2br($error)."\n")."'</div>$JS_debug_button$debug_info".show_log();
 		}
+	}
+}
+
+class Site {
+	function get_requested_id_and_alias() {
+		$request_arr = explode('/',$_GET['s'],1);
+		$page = $request_arr[0];
+
+		if(strtolower($page) == 'admin')	//the admin page
+			return array('alias' => $page, 'id' => 'admin');
+
+		$publish_info = FileSystem::get_file_assoc($GLOBALS['data_root'].'/publish.data');
+		$home = FALSE;
+		foreach($publish_info as $info) {
+			if(!$info['enable'])
+				continue;
+			if(!empty($page) && in_array($page, $info))
+				return $info;
+			if(in_array('<home>', $info))
+				$home = $info;
+		}
+		if(empty($page))	//no request means the home page
+			return $home;
+		return FALSE;
 	}
 }
 ?>

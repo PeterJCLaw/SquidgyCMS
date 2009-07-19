@@ -29,6 +29,8 @@ require_once("Modules/FileSystem.php");
 require_once("Modules/Module.php");
 require_once("Modules/User.php");
 require_once("Modules/Content.module.php");
+require_once("Modules/Publish.module.php");
+require_once("Modules/Site.module.php");
 require_once("Modules/Theme.module.php");
 require_once("Modules/Users.module.php");
 

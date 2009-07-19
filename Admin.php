@@ -4,19 +4,8 @@
 <script type="text/javascript" src="ajax.js"></script>
 <script type="text/javascript" src="scripts.js"></script>
 <script type="text/javascript" src="scripts_admin.js"></script>
-<!-- script type="text/javascript" src="tinymce_???????/jscripts/tiny_mce.js"></script -->
 <script type="text/javascript">
 <!--
-/*
-tinyMCE.init({
-	mode : "textareas",
-	theme : "advanced",
-	gecko_spellcheck : true,
-	content_css : "Textarea.css",
-	doctype : '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
-});
-*/
-
 function load_admin()
 {
 	window.divList	= get_Sub_Class_Elements('admin_divs_holder', 'admin_div');
@@ -34,12 +23,9 @@ function load_admin()
 }
 window.LOG	= add_loader(load_admin);
 window.TITLE	= document.title;
-location.hash.onchange	= switch_tabs;
 //-->
 </script>
 SCRIPTS;
-
-include 'Head.inc.php';
 
 /* This is the actual page below this point */
 
@@ -49,8 +35,7 @@ if(!$_SITE_USER->is_logged_in() || !$_SITE_USER->has_auth(USER_SIMPLE)) {
 		echo 'You do not have sufficient priviledges to view this page.';
 	else
 		$_SITE_USER->print_logon_form();
-	include "Foot.inc.php";
-	exit();
+	return;
 }
 
 //get the list of wanted ones
@@ -124,4 +109,3 @@ foreach($_Admin_list as $section => $val) {
 		window.ART	= '<?php echo empty($art_req) ? '' : $art_req; ?>';
 	//-->
 	</script>
-<?php include 'Foot.inc.php'; ?>

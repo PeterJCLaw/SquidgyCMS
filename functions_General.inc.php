@@ -1,4 +1,14 @@
 <?php
+/* add a biit of JS to the page */
+function add_script($type, $src) {
+	global $script_files, $script_code;
+	if($type == 'file' && !in_array($src, $script_files))
+		array_push($script_files, $src);
+	elseif($type == 'code')
+		$script_code .= "\n$src";
+	return;
+}
+
 /* This function groups array elements by one property of those elements */
 function has_method($class, $method) {
 	if(!class_exists($class))
@@ -189,41 +199,6 @@ function send_mail($to, $subject, $message, $headers)
 		."\$headers=$headers\n<br />\$separate_emails=".($separate_emails ? "True" : "False")."\n<br />\n[/send_mail]\n";
 
 	return mail($_to_, $subject, $message, $headers);
-}
-
-/* This function prints tickboxes which can be linked to an all box */
-function print_tickboxes($item_list, $ticked_list, $all_box=FALSE, $tick_side = '')
-{
-	global $debug_info;
-	if(!is_arraY($ticked_list))
-		$ticked_list = array();
-
-	$left = FALSE;
-	if($tick_side == "left")	//if in doubt it goes on the right
-		$left = TRUE;
-
-	$onclick	= empty($all_box) ? '' : ' onchange="group_tick_2(this, \'_all\')" onclick="group_tick_2(this, \'_all\')"';
-	if(in_array('_all', $ticked_list))
-		$check_it	= 'checked="checked" ';
-
-	echo '<ul class="tick_list '.($left ? 'left' : 'right')."\">\n";
-
-	foreach($item_list as $item) {	//spit as many items as there are
-		if(in_array($item, $ticked_list))
-			$check_it	= 'checked="checked" ';
-
-		echo "	<li><label>".($left ? '' : $item).'
-		<input class="'.(empty($all_box) ? '' : 'tick_1 ').'tick" type="checkbox" name="target['.$item."]\"$onclick $check_it/>"
-			.($left ? $item : '')."\n	</label></li>\n";
-	}
-
-	if(!empty($all_box))
-		echo '	<li><label id="_all_label" for="_all"><strong>'.($left ? '' : $all_box).'
-		<input class="tick_1 tick" type="checkbox" name="target[_all]" id="_all"'."$onclick $check_it/>"
-			.($left ? $all_box : '')."\n	</strong></label></li>\n";
-
-	echo "</ul>\n";
-	return;
 }
 
 /* This function prints the success item on the admin page */
