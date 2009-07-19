@@ -119,16 +119,18 @@ class AdminUsers extends Admin {
 			$body['reset'] = "The following passwords have been reset successfully:\n\n$reset_list $reset_error";
 		}
 
-		if(!empty($subject['del']) && !empty($subject['reset'])) {
-			$subject = implode(' and ', $subject);
-			$body = implode("\n\n", $body);
-		} else {
-			$subject = implode('', $subject);
-			$body = implode('', $body);
-		}
+		if(!empty($subject['del']) || !empty($subject['reset'])) {
+			if(!empty($subject['del']) && !empty($subject['reset'])) {	//both
+				$subject = implode(' and ', $subject);
+				$body = implode("\n\n", $body);
+			} else {	//only one of them
+				$subject = implode('', $subject);
+				$body = implode('', $body);
+			}
 
-		send_mail("Webmaster", "$website_name_short Website User $subject", $body,
+			send_mail("Webmaster", "$website_name_short Website User $subject", $body,
 				"From: $website_name_short Webmaster <$webmaster_email>");
+		}
 
 		return $reset_error.$del_error;
 	}
