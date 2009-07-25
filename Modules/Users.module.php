@@ -84,7 +84,7 @@ class AdminUsers extends Admin {
 	}
 
 	function submit($content=0) {
-		list($pass_reset, $del) = array();
+		list($pass_reset, $del, $rights) = array();
 		extract($_POST, EXTR_IF_EXISTS);
 		global $debug_info, $username, $website_name_short, $webmaster_email;
 
@@ -117,6 +117,14 @@ class AdminUsers extends Admin {
 				$reset_error = "\n\nThe following Users' passwords could not be reset: \n$reset_error";
 			$subject['reset'] = "Password Reset";
 			$body['reset'] = "The following passwords have been reset successfully:\n\n$reset_list $reset_error";
+		}
+
+		if(!empty($rights)) {
+			foreach($rights as $id => $val) {
+				$user = new User($id);
+				$user->set_property('auth_level', $val);
+				$user->save();
+			}
 		}
 
 		if(!empty($subject['del']) || !empty($subject['reset'])) {
