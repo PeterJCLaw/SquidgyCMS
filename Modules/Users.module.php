@@ -98,7 +98,7 @@ class AdminUsers extends Admin {
 					$del_error .= "\n$user";
 			}
 			if(!empty($del_error))
-				$del_error = "\n\nThe following Users' passwords failed: \n$del_error";
+				$del_error = "\n\nThe following Users' could not be deleted: \n$del_error";
 			$subject['del'] = "Deletion";
 			$body['del'] = "The following users have been deleted successfully:\n\n$del_list $del_error";
 		}
@@ -114,7 +114,7 @@ class AdminUsers extends Admin {
 				}
 			}
 			if(!empty($reset_error))
-				$reset_error = "\n\nThe following Users' passwords failed: \n$reset_error";
+				$reset_error = "\n\nThe following Users' passwords could not be reset: \n$reset_error";
 			$subject['reset'] = "Password Reset";
 			$body['reset'] = "The following passwords have been reset successfully:\n\n$reset_list $reset_error";
 		}
