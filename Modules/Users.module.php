@@ -8,8 +8,8 @@
 class AdminUsers extends Admin {
 	function AdminUsers() {
 		parent::__construct(-1, 20);
-		$user_list = Users::list_all();
-		foreach($user_list as $id) {
+		$this->user_list = Users::list_all();
+		foreach($this->user_list as $id) {
 			$this->users[$id] = new User($id);
 		}
 	}
@@ -106,7 +106,7 @@ class AdminUsers extends Admin {
 		}
 
 		if(!empty($new_user)) {
-			if(in_array($new_user, $user_list)) {
+			if(in_array($new_user, $this->user_list)) {
 				$error = "User '$new_user' already exists";
 			} else {
 				$this->users[$new_user] = new User($new_user);
