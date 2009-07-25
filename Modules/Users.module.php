@@ -86,7 +86,7 @@ class AdminUsers extends Admin {
 	}
 
 	function submit($content=0) {
-		list($pass_reset, $del, $rights) = array();
+		list($pass_reset, $del, $rights, $new_user) = array();
 		extract($_POST, EXTR_IF_EXISTS);
 		global $debug_info, $username, $website_name_short, $webmaster_email;
 
@@ -127,6 +127,15 @@ class AdminUsers extends Admin {
 			}
 		}
 
+		if(!empty($new_user)) {
+			if(in_array($new_user, $user_list)) {
+				$error = "User '$new_user' already exists";
+			} else {
+				$this->users[$new_user] = new User($new_user);
+				$this->users[$new_user]->reset_password();
+			}
+		}
+
 		if(!empty($subject['del']) || !empty($subject['reset'])) {
 			if(!empty($subject['del']) && !empty($subject['reset'])) {	//both
 				$subject = implode(' and ', $subject);
@@ -144,7 +153,7 @@ class AdminUsers extends Admin {
 			$User->save();
 		}
 
-		return $reset_error.$del_error;
+		return $reset_error.$del_error.$error;
 	}
 }
 
