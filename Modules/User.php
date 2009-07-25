@@ -107,11 +107,12 @@ class User {
 	function save() {
 		if(!$this->_changed)
 			return true;
-		$save_properties = array('pass_hash', 'image_path', 'gender', 'spiel', 'name', 'auth_level');
+		$save_properties = array('pass_hash', 'image_path', 'gender', 'spiel', 'name');
 		$out = "<?php\n\n";
 		foreach($save_properties as $property) {
 			$out .= "\$$property = ".var_export($this->$property, true).";\n\n";
 		}
+		$out .= "\$auth_level = ".substr(var_export($this->$property, true), 1, -1).";\n\n";
 		$out .= '?>';
 		return FileSystem::file_put_contents($this->data_file, $out);
 	}
