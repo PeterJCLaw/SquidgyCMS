@@ -113,7 +113,7 @@ class User {
 			$out .= "\$$property = ".var_export($this->$property, true).";\n\n";
 		}
 		$out .= '?>';
-		return file_put_contents($this->data_file, $out);
+		return FileSystem::file_put_contents($this->data_file, $out);
 	}
 
 	/* This function prints the logon form on any page its needed */
