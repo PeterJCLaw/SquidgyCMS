@@ -8,6 +8,9 @@
 class AdminUsers extends Admin {
 	function AdminUsers() {
 		parent::__construct(-1, 20);
+		foreach($user_list as $id) {
+			$this->users[$id] = new User($id);
+		}
 	}
 
 	function printFormAdmin() { ?>
@@ -23,8 +26,7 @@ class AdminUsers extends Admin {
 		foreach(array_keys($USER_LEVELS) as $level) {
 			$level_options[ucwords(strtolower(substr($level, 5)))] = $level;
 		}
-		foreach($user_list as $id) {
-			$User = new User($id);
+		foreach($this->user as $id => $User) {
 
 			$del_box	= '<input type="checkbox" class="tick" name="del['.$id.']" />';
 			$reset_box	= '<input type="checkbox" class="tick" name="pass_reset['.$id.']" />';
@@ -121,9 +123,7 @@ class AdminUsers extends Admin {
 
 		if(!empty($rights)) {
 			foreach($rights as $id => $val) {
-				$user = new User($id);
-				$user->set_property('auth_level', $val);
-				$user->save();
+				$this->users[$id]->set_property('auth_level', $val);
 			}
 		}
 
@@ -138,6 +138,10 @@ class AdminUsers extends Admin {
 
 			send_mail("Webmaster", "$website_name_short Website User $subject", $body,
 				"From: $website_name_short Webmaster <$webmaster_email>");
+		}
+
+		foreach($this->users as $User) {
+			$User->save();
 		}
 
 		return $reset_error.$del_error;
