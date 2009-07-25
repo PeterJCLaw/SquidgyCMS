@@ -22,6 +22,7 @@ if($page_id == 'admin') {
 	$chunk_file = Content::get_file_from_id($page_id);
 	if($page_id === FALSE || $chunk_file === FALSE) {
 		header('HTTP/1.0 404 Not Found');
+		log_info('404 error', array('page_info' => $page_info, 'chunk_file' => $chunk_file));
 		$email_link = email_link("email", 0, "webmaster","$website_name_short $_GET[s] $id  Error whilst following a link from ".$_SERVER["HTTP_REFERER"],0,0,0);
 		$content = <<<MSG
 <div class="center">
