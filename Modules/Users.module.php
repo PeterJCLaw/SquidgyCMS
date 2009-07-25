@@ -21,13 +21,11 @@ class AdminUsers extends Admin {
 	<th title="Tick the box to reset the user's password, this cannot be undone" class="T M">Reset Password:</th>
 	<th title="Tick the box to delete the user, this cannot be undone" class="T R">Delete:</th>
 </tr><?php
-		$user_list = Users::list_all();
 		global $USER_LEVELS;
 		foreach(array_keys($USER_LEVELS) as $level) {
 			$level_options[ucwords(strtolower(substr($level, 5)))] = $level;
 		}
-		foreach($this->user as $id => $User) {
-
+		foreach($this->users as $id => $User) {
 			$del_box	= '<input type="checkbox" class="tick" name="del['.$id.']" />';
 			$reset_box	= '<input type="checkbox" class="tick" name="pass_reset['.$id.']" />';
 			$level_box	= $this->get_selectbox('rights', $level_options, array_search($User->auth_level, $USER_LEVELS), 0);
