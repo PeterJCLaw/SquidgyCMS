@@ -94,7 +94,7 @@ class AdminProfile extends Admin {
 		$out_val	= "<?php\n\n\$pass_hash	= '$out_hash';\n\n\$image_path	= '$image_path';\n\n\$gender	= '$n_gender';"
 					."\n\n\$spiel	= '$content';\n\n\$name	= '$new_name';\n\n?>";
 
-		return FileSystem::file_put_contents($file, $out_val, 'w');
+		return FileSystem::file_put_contents($file, $out_val);
 	}
 }
 

@@ -164,7 +164,7 @@ class FileSystem {
 				array_push($line_arr, $line[$col]);
 			$file_string .= implode('|:|', $line_arr)."\n";
 		}
-		return FileSystem::file_put_contents($path, $file_string, 'w');
+		return FileSystem::file_put_contents($path, $file_string);
 	}
 
 	/* grab a data file & convert it to a 2D associative array using the passed column names, or use the ones from the file is none are pased */
@@ -194,7 +194,7 @@ class FileSystem {
 	}
 
 	/* This function writes a string passed to the filename given */
-	function file_put_contents($file, $data, $mode)
+	function file_put_contents($file, $data, $mode='w')
 	{
 		$error	= '';
 		if(empty($file))

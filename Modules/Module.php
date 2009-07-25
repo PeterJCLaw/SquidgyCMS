@@ -45,7 +45,7 @@ class Admin extends ModuleTemplate {
 		if($this->complex_data)
 			return FileSystem::put_file_assoc($this->data_file, $this->data, true);
 		else
-			return FileSystem::file_put_contents($this->data_file, implode("\n",$this->data), 'w');
+			return FileSystem::file_put_contents($this->data_file, implode("\n",$this->data));
 	}
 
 	var $section;	//php <5
@@ -137,7 +137,7 @@ class Admin extends ModuleTemplate {
 		foreach($GEN_pages as $page) {	//go through all the pages, replacing the old id with the new one, if its present
 			$page_content	= file_get_contents($page);
 			if(strpos($page_content, $old))
-				$error	.= FileSystem::file_put_contents($page, str_replace($old, $new, $page_content), 'w');
+				$error	.= FileSystem::file_put_contents($page, str_replace($old, $new, $page_content));
 		}
 		return $error;
 	}

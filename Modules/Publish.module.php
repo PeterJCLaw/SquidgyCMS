@@ -100,7 +100,7 @@ OUT;
 		foreach($chunks as $chunk) {	//go through all the pages, replacing the old id with the new one, if its present
 			$content	= file_get_contents($chunk);
 			if(strpos($content, $old))
-				$error	.= FileSystem::file_put_contents($chunk, str_replace($old, $new, $content), 'w');
+				$error	.= FileSystem::file_put_contents($chunk, str_replace($old, $new, $content));
 		}
 		return $error;
 	}
