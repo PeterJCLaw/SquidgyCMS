@@ -29,7 +29,7 @@ class AdminUsers extends Admin {
 		foreach($this->users as $id => $User) {
 			$del_box	= '<input type="checkbox" class="tick" name="del['.$id.']" />';
 			$reset_box	= '<input type="checkbox" class="tick" name="pass_reset['.$id.']" />';
-			$level_box	= $this->get_selectbox('rights', $level_options, array_search($User->auth_level, $USER_LEVELS), 0);
+			$level_box	= $this->get_selectbox("rights[$id]", $level_options, array_search($User->auth_level, $USER_LEVELS), 0);
 
 			echo '
 <tr>
