@@ -32,6 +32,7 @@ class User {
 		$this->spiel = $spiel;
 		$this->name = $name;
 		$this->auth_level = empty($auth_level) ? USER_GUEST : $auth_level;
+		$this->_changed = FALSE;
 	}
 
 	function User($id) {
@@ -68,6 +69,51 @@ class User {
 				$level = USER_SIMPLE;
 		}
 		return $this->has_auth($level);
+	}
+
+	function reset_password() {
+		$this->set_property('pass_hash', md5('password'));
+	}
+
+	function delete() {
+		if(!$GLOBALS['_SITE_USER']->has_auth(USER_ADMIN) && $GLOBALS['_SITE_USER']->id != $this->id) {
+			log_error('You do not have the rights to remove users other than your own');
+			return FALSE;
+		}
+		if($this->id != $GLOBALS['_SITE_USER']->id)
+			return unlink($this->file);
+		log_error('You cannot remove your own user account at the moment');
+		return FALSE;
+	}
+
+	function set_property($property, $value) {
+		if($property[0] == '_') {
+			log_error('you cannot change private varaibles');
+			return FALSE;
+		}
+		/*
+		 * check that the logged in user has the rights to change things
+		 * you can mod your own detils, but not your auth level, unlesss you're an admin
+		 */
+		if( ($GLOBALS['_SITE_USER']->id == $this->id && $property != 'auth_level')
+		  || $GLOBALS['_SITE_USER']->has_auth(USER_ADMIN) ) {
+			$this->$property = $value;
+			$this->_changed = true;
+			return true;
+		}
+		return FALSE;
+	}
+
+	function save() {
+		if(!$this->_changed)
+			return true;
+		$save_properties = array('pass_hash', 'image_path', 'gender', 'spiel', 'name', 'auth_level');
+		$out = "<?php\n\n";
+		foreach($save_properties as $property) {
+			$out .= "\$$property = ".var_export($this->$property, true)."\n\n";
+		}
+		$out .= '?>';
+		return file_put_contents($this->data_file, $out);
 	}
 
 	/* This function prints the logon form on any page its needed */
