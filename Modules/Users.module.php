@@ -79,10 +79,6 @@ class AdminUsers extends Admin {
 		return FileSystem::file_put_contents($file, $new_file_contents, 'w');
 	}
 
-	function delete_user($id) {
-		return unlink(User::file($id));
-	}
-
 	function submit($content=0) {
 		list($pass_reset, $del, $rights, $new_user) = array();
 		extract($_POST, EXTR_IF_EXISTS);
@@ -92,9 +88,10 @@ class AdminUsers extends Admin {
 
 		if(!empty($del)) {
 			foreach($del as $user => $val) {
-				if(!empty($val) && $this->delete_user($user))
+				if(!empty($val) && $this->users[$user]>delete()) {
+					unset($this->users[$user]);
 					$del_list .= "\n$user";
-				elseif(!empty($val))
+				} elseif(!empty($val))
 					$del_error .= "\n$user";
 			}
 			if(!empty($del_error))
