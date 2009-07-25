@@ -70,7 +70,7 @@ class AdminUsers extends Admin {
 
 		if(!empty($del)) {
 			foreach($del as $user => $val) {
-				if(!empty($val) && $this->users[$user]>delete()) {
+				if(!empty($val) && $this->users[$user]->delete()) {
 					unset($this->users[$user]);
 					$del_list .= "\n$user";
 				} elseif(!empty($val))
