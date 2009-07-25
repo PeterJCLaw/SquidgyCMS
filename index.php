@@ -15,7 +15,7 @@ if($page_id == 'admin') {
 	$page_head_title	= "$website_name_short - Administration";	//the page title
 	$page_heading	= "Administration";
 	ob_start();
-	include 'Admin.php';
+	include 'Admin.inc.php';
 	$content = ob_get_contents();
 	ob_end_clean();
 } else {
