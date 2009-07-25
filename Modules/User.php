@@ -110,7 +110,7 @@ class User {
 		$save_properties = array('pass_hash', 'image_path', 'gender', 'spiel', 'name', 'auth_level');
 		$out = "<?php\n\n";
 		foreach($save_properties as $property) {
-			$out .= "\$$property = ".var_export($this->$property, true)."\n\n";
+			$out .= "\$$property = ".var_export($this->$property, true).";\n\n";
 		}
 		$out .= '?>';
 		return file_put_contents($this->data_file, $out);
