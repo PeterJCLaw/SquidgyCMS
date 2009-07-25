@@ -53,30 +53,12 @@ class AdminUsers extends Admin {
 	function reset_pass($who) {
 		global $debug_info, $website_name_short, $webmaster_email;
 
-		$file	= Users::file($who);	//convert to a filename type and include
-		include $file;
-		$error = $this->change_user_file($pass_hash, md5('password'), $file);
+		$error = $this->users[$who]->reset_password();
 		send_mail(email($who), "$who: $website_name_short Website Password Reset", "Dear ".$who
 			.",\n\nYour password for the $website_name_long website has been reset to 'password' (without the quotes)."
 			."\n\nIf you did not request this and you have not just been elected to the committee then please email the Webmaster ($webmaster_email) and report this error."
 			."\n\n$website_name_short Webmaster", "From: $website_name_short Webmaster <$webmaster_email>");
 		return $error;
-	}
-
-	function change_user_file($old_val, $new_val, $file) {
-		global $debug_info;
-
-		$old_val	= "= \"".$old_val;
-		$new_val	= "= \"".$new_val;
-
-		$old_file_contents = file_get_contents($file);
-
-		$new_file_contents = str_replace($old_val, $new_val, $old_file_contents);
-
-		$debug_info .= "\$file=$file\n<br />\$new_val=$new_val\n<br />\$old_val=$old_val\n<br />"
-				."\$old_file_contents=$old_file_contents\n<br />\$new_file_contents=$new_file_contents\n<br />\n";
-
-		return FileSystem::file_put_contents($file, $new_file_contents, 'w');
 	}
 
 	function submit($content=0) {
