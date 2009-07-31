@@ -112,7 +112,7 @@ class User {
 		foreach($save_properties as $property) {
 			$out .= "\$$property = ".var_export($this->$property, true).";\n\n";
 		}
-		$out .= "\$auth_level = ".substr(var_export($this->$property, true), 1, -1).";\n\n";
+		$out .= "\$auth_level = ".substr(var_export($this->auth_level, true), 1, -1).";\n\n";
 		$out .= '?>';
 		return FileSystem::file_put_contents($this->data_file, $out);
 	}
