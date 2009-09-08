@@ -53,9 +53,12 @@ SCRIPTS;
 	}
 
 	function block($args) {
-		global $debug, $MailingList, $job_list, $website_name_long, $website_name_short;
+		list($all_label, $side) = array('Everyone', "right");
+		extract($args, EXTR_IF_EXISTS);
+
+		global $debug, $MailingList, $website_name_long, $website_name_short;
 		$debug_link = $debug ? '?debug=1' : '';
-		$tickboxes = $this->get_tickboxes($job_list, 0, 'Whole Committee', "right");
+		$tickboxes = $this->get_tickboxes(Users::list_all(), 0, $all_label, $side);
 		$subject = empty($_GET['subject']) ? '' : 'value="'.$_GET['subject'].'"';
 		$out = <<<OUT
 <form method="post" action="mail_handler.php$debug_link" id="contact_form" onreset="init()" onsubmit="return Validate_On_Contact_Submit(this)">
