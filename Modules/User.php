@@ -17,13 +17,14 @@ class User {
 		//set some basic bits of info
 		$this->id = strtolower($id);
 		$this->data_file = $this->file($this->id);
+		//set auth_level to guest until we descover otherwise
+		$this->auth_level = USER_GUEST;
 		//check that the user either has a file to use, or is new
 		if(!$this->validate_file() && !$new)
 			return FALSE;
 
 		//handle new users
 		if($new) {
-			$this->auth_level = USER_GUEST;
 			$this->_changed = true;
 			$this->save();
 			return true;
@@ -52,7 +53,8 @@ class User {
 		$this->gender = $gender;
 		$this->spiel = $spiel;
 		$this->name = $name;
-		$this->auth_level = empty($auth_level) ? USER_GUEST : $auth_level;
+		if(!empty($auth_level) && in_array($auth_level, $GLOBALS['USER_LEVELS']))
+			$this->auth_level = $auth_level;
 		$this->_changed = FALSE;
 	}
 
