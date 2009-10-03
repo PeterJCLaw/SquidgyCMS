@@ -60,7 +60,7 @@ foreach($enabled_modules as $module) {
 	}
 }
 
-multi2dSortAsc($_Admin_list, "weight");
+multi2dSortAsc($_Admin_list, 'section_human');
 if(!empty($debug) && $debug > 1) {
 	echo "printing \$_Admin_list:\n";
 	print_r($_Admin_list);
