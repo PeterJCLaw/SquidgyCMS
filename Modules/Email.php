@@ -67,7 +67,7 @@ class Email {
 		$mailto = 'mailto:'.$this->addresses_to_string($this->to);
 
 		foreach(array('cc'=>'CC', 'bcc'=>'BCC') as $name => $label) {
-			if(!empty($this->$name)) {
+			if(!empty($this->$name))
 				$mailto .= "&amp;$label: ".$this->addresses_to_string($this->$name);
 		}
 
@@ -84,7 +84,6 @@ class Email {
 		}
 
 		return "<a href=\"$mailto\"$html>$text</a>";
-
 	}
 
 	/* actually send the email */
@@ -92,7 +91,7 @@ class Email {
 		$to = $this->addresses_to_string($this->to);
 
 		foreach(array('cc'=>'CC', 'bcc'=>'BCC', 'from'=>'From') as $name => $label) {
-			if(!empty($this->$name)) {
+			if(!empty($this->$name))
 				$this->headers .= "$label: ".$this->addresses_to_string($this->$name)."\r\n";
 		}
 
@@ -100,4 +99,13 @@ class Email {
 	}
 }
 
+class EmailLink extends Email {
+	function EmailLink() {
+		$this->__construct();
+	}
+
+	function __construct() {
+		parent::__construct();
+	}
+}
 ?>
