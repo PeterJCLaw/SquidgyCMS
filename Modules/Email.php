@@ -39,14 +39,19 @@ class Email {
 		$this->from[$email] = $name;
 	}
 
+	/* add headers */
+	function add_headers($headers) {
+		$this->headers .= $headers;
+	}
+
 	/* add a subject */
 	function add_subject($subject) {
 		$this->subject = $subject;
 	}
 
-	/* add headers */
-	function add_headers($headers) {
-		$this->headers .= $headers;
+	/* add a body */
+	function add_body($body) {
+		$this->body = $body;
 	}
 
 	/* convert an array of addresses into a comma separated string ready for sending */
