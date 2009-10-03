@@ -109,7 +109,7 @@ class AdminUsers extends Admin {
 			if(in_array($new_user, $this->user_list)) {
 				$error = "User '$new_user' already exists";
 			} else {
-				$this->users[$new_user] = new User($new_user);
+				$this->users[$new_user] = new User($new_user, true);
 				$this->users[$new_user]->reset_password();
 			}
 		}
