@@ -312,6 +312,9 @@ class Module {
 		$info['#id']	= $module;
 		$info['#path']	= $file;
 
+		if(empty($info['type']))	//ensure that they all have a type
+			$info['type'] = 'content';
+
 		return $info;
 	}
 
