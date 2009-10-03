@@ -101,7 +101,7 @@ class AdminUsers extends Admin {
 
 		if(!empty($rights)) {
 			foreach($rights as $id => $val) {
-				$this->users[$id]->set_property('auth_level', $val);
+				$this->users[$id]->set_property('auth_level', $GLOBALS['USER_LEVELS'][$val]);
 			}
 		}
 
