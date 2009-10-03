@@ -84,14 +84,25 @@ class EmailLink extends Email {
 		parent::__construct();
 	}
 
+	/* convert an array of addresses into a comma separated string ready for using in a mailto link */
+	function addresses_to_string($arr) {
+		return implode(',', array_keys($arr));
+	}
+
 	/* generate a mailto link */
 	function link($full=FALSE, $text='', $opts=array()) {
-		$mailto = 'mailto:'.$this->addresses_to_string($this->to);
-
-		foreach(array('cc'=>'CC', 'bcc'=>'BCC') as $name => $label) {
-			if(!empty($this->$name))
-				$mailto .= "&amp;$label: ".$this->addresses_to_string($this->$name);
+		foreach(array('cc', 'bcc', 'subject', 'body') as $name) {
+			if(empty($this->$name))
+				continue;
+			if($name == 'cc' || $name == 'bcc')
+				$value = $this->addresses_to_string($this->$name);
+			else
+				$value = $this->$name;
+			$bits[] = "$name=".htmlspecialchars($value);
 		}
+
+		$mailto = empty($bits) ? '' : '?'.implode('&amp;', $bits);
+		$mailto = 'mailto:'.$this->addresses_to_string($this->to).$mailto;
 
 		if(!$full)
 			return $mailto;
