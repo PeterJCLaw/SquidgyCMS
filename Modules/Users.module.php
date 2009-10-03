@@ -7,7 +7,7 @@
 
 class AdminUsers extends Admin {
 	function AdminUsers() {
-		parent::__construct(-1, 20);
+		parent::__construct();
 		$this->user_list = Users::list_all();
 		foreach($this->user_list as $id) {
 			$this->users[$id] = new User($id);

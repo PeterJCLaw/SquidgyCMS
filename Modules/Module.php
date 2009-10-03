@@ -48,14 +48,7 @@ class Admin extends ModuleTemplate {
 			return FileSystem::file_put_contents($this->data_file, implode("\n",$this->data));
 	}
 
-	var $section;	//php <5
-	var $sect_title;
-	var $grouping;
-/*	protected $section;
-	protected $sect_title;
-	protected $grouping;
-*/
-	function __construct($grouping = 0, $weight = 0) {
+	function __construct() {
 		parent::__construct();
 		global $_SITE_USER;
 		if(!$_SITE_USER->is_logged_in() || !$_SITE_USER->has_auth(USER_SIMPLE)) {
@@ -92,14 +85,8 @@ class Admin extends ModuleTemplate {
 		return $this->sect_title;
 	}
 
-	function get_grouping() {
-		return $this->grouping;
-	}
-
 	function get_info() {
 		$a['desc']	= $this->sect_title;
-		$a['grouping']	= $this->grouping;
-		$a['weight']	= $this->weight;
 		$a['no_submit']	= $this->no_submit;
 		$a['data_file']	= $this->data_file;
 		$a['section']	= $this->section;

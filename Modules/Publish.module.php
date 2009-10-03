@@ -7,7 +7,7 @@
 
 class AdminPublish extends Admin {
 	function AdminPublish() {
-		parent::__construct('Manage website content', -1, -20);
+		parent::__construct();
 		$this->complex_data = true;
 		$this->data_key_column = 'id';
 	}
