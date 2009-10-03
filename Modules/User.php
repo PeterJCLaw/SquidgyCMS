@@ -168,10 +168,10 @@ class UserLogin extends User {
 			$username = $_SESSION['user'];
 			$hash = $_SESSION['hash'];
 			$type = 'session';
-		} else {	//possibly a new login
+		} elseif(!empty($_POST['username']) && !empty($_POST['login_pass'])) {	//possibly a new login
 			$username = strtolower($_POST['username']);	//username should be in lowercase, but force it anyway
 			$hash = md5($_POST['login_pass']);
-			$remember_me = $_POST['remember_me'];
+			$remember_me = !empty($_POST['remember_me']);
 			$type = 'new';
 		}
 
@@ -183,14 +183,14 @@ class UserLogin extends User {
 		//since we know that the username is valid we can go ahead and grab the bits from the parent object, this brings in the file info
 		parent::__construct($username);
 
-		if(!empty($remember_me))
+		if($remember_me)
 			$debug_info	.= "Remember Me is on\n<br />\n";
 
 		if($hash == $this->pass_hash && !empty($hash) && !empty($this->pass_hash))	//check the password
 			$this->logged_in = true;
 
 		if($type == 'new')
-			if(!empty($remember_me)) {	//if they want: set a cookie to expire in 100 days, only valid for this sub-site
+			if($remember_me) {	//if they want: set a cookie to expire in 100 days, only valid for this sub-site
 				setcookie($cookie_name, $this->id, time()+(60*60*24)*100, $base_href);
 				setcookie($cookie_name.'_hash', $this->pass_hash, time()+(60*60*24)*100, $base_href);
 			} else {	//set sessions variables

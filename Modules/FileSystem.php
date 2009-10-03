@@ -61,8 +61,7 @@ class FileSystem {
 		if(!is_dir($dir) || !is_readable($dir))
 			return $results;
 
-		if($filter == -1)	//special filter for all files (no dirs)
-			$all = true;
+		$all = ($filter == -1);	//special filter for all files (no dirs)
 
 		if(!is_array($filter))	//allow either an array or a csv list
 			$filter = str_getcsv($filter);
