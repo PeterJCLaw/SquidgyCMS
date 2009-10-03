@@ -13,10 +13,31 @@ foreach($USER_LEVELS as $U_level => $U_val) {
 }
 
 class User {
-	function __construct($id) {
-		//load up the info on the user
+	function __construct($id, $new=FALSE) {
+		//set some basic bits of info
 		$this->id = strtolower($id);
 		$this->data_file = $this->file($this->id);
+		//check that the user either has a file to use, or is new
+		if(!$this->validate_file() && !$new)
+			return FALSE;
+
+		//handle new users
+		if($new) {
+			$this->auth_level = USER_GUEST;
+			$this->_changed = true;
+			$this->save();
+			return true;
+		}
+		//load up the info on the user
+		$this->load();
+		return true;
+	}
+
+	function User($id, $new=FALSE) {
+		return $this->__construct($id, $new);
+	}
+
+	function load() {
 		/* this would load the info if it uses the SquidgyCMS data format...
 		list($this->data) = FileSystem::get_file_assoc($this->data_file);
 
@@ -25,7 +46,7 @@ class User {
 		}
 		*/
 		//include the file, this is the way until I fix it
-		include $this->data_file;
+		require($this->data_file);
 		$this->pass_hash = $pass_hash;
 		$this->image_path = $image_path;
 		$this->gender = $gender;
@@ -35,16 +56,12 @@ class User {
 		$this->_changed = FALSE;
 	}
 
-	function User($id) {
-		return $this->__construct($id);
-	}
-
 	function get_first_name() {
 		return first_word($this->name);
 	}
 
-	function validate_id($id) {
-		return is_file($this->file($id)) && is_readable($this->file($id));
+	function validate_file() {
+		return is_file($this->data_file) && is_readable($this->data_file);
 	}
 
 	function file($n) {
@@ -177,20 +194,16 @@ class UserLogin extends User {
 
 		$debug_info	.= "(UserLogin)\$username=$username\n<br />\n";
 
-		if(empty($username) || !$this->validate_id($username))	//no login attempt or bad username
+		//if the username is blank, or construction fails then bail
+		if(empty($username) || !parent::__construct($username))
 			return;
-
-		//since we know that the username is valid we can go ahead and grab the bits from the parent object, this brings in the file info
-		parent::__construct($username);
-
-		if($remember_me)
-			$debug_info	.= "Remember Me is on\n<br />\n";
 
 		if($hash == $this->pass_hash && !empty($hash) && !empty($this->pass_hash))	//check the password
 			$this->logged_in = true;
 
 		if($type == 'new')
 			if($remember_me) {	//if they want: set a cookie to expire in 100 days, only valid for this sub-site
+				$debug_info .= "Remember Me is on\n<br />\n";
 				setcookie($cookie_name, $this->id, time()+(60*60*24)*100, $base_href);
 				setcookie($cookie_name.'_hash', $this->pass_hash, time()+(60*60*24)*100, $base_href);
 			} else {	//set sessions variables
