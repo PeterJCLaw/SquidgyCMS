@@ -62,6 +62,28 @@ class Email {
 		return implode(', ', $list);
 	}
 
+	/* actually send the email */
+	function send() {
+		$to = $this->addresses_to_string($this->to);
+
+		foreach(array('cc'=>'CC', 'bcc'=>'BCC', 'from'=>'From') as $name => $label) {
+			if(!empty($this->$name))
+				$this->headers .= "$label: ".$this->addresses_to_string($this->$name)."\r\n";
+		}
+
+		return @mail($to, $this->subject, $this->body, $this->headers);
+	}
+}
+
+class EmailLink extends Email {
+	function EmailLink() {
+		$this->__construct();
+	}
+
+	function __construct() {
+		parent::__construct();
+	}
+
 	/* generate a mailto link */
 	function link($full=FALSE, $text='', $opts=array()) {
 		$mailto = 'mailto:'.$this->addresses_to_string($this->to);
@@ -84,28 +106,6 @@ class Email {
 		}
 
 		return "<a href=\"$mailto\"$html>$text</a>";
-	}
-
-	/* actually send the email */
-	function send() {
-		$to = $this->addresses_to_string($this->to);
-
-		foreach(array('cc'=>'CC', 'bcc'=>'BCC', 'from'=>'From') as $name => $label) {
-			if(!empty($this->$name))
-				$this->headers .= "$label: ".$this->addresses_to_string($this->$name)."\r\n";
-		}
-
-		return @mail($to, $this->subject, $this->body, $this->headers);
-	}
-}
-
-class EmailLink extends Email {
-	function EmailLink() {
-		$this->__construct();
-	}
-
-	function __construct() {
-		parent::__construct();
 	}
 }
 ?>
