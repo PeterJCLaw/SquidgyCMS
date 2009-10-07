@@ -67,23 +67,23 @@ class AdminProfile extends Admin {
 	function submit($content=0) {
 		list($new_name, $n_gender, $new_pass, $old_pass, $confirm_pass, $photo) = array();
 		extract($_POST, EXTR_IF_EXISTS);
-		global$debug_info, $username;
+		global $debug_info;
 
-		$content	= addslashes($content);	//they get removed by the handler
-		$new_name	= addslashes(stripslashes($new_name));	//they get added when sent
+		$user = new UserProfile($GLOBALS['_SITE_USER']->id);
 
-		$file = Users::file($username);
-		include $file;
+		$user->set_property('spiel', $content);
+		$user->set_property('name', $new_name);
+		$user->set_property('gender', $n_gender);
 
-		$out_hash	= $pass_hash;
 		if(!empty($photo))
 			$image_path	= "$photo.jpg";
 		else
 			$image_path	= "Unknown.jpg";
+		$user->set_property('image_path', $image_path);
 
-		if(!empty($old_pass) && !empty($new_pass) && !empty($confirm_pass))	//if they want to change their password and the new password isn't blank
-			if(check_pass($username, $old_pass) && ($new_hash = md5($new_pass)) == md5($confirm_pass))	//if the old password is valid & correclty confirmed
-				$out_hash	= $new_hash;
+		//if they want to change their password and the new password isn't blank
+		if(!empty($old_pass) && !empty($new_pass) && !empty($confirm_pass))
+			$user->change_password($old_pass, $new_pass, $confirm_pass);
 
 		$debug_info	.= @"<b>Password</b> \$out_hash='$out_hash'\n<br />\$new_hash='$new_hash'\n<br />\$pass_hash='$pass_hash'\n<br />
 <b>Spiel</b>\n'$content'\n<br />
@@ -91,10 +91,7 @@ class AdminProfile extends Admin {
 <b>Gender</b>\n'$n_gender'\n<br />
 <b>Name</b>\n'$new_name'\n<br />\n";
 
-		$out_val	= "<?php\n\n\$pass_hash	= '$out_hash';\n\n\$image_path	= '$image_path';\n\n\$gender	= '$n_gender';"
-					."\n\n\$spiel	= '$content';\n\n\$name	= '$new_name';\n\n?>";
-
-		return FileSystem::file_put_contents($file, $out_val);
+		return $user->save();
 	}
 }
 
