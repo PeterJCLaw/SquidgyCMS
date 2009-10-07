@@ -172,7 +172,7 @@ class UserLogin extends User {
 	function UserLogin() {
 		session_start();	//start the php session, just in case
 		$this->logged_in = FALSE;
-		global $debug_info, $cookie_name, $base_href;
+		global $debug_info, $cookie_name;
 
 		if(!empty($_GET['logout'])) {	//do a logout if requested
 			$this->logout();
@@ -206,14 +206,21 @@ class UserLogin extends User {
 		if($type == 'new')
 			if($remember_me) {	//if they want: set a cookie to expire in 100 days, only valid for this sub-site
 				$debug_info .= "Remember Me is on\n<br />\n";
-				setcookie($cookie_name, $this->id, time()+(60*60*24)*100, $base_href);
-				setcookie($cookie_name.'_hash', $this->pass_hash, time()+(60*60*24)*100, $base_href);
+				$this->setcookie($cookie_name, $this->id);
+				$this->setcookie($cookie_name.'_hash', $this->pass_hash);
 			} else {	//set sessions variables
 				$_SESSION['user']	= $this->id;
 				$_SESSION['hash']	= $this->pass_hash;
 			}
 
 		return;
+	}
+
+	/* This function sets a cookie with a given name and value */
+	function setcookie($name, $value, $time=FALSE) {
+		if($time === FALSE)
+			$time = time()+(60*60*24)*100;
+		return setcookie($name, $value, $time, $GLOBALS['base_href']);
 	}
 
 	/* This function checks that the user is logged in */
@@ -223,13 +230,13 @@ class UserLogin extends User {
 
 	/* This function logs the user out */
 	function logout() {
-		global $debug_info, $username, $referrer, $cookie_name, $base_href;
+		global $debug_info, $username, $referrer, $cookie_name;
 
 		$_SESSION['hash'] = $_SESSION['user'] = $username = "";	//unset all indications of the user being logged in
 		if(isset($_COOKIE[$cookie_name]))
-			setcookie($cookie_name, "", time()-7200, $base_href);	//set a blank cookie that has already expired
+			$this->setcookie($cookie_name, "", time()-7200);	//set a blank cookie that has already expired
 		if(isset($_COOKIE[$cookie_name.'_hash']))
-			setcookie($cookie_name.'_hash', "", time()-7200, $base_href);
+			$this->setcookie($cookie_name.'_hash', "", time()-7200);
 
 		$ref	= str_replace("success=1", "", $referrer);
 		$ref	= str_replace("success=0", "", $ref);
