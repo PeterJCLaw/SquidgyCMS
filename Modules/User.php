@@ -90,6 +90,25 @@ class User {
 		return $this->has_auth($level);
 	}
 
+	function check_password($pass) {
+		return $this->pass_hash == md5($pass);
+	}
+
+	function change_password($old, $new, $confirm) {
+		//ok to change the password so change it, else bail
+		if($this->check_password($old) && !empty($new) && $new === $confirm) {
+			$hash = md5($new);
+			$this->set_property('pass_hash', $hash);
+		} else
+			return FALSE;
+
+		//the current user so change the login info too
+		if($GLOBALS['_SITE_USER']->id == $this->id)
+			$GLOBALS['_SITE_USER']->change_pass_hash($hash);
+
+		return true;
+	}
+
 	function reset_password() {
 		$this->set_property('pass_hash', md5('password'));
 	}
@@ -208,12 +227,26 @@ class UserLogin extends User {
 				$debug_info .= "Remember Me is on\n<br />\n";
 				$this->setcookie($cookie_name, $this->id);
 				$this->setcookie($cookie_name.'_hash', $this->pass_hash);
+				$type = 'cookie';
 			} else {	//set sessions variables
 				$_SESSION['user']	= $this->id;
 				$_SESSION['hash']	= $this->pass_hash;
+				$type = 'session';
 			}
+		$this->type = $type;
 
 		return;
+	}
+
+	/* Change the password of the logged in user. called after the password has been loaded and saved */
+	function change_pass_hash($new_hash) {
+		if(!$this->logged_in)
+			return FALSE;
+		if($this->type == 'session')
+			$_SESSION['hash'] = $new_hash;
+		elseif($this->type == 'cookie')
+			$this->setcookie($cookie_name.'_hash', $new_hash);
+		return true;
 	}
 
 	/* This function sets a cookie with a given name and value */
