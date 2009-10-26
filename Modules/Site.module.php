@@ -37,7 +37,7 @@ HeadOne;
 
 		if(!empty($args) && Publish::get_alias_from_id($page_id) == '<home>') {
 			list($front)	= $args;
-			return str_replace('<front>', $page_heading, str_replace('<theme>', $this->BaseHREF(array('theme')), $front));
+			return str_replace('<front>', $page_heading, str_replace('<theme>', BlockTheme::root(), $front));
 		}
 
 		return $page_heading;
