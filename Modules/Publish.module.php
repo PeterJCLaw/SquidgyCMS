@@ -30,7 +30,7 @@ OUT;
 			$del_box	= $enable_box	= $alias_box	= $view_link	= '&nbsp;';
 			$title	= get_GEN_title($chunk_id);
 			$alias_box = '<input name="alias['.$chunk_id.']" value="'.$this->data[$chunk_id]['alias'].'" />';
-			$link	= '<a href="?p='.$chunk_id.'#Content" title="Edit the \''.$title.'\' chunk">'.$title.'</a>';
+			$link	= '<a href="'.Content::edit_URL($chunk_id).'" title="Edit the \''.$title.'\' chunk">'.$title.'</a>';
 
 			$del_box	= $check.'del['.$chunk_id.']" title="delete this chunk, cannot be undone"/>';
 			if($this->data[$chunk_id]['enable'])
