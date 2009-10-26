@@ -49,25 +49,17 @@ HeadOne;
 		if(!$_SITE_USER->is_logged_in())
 			return FALSE;
 		$out	= '
-	<ul id="EditLogoutLinks" class="menu">';
+	<ul id="EditLogoutLinks" class="menu">
+		<li class="first"><a href="'.$base_href.'admin">Administration</a></li>';
 
-		if(!empty($page_edit_link) || $page_n == "Home" || $page_n == "Committee" ) {
-			$page_edit_link	= "Admin.php";
-			if($page_n == "Committee")
-				$page_edit_link	.= "#Profile";
-			else {
-				$page_edit_link	.= "?p=";
-				if($page_n == "Home")
-					$page_edit_link	.= "1-Home#Page";
-				else
-					$page_edit_link	.= $page_req."#Page";
-			}
+		$edit_URL = Content::edit_URL();
+		if(!empty($edit_URL)) {	//no edit link if the URL fails
 			$out	.= '
-		<li class="first"><a href="'.$base_href.$page_edit_link.'">Edit Page</a></li>';
+		<li><a href="'.$base_href.$edit_URL.'">Edit Page</a></li>';
 		}
 
 		return $out.'
-		<li class="'.(empty($page_edit_link) ? 'first ' : '').'last"><a href="'.$base_href.'?logout=1">Log Out</a></li>
+		<li class="last"><a href="'.$base_href.'?logout=1">Log Out</a></li>
 	</ul>';
 	}
 

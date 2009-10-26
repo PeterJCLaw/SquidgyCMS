@@ -223,6 +223,14 @@ class Content {
 		return $page;
 	}
 
+	function edit_URL($id=FALSE) {
+		if(empty($id))
+			$id = $GLOBALS['page_id'];
+		if($id == 'admin' || empty($id))
+			return FALSE;
+		return "admin?p=$id#Content";
+	}
+
 	function get_file_from_id($id) {
 		if($id === FALSE)
 			return FALSE;
