@@ -61,8 +61,7 @@ class BlockTheme extends Block {
 	function root($args) {
 		$site_theme = Theme::get_site_theme();
 		list($package, $theme) = explode('|', $site_theme, 2);
-		$root = "Modules/Theme/";
-		return '[[Block::Site-BaseHREF]]'.($package == 'Custom' ? 'Sites/Custom_'.$root : $root);
+		return '[[Block::Site-BaseHREF]]'.($package == 'Custom' ? 'Sites/Custom_Themes/' : 'Modules/Theme/');
 	}
 }
 
@@ -81,8 +80,8 @@ class Theme {
 		list($package, $theme) = explode('|', $site_theme, 2);
 		if(empty($theme))
 			$theme = 'BeSquidgy';
-		$file = "Modules/Theme/$theme.template";
-		return $package == 'Custom' ? 'Sites/Custom_'.$file : $file;
+		$file = "$theme.template";
+		return $package == 'Custom' ? 'Sites/Custom_Themes/'.$file : 'Modules/Theme/'.$file;
 	}
 }
 ?>
