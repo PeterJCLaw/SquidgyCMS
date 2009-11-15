@@ -125,6 +125,32 @@ class BlockProfile extends Block {
 		}
 		return $ret.'</table>';
 	}
+
+	function Detail($args) {
+		list($id) = $args;
+		$user = new UserProfile($id);
+		$thumb = $user->get_image();
+		$spiel = stripslashes($user->spiel); //just to be sure
+		return <<<DETAIL
+<table id="user_detail"><tr>
+	<td class="u_image" rowspan="2"><img src="$thumb" alt="[image of $user->name]" /></td>
+	<td><h4>$user->name</h4></td>
+</tr><tr>
+	<td>$spiel</td>
+</tr><tr>
+	<th colspan="2">Contact $user->name:</th>
+</tr><tr>
+	<th class="u_contact">eMail:</td>
+	<td><a title="Send $user->gender an email" href="mailto:$user->email">$user->email</a></td>
+</tr><tr>
+	<th class="u_contact">Contact Form:</td>
+	<td><a href="Contact?target=$user->id" title="Use the contact form">Use the contact form</a></td>
+</tr><tr>
+	<th class="u_contact">Phone:</td>
+	<td>$user->phone</td>
+</tr></table>
+DETAIL;
+	}
 }
 
 //User Profile object, built on the main User object
