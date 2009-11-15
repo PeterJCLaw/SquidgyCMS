@@ -12,7 +12,7 @@ class AdminTheme extends Admin {
 
 	function printFormAdmin() {
 		$site_theme = Theme::get_site_theme();
-		$category['Core']	= FileSystem::Filtered_File_List('Themes', '.template');
+		$category['Core']	= FileSystem::Filtered_File_List('Modules/Theme', '.template');
 		$category['Custom']	= FileSystem::Filtered_File_List('Sites/Custom_Themes', '.template');
 		foreach($category as $package => $themes) {
 ?>
@@ -61,7 +61,7 @@ class BlockTheme extends Block {
 	function root($args) {
 		$site_theme = Theme::get_site_theme();
 		list($package, $theme) = explode('|', $site_theme, 2);
-		$root = "Themes/";
+		$root = "Modules/Theme/";
 		return '[[Block::Site-BaseHREF]]'.($package == 'Custom' ? 'Sites/Custom_'.$root : $root);
 	}
 }
@@ -81,7 +81,7 @@ class Theme {
 		list($package, $theme) = explode('|', $site_theme, 2);
 		if(empty($theme))
 			$theme = 'BeSquidgy';
-		$file = "Themes/$theme.template";
+		$file = "Modules/Theme/$theme.template";
 		return $package == 'Custom' ? 'Sites/Custom_'.$file : $file;
 	}
 }
