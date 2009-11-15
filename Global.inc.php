@@ -59,14 +59,5 @@ $debug_info		.="\n ini_set('url_rewriter.tags', '') = ".ini_set('url_rewriter.ta
 
 $referrer		= isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : "";
 
-if(has_method('FileSystem', "filtered_file_list")) {
-	//make the page and article arrays
-	$GEN_pages	= FileSystem::Filtered_File_List($data_root, ".page");
-	$GEN_art	= FileSystem::Filtered_File_List($data_root, ".article");
-} else {
-	$GEN_pages	= array();
-	$GEN_art	= array();
-}
-
 $_SITE_USER	= new UserLogin();
 ?>
