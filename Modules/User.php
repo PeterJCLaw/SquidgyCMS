@@ -20,6 +20,8 @@ class User {
 		//set auth_level to guest until we descover otherwise
 		$this->auth_level = USER_GUEST;
 		//check that the user either has a file to use, or is new
+		$this->save_properties = array('pass_hash', 'name');
+		//check that the user either has a file to use, or is new
 		if(!$this->validate_file() && !$new)
 			return FALSE;
 
@@ -145,9 +147,8 @@ class User {
 	function save() {
 		if(!$this->_changed)
 			return true;
-		$save_properties = array('pass_hash', 'image_path', 'gender', 'spiel', 'name');
 		$out = "<?php\n\n";
-		foreach($save_properties as $property) {
+		foreach($this->save_properties as $property) {
 			$out .= "\$$property = ".var_export($this->$property, true).";\n\n";
 		}
 		$out .= "\$auth_level = ".array_search($this->auth_level, $GLOBALS['USER_LEVELS']).";\n\n";
