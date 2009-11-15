@@ -1,21 +1,18 @@
 // gets called by some textboxes when a key is pressed
-function TBpress(that)
-{
+function TBpress(that) {
 	clearTimeout(that.countdown);
 	that.countdown	= setTimeout("TBrefresh('"+that.id+"')", 12*1000);
 }
 
 // gets called after a set delay after a key press on certain text boxes
-function TBrefresh(thing)
-{
+function TBrefresh(thing) {
 	var that	= $(thing);
 	clearTimeout(that.countdown);
 	//do the refresh stuff
 }
 
 // Add a row of articles
-function add_article_row ()
-{
+function add_article_row() {
 	var num_rows	= $('num_rows').value;
 	var ai_sel		= new Array()
 	var curr_sel	= new Array()
@@ -58,8 +55,7 @@ function add_article_row ()
 }
 
 // Clear the contents of an entire table row
-function clearRow(thing)
-{
+function clearRow(thing) {
 	var input_list	= thing.parentNode.parentNode.getElementsByTagName('input');
 	for(var i=0; i<input_list.length; i++) {
 		input_list[i].value	= '';
@@ -68,8 +64,7 @@ function clearRow(thing)
 }
 
 // Tick (or untick) items as a group
-function group_tick(thing)
-{
+function group_tick(thing) {
 	var state	= thing.checked;
 	var tick_list	= get_Sub_Class_Elements('', thing.className);
 	for(var i=0; i<tick_list.length; i++) {
@@ -79,8 +74,7 @@ function group_tick(thing)
 }
 
 // get a page or article
-function get(type, orig)
-{
+function get(type, orig) {
 	var that	= $(type+"_select");
 	var type_l	= type.toLowerCase();
 	var file_type	= (type_l == "content" ? "chunk" : type_l);
@@ -114,8 +108,7 @@ function get(type, orig)
 	return;
 }
 
-function switch_tabs(cur_div, mode)
-{
+function switch_tabs(cur_div, mode) {
 	if(typeof cur_div == 'undefined') {
 		if('' != location.hash)
 			cur_div	= window.cur_div	= location.hash.substr(1);
@@ -173,8 +166,7 @@ function switch_tabs(cur_div, mode)
 	return;
 }
 
-function pass_change(type)
-{
+function pass_change(type) {
 	if(!$('pass_0'))
 		return;
 	var PASS_AR	= [ "old_pass", "new_pass", "confirm_pass" ];
@@ -193,15 +185,13 @@ function pass_change(type)
 	return;
 }
 
-function show_change(type)
-{
+function show_change(type) {
 	$(type+'_change').style.display	= 'none';
 	$(type+'_sel_span').style.display	= '';
 	return;
 }
 
-function change_pic(value)
-{
+function change_pic(value) {
 	if(value != "none")
 		var path = value + '.jpg';
 	else
@@ -227,8 +217,7 @@ function daysInFebruary (year){
 }
 
 //function for returning how many days there are in a month including leap years
-function DaysInMonth(WhichMonth, WhichYear)
-{
+function DaysInMonth(WhichMonth, WhichYear) {
 	var DaysInMonth = 31;
 	if(WhichMonth == "4" || WhichMonth == "6" || WhichMonth == "9" || WhichMonth == "11")
 	DaysInMonth = 30;
@@ -238,8 +227,7 @@ function DaysInMonth(WhichMonth, WhichYear)
 }
 
 //function to change the available days in a months
-function ChangeOptionDays(formObj, prefix)
-{
+function ChangeOptionDays(formObj, prefix) {
 	var DaysObject	= eval("formObj." + prefix + "day" );
 	var MonthObject	= eval("formObj." + prefix + "month" );
 	var YearObject	= eval("formObj." + prefix + "year" );
@@ -289,8 +277,7 @@ function ChangeOptionDays(formObj, prefix)
 		DaysObject.selectedIndex = DaySelIdx;
 }
 
-function Validate_On_Admin_Submit(FORM)
-{
+function Validate_On_Admin_Submit(FORM) {
 	var form_id	= FORM.id.replace('_form', '');
 	window.LOG	+= "Admin Validation: form_id = "+form_id;
 
