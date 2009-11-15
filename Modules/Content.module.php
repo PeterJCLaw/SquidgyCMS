@@ -60,7 +60,7 @@ class AdminContent extends Admin {
 			$chunk_id	= urlencode(get_next_id($this->data_root, ".chunk")."-$chunk_title");
 		} elseif($this->new_id_needed($old_chunk_id, $chunk_title) && is_writable("$this->data_root/$chunk_id.chunk")) {	//if we should and can change stuff
 			$chunk_id	= get_next_id($this->data_root, ".chunk")."-$chunk_title";
-			$error	= $this->change_something_in_all_pages($old_chunk_id, $chunk_id);
+			$error	= $this->change_something_in_all_chunks($old_chunk_id, $chunk_id);
 			if(!empty($error))	//if there's an error then bail
 				return $error;
 			$error	= $this->delete_file("$this->data_root/".urlencode($old_chunk_id).".chunk");

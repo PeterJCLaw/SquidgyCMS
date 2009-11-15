@@ -113,18 +113,18 @@ class Admin extends ModuleTemplate {
 		return "$this->data_root/$page.page";
 	}
 
-	function change_something_in_all_pages($old, $new) {
-		$GEN_pages	= array_map(array($this, 'site_full_path'), Filtered_File_List($this->data_root, ".page"));
-		array_push($GEN_pages, $GLOBALS['pages_file']);
+	function change_something_in_all_chunks($old, $new) {
+		$chunks = FileSystem::Filtered_File_List($this->data_root, '.chunk');
+		array_push($chunks, $GLOBALS['pages_file']);
 		$error	= "";
-		foreach($GEN_pages as $page) {	//check if we can modify all the pages
-			if(!is_writable($page))
-				return "\nUnable to change file id as file ($page) is not writeable - please inform the Webmaster\n<br />\n";
+		foreach($chunks as $chunk) {	//check if we can modify all the pages
+			if(!is_writable($chunk))
+				return "\nUnable to change file id as file ($chunk) is not writeable - please inform the Webmaster\n<br />\n";
 		}
-		foreach($GEN_pages as $page) {	//go through all the pages, replacing the old id with the new one, if its present
-			$page_content	= file_get_contents($page);
-			if(strpos($page_content, $old))
-				$error	.= FileSystem::file_put_contents($page, str_replace($old, $new, $page_content));
+		foreach($chunks as $chunk) {	//go through all the pages, replacing the old id with the new one, if its present
+			$chunk_content	= file_get_contents($chunk);
+			if(strpos($chunk_content, $old) !== FALSE)
+				$error	.= FileSystem::file_put_contents($chunk, str_replace($old, $new, $chunk_content));
 		}
 		return $error;
 	}
