@@ -50,11 +50,10 @@ class User {
 		*/
 		//include the file, this is the way until I fix it
 		require($this->data_file);
-		$this->pass_hash = $pass_hash;
-		$this->image_path = $image_path;
-		$this->gender = $gender;
-		$this->spiel = $spiel;
-		$this->name = $name;
+		foreach($this->save_properties as $property) {
+			if(!empty($$property))
+				$this->$property = $$property;
+		}
 		if(!empty($auth_level) && in_array($auth_level, $GLOBALS['USER_LEVELS']))
 			$this->auth_level = $auth_level;
 		$this->_changed = FALSE;
