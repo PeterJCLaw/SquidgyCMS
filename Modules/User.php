@@ -19,8 +19,9 @@ class User {
 		$this->data_file = $this->file($this->id);
 		//set auth_level to guest until we descover otherwise
 		$this->auth_level = USER_GUEST;
-		//check that the user either has a file to use, or is new
-		$this->save_properties = array('pass_hash', 'name');
+		//list the properties that we know of that get saved
+		$this->save_properties[] = 'pass_hash';
+		$this->save_properties[] = 'name';
 		//check that the user either has a file to use, or is new
 		if(!$this->validate_file() && !$new)
 			return FALSE;
