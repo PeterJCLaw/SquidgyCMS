@@ -130,10 +130,13 @@ class BlockProfile extends Block {
 //User Profile object, built on the main User object
 class UserProfile extends User {
 	function UserProfile($id) {
-		parent::__construct($id);
-		$this->save_properties[] = 'image_path';
+		$this->save_properties[] = 'email';
 		$this->save_properties[] = 'gender';
+		$this->save_properties[] = 'image_path';
+		$this->save_properties[] = 'job';
+		$this->save_properties[] = 'phone';
 		$this->save_properties[] = 'spiel';
+		parent::__construct($id);
 	}
 
 	/* This function determines if the profile picture is valid, if so it returns it's path, else returns the path to a stand in image */
