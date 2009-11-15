@@ -106,6 +106,5 @@ foreach($_Admin_list as $section => $val) {
 		window.DATA_root	= '<?php echo $data_root; ?>';
 		window.SITE_root	= '<?php echo $site_root; ?>';
 		window.PAGE	= '<?php echo empty($page_req) ? '' : $page_req; ?>';
-		window.ART	= '<?php echo empty($art_req) ? '' : $art_req; ?>';
 	//-->
 	</script>

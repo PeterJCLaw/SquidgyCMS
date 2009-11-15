@@ -52,10 +52,6 @@ if(empty($p))
 	unset($p);
 else
 	$page_req	= urlencode($p);
-if(empty($a))
-	unset($a);
-else
-	$art_req	= urlencode($a);
 
 //use cookies only to handle session stuff
 $debug_info		.="\n ini_set(\"session.use_only_cookies\", \"1\") = ".ini_set("session.use_only_cookies", "1")."\n<br />";
@@ -71,8 +67,6 @@ if(has_method('FileSystem', "filtered_file_list")) {
 	$GEN_pages	= array();
 	$GEN_art	= array();
 }
-
-$FSCMS_pages	= array('Contact_Us.php');	//the ones that the the system provides
 
 $_SITE_USER	= new UserLogin();
 ?>
