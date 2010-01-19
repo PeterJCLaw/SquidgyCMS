@@ -155,20 +155,20 @@ function recursiveMkdir($directory)
 /* This takes a path and filename and returns just the path (not the filename) */
 function returnPath($string)
 {
-	$string = removeSlashes($string);
+	$string = FSPHP::removeSlashes($string);
 	$split = split("/", $string);
 	$return = "";
 	for ($i = 0; $i < count($split) - 1; $i++)
 	{
 		$return = $return . $split[$i] . "/";
 	}
-	return removeSlashes($return);
+	return FSPHP::removeSlashes($return);
 }
 
 /* Takes a path and filename and returns just the filename (not the path) */
 function returnName($string)
 {
-	$string = removeSlashes($string);
+	$string = FSPHP::removeSlashes($string);
 	$split = split("/", $string);
 	return $split[count($split) - 1];
 }
@@ -215,7 +215,7 @@ function readCacheFile($file)
 function writeCacheFile($item, $size_cache)
 {
 	// Grab images for dimensions
-	$extension = returnExtension($item);
+	$extension = FSPHP::returnExtension($item);
 
 	if($extension == "jpg")
 	{
