@@ -123,8 +123,7 @@ HeadOne;
 
 class Site {
 	function get_requested_id_and_alias() {
-		$request_arr = explode('/',$_GET['s'],1);
-		$page = $request_arr[0];
+		list($page, $query) = explode('/',$_GET['s'],2);
 
 		if(strtolower($page) == 'admin')	//the admin page
 			return array('alias' => $page, 'id' => 'admin');
@@ -134,11 +133,14 @@ class Site {
 		foreach($publish_info as $info) {
 			if(!$info['enable'])
 				continue;
-			if(!empty($page) && in_array($page, $info))
+			if(!empty($page) && in_array($page, $info)) {
+				$info['query'] = $query;
 				return $info;
+			}
 			if(in_array('<home>', $info))
 				$home = $info;
 		}
+		$home['query'] = $query;
 		if(empty($page))	//no request means the home page
 			return $home;
 		return FALSE;

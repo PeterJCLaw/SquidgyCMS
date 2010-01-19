@@ -7,6 +7,7 @@ list($base_href) = get_page_basics();
 $page_info = Site::get_requested_id_and_alias();
 $page_alias = $page_info['alias'];
 $page_id = $page_info['id'];
+$query = $page_info['query'];
 $content = '';
 $script_files = array();
 $script_code = '';
