@@ -246,7 +246,7 @@ class UserLogin extends User {
 		if($this->type == 'session')
 			$_SESSION['hash'] = $new_hash;
 		elseif($this->type == 'cookie')
-			$this->setcookie($cookie_name.'_hash', $new_hash);
+			$this->setcookie($GLOBALS['cookie_name'].'_hash', $new_hash);
 		return true;
 	}
 
