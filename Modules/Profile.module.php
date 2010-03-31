@@ -95,15 +95,21 @@ class AdminProfile extends Admin {
 	}
 }
 
+require_once('UserGroups.module.php');
+
 class BlockProfile extends Block {
 	function BlockProfile() {
 		parent::__construct();
 	}
 
 	function ListDiv($args) {
+		list($group) = $args;
+		if(empty($group))
+			$user_list = Users::list_all();
+		else
+			$user_list = UserGroups::users_in_group($group);
 		$ret	= '
 <table id="comm_tbl">';
-		$user_list = Users::list_all();
 
 		foreach($user_list as $id) {
 			$user = new UserProfile($id);
