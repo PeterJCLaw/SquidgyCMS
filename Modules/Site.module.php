@@ -63,27 +63,6 @@ HeadOne;
 	</ul>';
 	}
 
-	function TOCLinks($args) {
-		return 'JAM!';
-		global $Site_TOClist, $Clean_URLs, $base_href;
-		$out	= '
-	<ul id="TOClinks" class="menu">
-		<li class="first"><a id="toc_home_link" href="'.$base_href.'">Home</a></li>
-';
-
-		foreach($Site_TOClist as $page => $val)
-		{
-			if(empty($val['weight']) || in_array($page, array('Home', '1-Home', 'Admin')))	//compulsory items - hardcoded above and below this list
-				continue;
-
-			$out	.= '		<li><a href="'.$base_href.($Clean_URLs ?  (array_key_exists('alias', $val) ? $val['alias'] : str_replace("?page_req=", '', $val['href'])) : $val['href'])
-					.'">'.$val['title']."</a></li>\n";
-		}
-
-		return $out.'		<li class="last"><a id="toc_admin_link" href="'.$base_href.'Admin.php">Admin</a></li>
-	</ul>';
-	}
-
 	function Footer($args) {
 		global $who_copyright, $website_name_short, $website_name_long, $SquidgyCMS_version;
 		list($full)	= $args;

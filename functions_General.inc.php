@@ -42,27 +42,6 @@ function get_page_basics() {
 }
 
 /* prints an admin section, if it exsists */
-function get_TOClist() {
-	global $pages_file;
-	unset($Site_TOClist);
-
-	if(is_readable($pages_file))
-		include $pages_file;	//Site_TOClist
-
-	if(!isset($Site_TOClist))
-		$Site_TOClist	= array();
-
-	unset($Site_TOClist['1-Home']);
-
-	if(!isset($Site_TOClist['Home']))	//if neither is set
-		$Site_TOClist	= array_merge(array('Home' => array('weight' => -10)), $Site_TOClist);
-
-	$Site_TOClist	= array_merge($Site_TOClist, array('Admin'  => array('weight' => 100)));
-
-	return $Site_TOClist;
-}
-
-/* prints an admin section, if it exsists */
 function print_Admin_Section($val) {
 	if(!empty($val['obj']) && method_exists($val['obj'], 'submit') && method_exists($val['obj'], 'printFormAdmin')) {
 		$val['obj']->printFormHeader();
