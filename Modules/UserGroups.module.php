@@ -13,7 +13,7 @@ class AdminUserGroups extends Admin {
 		$this->user_list['Select User'] = '';
 		foreach($this->u_list as $uid) {
 			$u = new User($uid);
-			$this->user_list["$u->name ($uid)"] = $uid;
+			$this->user_list[$uid.(empty($u->name)?'':" ($u->name)")] = $uid;
 		}
 	}
 
