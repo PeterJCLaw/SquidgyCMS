@@ -64,10 +64,11 @@ class AdminUserGroups extends Admin {
 				log_error("Incorrect parameter count in group ($new_name)");
 
 			foreach($user[$group_id] as $key => $uid) {
-				$U_weight	= empty($weight[$group_id][$key]) ? 0 : $weight[$group_id][$key];
+				if(empty($uid))	//if it's blank skip it
+					continue;
 
-				if(!empty($uid) && !empty($U_weight))	//if it's not blank save it
-					array_push($this->data, array('group'=>$new_name, 'uid'=>$uid, 'weight'=>$U_weight));
+				$U_weight	= empty($weight[$group_id][$key]) ? 0 : $weight[$group_id][$key];
+				array_push($this->data, array('group'=>$new_name, 'uid'=>$uid, 'weight'=>$U_weight));
 			}
 		}
 
