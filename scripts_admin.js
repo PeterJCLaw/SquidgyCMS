@@ -56,9 +56,14 @@ function add_article_row() {
 
 // Clear the contents of an entire table row
 function clearRow(thing) {
-	var input_list	= thing.parentNode.parentNode.getElementsByTagName('input');
+	var row = thing.parentNode.parentNode;
+	var input_list	= row.getElementsByTagName('input');
+	var select_list	= row.getElementsByTagName('select');
 	for(var i=0; i<input_list.length; i++) {
 		input_list[i].value	= '';
+	}
+	for(var i=0; i<select_list.length; i++) {
+		select_list[i].value	= '';
 	}
 	return;
 }
