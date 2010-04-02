@@ -60,13 +60,15 @@ class AdminUserGroups extends Admin {
 		global $debug_info;
 
 		foreach($group_name as $group_id => $new_name) {
+			$group = array();
 			if(count($user[$group_id]) != count($weight[$group_id]))
 				log_error("Incorrect parameter count in group ($new_name)");
 
 			foreach($user[$group_id] as $key => $uid) {
-				if(empty($uid))	//if it's blank skip it
+				if(empty($uid) || $group[$uid])	//no blank or duplicate users
 					continue;
 
+				$group[$uid] = true;
 				$U_weight	= empty($weight[$group_id][$key]) ? 0 : $weight[$group_id][$key];
 				array_push($this->data, array('group'=>$new_name, 'uid'=>$uid, 'weight'=>$U_weight));
 			}
