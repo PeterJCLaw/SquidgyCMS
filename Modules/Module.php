@@ -115,7 +115,6 @@ class Admin extends ModuleTemplate {
 
 	function change_something_in_all_chunks($old, $new) {
 		$chunks = FileSystem::Filtered_File_List($this->data_root, '.chunk');
-		array_push($chunks, $GLOBALS['pages_file']);
 		$error	= "";
 		foreach($chunks as $chunk) {	//check if we can modify all the pages
 			if(!is_writable($chunk))

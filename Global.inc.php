@@ -42,7 +42,6 @@ else {	//dummy functions to prevent errors
 	function show_log($t = '') { }
 }
 
-$pages_file	= "$data_root/pages.data";	//for all pages - the main table of contents
 $template_file = Theme::get_site_template();	//the site template
 
 $SquidgyCMS_version	= 0.01;
