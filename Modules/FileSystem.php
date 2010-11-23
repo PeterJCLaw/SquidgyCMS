@@ -1,5 +1,5 @@
 <?php
-#name = Log
+#name = FileSystem
 #description = Enables interactions with the File System
 #package = Core - required
 #type = system
