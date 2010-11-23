@@ -34,10 +34,12 @@ if (array_key_exists('file', $_REQUEST) && array_key_exists('width', $_REQUEST) 
 {
 	global $maxWidth, $maxHeight;
 
-	$request	= $site_root.$_REQUEST['file']; $debug	= 0;	//Peter Law added the site_root variable
+	//Peter Law added the site_root variable
+	$request	= FileSystem::joinPath($site_root, $_REQUEST['file']);
+	$debug	= 0;
 	$debug	= $_REQUEST['debug'];
 
-	authoriseRequest($request);
+	FSPHP::authoriseRequest($request);
 
 	$thumbX	= $_REQUEST['width'];
 	$thumbY	= $_REQUEST['height'];
@@ -70,14 +72,14 @@ if (array_key_exists('file', $_REQUEST) && array_key_exists('width', $_REQUEST) 
 			$thumbY	= $thumbX / $image_ratio;
 	}
 
-	$returnPath	= returnPath($request);
-	$cache	= ($returnPath == "" ? "" :"$returnPath/")."Thumbs/".returnName($request);
+	$returnPath	= FSPHP::returnPath($request);
+	$cache	= ($returnPath == "" ? "" :"$returnPath/")."Thumbs/".FSPHP::returnName($request);
 
 	if (best_thumb($cache, (int) $thumbX, (int) $thumbY) && !$debug)	//if its a good thumbnail, else make one
 		header("Location: $cache");
 	else
 	{
-		$extension	= returnExtension(returnName($request));
+		$extension	= FSPHP::returnExtension(FSPHP::returnName($request));
 
 		if ($extension == "jpg")
 			$source	= imagecreatefromjpeg($request);	//returns a resource handle
@@ -87,7 +89,7 @@ if (array_key_exists('file', $_REQUEST) && array_key_exists('width', $_REQUEST) 
 
 		$dest	= imagecreatetruecolor($thumbX, $thumbY);
 		imagecopyresampled($dest, $source, 0, 0, 0, 0, $thumbX, $thumbY, $imageX, $imageY);
-		recursiveMkdir(returnPath($cache));
+		FSPHP::recursiveMkdir(FSPHP::returnPath($cache));
 
 		if ($extension == "jpg")
 			imagejpeg($dest, $cache);	//outputs the image to the cache
