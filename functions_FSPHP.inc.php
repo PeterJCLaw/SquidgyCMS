@@ -17,8 +17,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
  */
-?>
-<?php
+
 class FSPHP{
 //Chris' orignial functions, which may have been tweaked by me, just a little
 

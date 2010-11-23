@@ -16,8 +16,7 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-?>
-<?php
+
 include_once("Global.inc.php");	//tweaked by Peter Law due to move to a single global include
 
 /* This function appends a string passed to the filename given */
