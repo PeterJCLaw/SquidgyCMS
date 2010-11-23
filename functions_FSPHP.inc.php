@@ -296,4 +296,3 @@ function writeCacheFile($item, $size_cache)
 	clearstatcache();
 }
 }
-?>

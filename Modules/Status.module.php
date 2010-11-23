@@ -69,4 +69,4 @@ class AdminStatus extends Admin {
 	function submit($content=0) {
 	}
 }
-?>
+

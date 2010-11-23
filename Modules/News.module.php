@@ -87,4 +87,3 @@ class BlockNews extends Block {
 	<ul>'."\n$news_out	</ul>\n</div>";
 	}
 }
-?>

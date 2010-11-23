@@ -140,4 +140,4 @@ class Users {
 		return FileSystem::Filtered_File_List($GLOBALS['site_root'].'/Users/', '.user.php');
 	}
 }
-?>
+

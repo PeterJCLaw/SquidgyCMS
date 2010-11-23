@@ -81,4 +81,3 @@ class BlockNewsletter extends Block {
 			return $this->date(array('when'=>strtotime("-1 week", $first_day), 'prefix'=>$prefix, 'postfix'=>$postfix, 'day'=>$day));
 	}
 }
-?>

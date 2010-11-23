@@ -76,4 +76,3 @@
 	$comm_email_prefix	= "prefix";
 	$comm_email_postfix	= "@example.com";
 
-?>

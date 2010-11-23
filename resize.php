@@ -107,4 +107,3 @@ if (array_key_exists('file', $_REQUEST) && array_key_exists('width', $_REQUEST) 
 		echo $debug_info;
 	 }
 }
-?>

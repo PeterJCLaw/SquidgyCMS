@@ -12,4 +12,4 @@ $name	= 'Your name, as you would like it displayed';
 
 $auth_level = USER_ADMIN;
 
-?>
+

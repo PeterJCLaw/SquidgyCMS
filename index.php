@@ -79,4 +79,3 @@ if($debug < 0) {
 	echo $debug_info;
 	echo show_log();
 }
-?>

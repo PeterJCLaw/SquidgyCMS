@@ -90,4 +90,3 @@ function show_log($type = 'all')
 		return $_Log->show($type);
 }
 
-?>

@@ -119,4 +119,3 @@ class EmailLink extends Email {
 		return "<a href=\"$mailto\"$html>$text</a>";
 	}
 }
-?>

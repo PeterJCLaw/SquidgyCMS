@@ -285,4 +285,3 @@ function email_link($text, $gender, $address, $subject, $cc, $bcc, $body)
 	$out_val	.=  "\" title=\"Send $gender an email\">$text</a>";
 	return	$out_val;
 }
-?>

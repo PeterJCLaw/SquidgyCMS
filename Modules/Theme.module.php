@@ -84,4 +84,3 @@ class Theme {
 		return $package == 'Custom' ? 'Sites/Custom_Themes/'.$file : 'Modules/Theme/'.$file;
 	}
 }
-?>

@@ -1,7 +1,6 @@
 <?php
 	include 'Head.inc.php';
-?>
-<?php
+
 $referrer	= array_shift(explode('?', basename($referrer)));
 
 if(empty($error))
@@ -16,4 +15,3 @@ echo "You generated an error! Please "
 	Once you have feel free to <a href="<?php echo $referrer."?success=0"; ?>" title="Did you email the webmaster?">return</a> to the page you were on page.
 <?php
 	include 'Foot.inc.php';
-?>

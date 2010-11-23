@@ -41,4 +41,3 @@ switch($type) {
 
 if($debug)
 	echo "\$debug_info = <br />$debug_info<br />";
-?>
