@@ -8,7 +8,7 @@ $gender	= 'them';
 
 $spiel	= 'Use this space to talk about yourself.<br />This may well be made public.';
 
-$name	= 'Your name, as you would likke it displayed';
+$name	= 'Your name, as you would like it displayed';
 
 $auth_level = USER_ADMIN;
 
