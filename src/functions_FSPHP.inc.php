@@ -17,8 +17,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
  */
-?>
-<?php
+
 class FSPHP{
 //Chris' orignial functions, which may have been tweaked by me, just a little
 
@@ -234,7 +233,7 @@ function writeCacheFile($item, $size_cache)
 	$ratio = ($real_width / $real_height);
 	$ratio2 = ($real_height / $real_width);
 
-	if(isLandscape($item))
+	if(FSPHP::isLandscape($item))
 	{
 		$width = round(600 * $ratio);
 		$height = 600;
@@ -260,7 +259,7 @@ function writeCacheFile($item, $size_cache)
 	}
 	else
 	{
-		if(isLandscape($item))
+		if(FSPHP::isLandscape($item))
 		{
 			// For all landscape images (ie - with height > 960)
 			$width_size1	= round(768 * $ratio);
@@ -278,7 +277,7 @@ function writeCacheFile($item, $size_cache)
 		}
 	}
 
-	recursiveMkdir(returnPath($size_cache));
+	FSPHP::recursiveMkdir(FSPHP::returnPath($size_cache));
 	$fp = fopen($size_cache,'w');
 
 	fwrite($fp, $width . "\n");
@@ -296,4 +295,3 @@ function writeCacheFile($item, $size_cache)
 	clearstatcache();
 }
 }
-?>

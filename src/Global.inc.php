@@ -59,4 +59,4 @@ $debug_info		.="\n ini_set('url_rewriter.tags', '') = ".ini_set('url_rewriter.ta
 $referrer		= isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : "";
 
 $_SITE_USER	= new UserLogin();
-?>
+

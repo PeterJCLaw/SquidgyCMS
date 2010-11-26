@@ -121,4 +121,3 @@ class BlockEvents extends Block {
 		return "<div id=\"events\" class=\"gen_txt\">\n$out\n</div>";
 	}
 }
-?>

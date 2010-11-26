@@ -50,4 +50,3 @@ elseif($rename)
 else
 	echo "<p>All filenames are already correct.</p>";
 
-?>

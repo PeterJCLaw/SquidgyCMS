@@ -26,4 +26,3 @@ class BlockGA extends Block {
 SCR;
 	}
 }
-?>

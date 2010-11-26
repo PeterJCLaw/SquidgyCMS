@@ -280,4 +280,3 @@ class UserLogin extends User {
 		return;
 	}
 }
-?>

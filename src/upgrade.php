@@ -55,4 +55,3 @@ if(!empty($upgrade)) {
 //done
 }
 //	include 'Foot.inc.php';
-?>

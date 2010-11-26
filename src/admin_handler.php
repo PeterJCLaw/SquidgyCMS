@@ -52,4 +52,3 @@ if(!empty($error) || $debug)
 	include "handler.php";
 else
 	header("Location: admin?success=1$header_link");
-?>

@@ -113,4 +113,3 @@ class Publish {
 		return $info[$id]['alias'];
 	}
 }
-?>

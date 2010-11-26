@@ -31,7 +31,8 @@ EXP;
 		if(empty($size))
 			$size	= 3;
 
-		return '<div id="Docs-Browse">'.Docs::file_grid($this->get_path($path), $type, $size).'</div>';
+		$path = $this->get_path($path);
+		return '<div id="Docs-Browse">'.Docs::file_grid($path, $type, $size).'</div>';
 	}
 
 	function Tree($args) {
@@ -291,16 +292,17 @@ class Docs {	//parent class for useful functions
 			$title			= "Click to open folder";
 			$link_name		= Docs::nameFormat($file, 1, $line_len); //formats it for display
 		} elseif(Docs::is_file($item)) {
+			$real_path	= FileSystem::joinPath($GLOBALS['site_root'], $item);
 			$name		= str_replace("_", " ", FileSystem::returnFileName($file)); //gives us just the name (no extension) of the image, without underscores
 			$link_name	= Docs::nameFormat($name, 1, $line_len); //formats it for display
 
 			if(in_array(FileSystem::returnFileExt($item), array("png", "jpg")))	//is it an image of the sort we can handle (jpg or png)
 			{
-				$size_cache = FSPHP::returnPath($item)."/Thumbs/".FSPHP::returnName($item).".dim";
+				$size_cache = FileSystem::joinPath(FSPHP::returnPath($real_path), 'Thumbs', FSPHP::returnName($item).".dim");
 
 				// if the cache file doesn't exist make it
 				if(!file_exists($size_cache))
-					FSPHP::writeCacheFile($item, $size_cache);
+					FSPHP::writeCacheFile($real_path, $size_cache);
 
 				// the cache file either already existed or we just made it so use it
 				$sizes	= explode(" ", FSPHP::readCacheFile($size_cache));
@@ -563,4 +565,3 @@ ret;
 	}
 
 }
-?>

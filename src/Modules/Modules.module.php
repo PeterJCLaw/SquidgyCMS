@@ -131,4 +131,3 @@ class AdminModules extends Admin {
 		return $this->put_data();
 	}
 }
-?>

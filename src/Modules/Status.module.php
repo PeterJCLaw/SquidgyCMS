@@ -11,7 +11,7 @@ class AdminStatus extends Admin {
 	}
 
 	function printFormAdmin() {
-		$this->things_to_check = array('User', 'Data');
+		$this->things_to_check = array('User', 'Data', 'PHP', 'SquidgyCMS', 'WebServer');
 		sort($this->things_to_check);
 		$this->get_status();
 		echo '<dl>';
@@ -54,7 +54,19 @@ class AdminStatus extends Admin {
 		return;
 	}
 
+	function PHPStatus() {
+		$this->data['PHP Version'] = phpversion();
+	}
+
+	function SquidgyCMSStatus() {
+		$this->data['SquidgyCMS Version'] = $GLOBALS['version'];
+	}
+
+	function WebServerStatus() {
+		$this->data['Web server'] = $_SERVER['SERVER_SOFTWARE'];
+	}
+
 	function submit($content=0) {
 	}
 }
-?>
+

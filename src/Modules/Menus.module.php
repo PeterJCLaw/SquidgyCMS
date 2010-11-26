@@ -109,4 +109,3 @@ class BlockMenus extends Block {
 		return $out."\n</ul>";
 	}
 }
-?>

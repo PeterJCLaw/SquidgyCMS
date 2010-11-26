@@ -1,11 +1,21 @@
 <?php
-#name = Log
+#name = FileSystem
 #description = Enables interactions with the File System
 #package = Core - required
 #type = system
 ###
 
 class FileSystem {
+
+	/*
+	 * Join an arbitrary number of part-paths together, returning a clean path
+	 */
+	function joinPath()
+	{
+		$path = implode('/', func_get_args());
+		$path = str_replace('//', '/', $path);
+		return $path;
+	}
 
 	/* This function takes in the file name and retruns it, without the extension */
 	function returnFileName($n)
@@ -220,4 +230,4 @@ class FileSystem {
 	}
 
 }
-?>
+

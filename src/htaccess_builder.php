@@ -26,4 +26,3 @@ HTA;
 echo '<code><pre>'.htmlspecialchars($htaccess).'</pre></code>';
 
 
-?>

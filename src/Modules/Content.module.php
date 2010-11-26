@@ -244,4 +244,3 @@ class Content {
 		return urldecode(substr($id, strpos($id, "-")+1));
 	}
 }
-?>

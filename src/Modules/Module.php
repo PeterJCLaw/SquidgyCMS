@@ -342,4 +342,3 @@ class Module {
 		return $enabled_modules;
 	}
 }
-?>

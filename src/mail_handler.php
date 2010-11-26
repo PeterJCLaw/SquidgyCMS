@@ -78,4 +78,3 @@ if(!empty($error) || $debug)
 	include "handler.php";
 else
 	header("Location: $ReturnURL$success");
-?>

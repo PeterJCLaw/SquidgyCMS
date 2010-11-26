@@ -191,4 +191,3 @@ class UserProfile extends User {
 		return $path;
 	}
 }
-?>
