@@ -16,6 +16,15 @@ class Log {
 		$this->__construct();
 	}
 
+	function getInstance() {
+		static $instance;
+		if ($instance == null)
+		{
+			$instance = new Log();
+		}
+		return $instance;
+	}
+
 	/* log an error */
 	function error($text, $vars)
 	{
@@ -67,26 +76,18 @@ class Log {
 
 function log_error($text, $vars_arr = '')
 {
-	global $_Log;
-	if(!is_a($_Log, 'Log'))
-		$_Log	= new Log();
-	$_Log->error($text, $vars);
+	Log::getInstance()->error($text, $vars);
 }
 
 function log_info($text, $vars = '')
 {
 	if(empty($GLOBALS['debug']))
 		return;
-	global $_Log;
-	if(!is_a($_Log, 'Log'))
-		$_Log	= new Log();
-	$_Log->info($text, $vars);
+	Log::getInstance()->info($text, $vars);
 }
 
 function show_log($type = 'all')
 {
-	global $_Log;
-	if(is_a($_Log, 'Log'))
-		return $_Log->show($type);
+	return Log::getInstance()->show($type);
 }
 
