@@ -12,9 +12,8 @@ class AdminProfile extends Admin {
 	}
 
 	function printFormAdmin() {
-		global $debug_info;
 		$user = new UserProfile($GLOBALS['_SITE_USER']->id);
-		$debug_info	.= "user = '".print_r($user, true);"'\n<br />\n";
+		log_info('AdminProfile, user:', $user);
 ?>
 <table><tr>
 	<th><label for="new_name" title="Your name as you would like it to appear on the site">Name:</label></th>
@@ -58,16 +57,14 @@ class AdminProfile extends Admin {
 
 	/*this function generates the photo select box*/
 	function photo_select($curr_img) {
-		global $debug_info;
 		$img_list	= FileSystem::Filtered_File_List("$this->site_root/Users", ".jpg");
-		$debug_info .= "\$curr_img=$curr_img\n<br />\n";
+		log_info('image select', array('curr_img', $curr_img));
 		return $this->get_selectbox('photo" id="photo_change" title="Change your picture" onchange="change_pic(this.value);', $img_list, str_replace(".jpg", "", $curr_img));
 	}
 
 	function submit($content=0) {
 		list($new_name, $n_gender, $new_pass, $old_pass, $confirm_pass, $photo) = array();
 		extract($_POST, EXTR_IF_EXISTS);
-		global $debug_info;
 
 		$user = new UserProfile($GLOBALS['_SITE_USER']->id);
 
@@ -85,11 +82,8 @@ class AdminProfile extends Admin {
 		if(!empty($old_pass) && !empty($new_pass) && !empty($confirm_pass))
 			$user->change_password($old_pass, $new_pass, $confirm_pass);
 
-		$debug_info	.= @"<b>Password</b> \$out_hash='$out_hash'\n<br />\$new_hash='$new_hash'\n<br />\$pass_hash='$pass_hash'\n<br />
-<b>Spiel</b>\n'$content'\n<br />
-<b>Photo</b>\n'$image_path'\n<br />
-<b>Gender</b>\n'$n_gender'\n<br />
-<b>Name</b>\n'$new_name'\n<br />\n";
+		log_info(null, array('Password' => array('out_hash' => $out_hash, 'new_hash' => $new_hash, 'pass_hash' => $pass_hash),
+			'Spiel' => $content, 'Photo' => $image_path, 'Gender' => $n_gender, 'Name' => $new_name);
 
 		return $user->save();
 	}

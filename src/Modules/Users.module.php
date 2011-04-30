@@ -52,7 +52,7 @@ class AdminUsers extends Admin {
 	}
 
 	function reset_pass($who) {
-		global $debug_info, $website_name_short, $webmaster_email;
+		global $website_name_short, $webmaster_email;
 
 		$error = $this->users[$who]->reset_password();
 		send_mail(email($who), "$who: $website_name_short Website Password Reset", "Dear ".$who
@@ -65,7 +65,7 @@ class AdminUsers extends Admin {
 	function submit($content=0) {
 		list($pass_reset, $del, $rights, $new_user) = array();
 		extract($_POST, EXTR_IF_EXISTS);
-		global $debug_info, $username, $website_name_short, $webmaster_email;
+		global $username, $website_name_short, $webmaster_email;
 
 		$reset_list = $reset_error = $del_list = $del_error = '';
 

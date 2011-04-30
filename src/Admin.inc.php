@@ -42,7 +42,7 @@ if(!$_SITE_USER->is_logged_in() || !$_SITE_USER->has_auth(USER_SIMPLE)) {
 $module_info	= Module::list_all_with_info();
 $enabled_modules	= Module::list_enabled(true);
 
-$debug_info	.= "enabled_modules = ".print_r($enabled_modules, true)."\n<br />\n";
+log_info('Admin: enabled_modules', $enabled_modules);
 
 foreach($enabled_modules as $module) {
 	$path = Module::get_path($module);

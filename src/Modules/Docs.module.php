@@ -192,8 +192,6 @@ class Docs {	//parent class for useful functions
 	 */
 	function file_tree($base, $path, $ajax, $tabs='')
 	{
-		global $debug_info;
-
 		$base = Docs::fix_slashes($base);
 		$path = Docs::fix_slashes($path);
 		$base_id = Docs::id_convert($base);
@@ -210,7 +208,7 @@ class Docs {	//parent class for useful functions
 
 		$display	= ($paths_match || $new_css) ? '' : ' style="display: none;"';
 
-		$debug_info	.= "file_tree:paths_match=".var_export($paths_match, True)."|display=$display|";
+		log_info('file_tree', array('paths_match' => $paths_match, 'display' => $display));
 
 		$dir_contents = Docs::Full_Dir_List($base);
 
@@ -228,7 +226,7 @@ class Docs {	//parent class for useful functions
 					$item_id	= Docs::id_convert($item);
 					$curr_item	= ($item == $curr_file) ? TRUE : FALSE;
 					$item_sub_val = $li_insert = "";
-					$debug_info	.= "item=$item|item_id=$item_id|<br />\n";
+					log_info('file_tree.foreach', array('item' => $item, 'item_id' => $item_id));
 
 					if (Docs::is_file($item) || Docs::is_dir($item)) {
 						if (Docs::is_dir($item)) {	//if its a folder
@@ -242,7 +240,7 @@ class Docs {	//parent class for useful functions
 								$href			= "javascript:toggle_FE('FE_$item_id', 'FE_LI_$item_id');\" class=\"js_link";
 							}
 							$li_insert		= " id=\"FE_LI_$item_id\" class=\"$li_ins_class\"";
-							$debug_info		.= "item_sub_val=$item_sub_val|li_insert=$li_insert|<br />\n";
+							log_info('item_sub_val' => $item_sub_val, 'li_insert' => $li_insert));
 						} else {
 							$item_name	= FileSystem::returnFileName($item_name); //gives us just the name (no extension) of the file
 							$title		= "Go to $item_name";
@@ -263,7 +261,7 @@ class Docs {	//parent class for useful functions
 		else
 			return '<span style="display: none;">No files to display</span>';
 
-		$debug_info	.= "path=$path|base_id=$base_id|tabs=/$tabs/|<br />\n";
+		log_info('path' => $path, 'base_id' => $base_id, 'tabs' => "/$tabs/"));
 
 		return $retval;
 	}
@@ -490,12 +488,10 @@ ret;
 	 */
 	function path_compare($base, $path)
 	{
-		global $debug_info;
-
 		$base	= Docs::fix_slashes($base);
 		$path	= Docs::fix_slashes($path);
 
-		$debug_info .= "path_compare:base=$base|path=$path|<br />\n";
+		log_info('path_compare', array('base' => $base, 'path' => $path));
 
 		if(in_array($base, array($path, "./", '')))
 			return TRUE;
@@ -516,9 +512,8 @@ ret;
 	/* This function gets the name of the object to fit onto lines 13 characters wide */
 	function nameFormat($name, $line, $width)
 	{
-		global $debug_info;
 		if(function_exists('wordwrap')) {
-			$debug_info	.= "wordwrap exists, yay\n<br />\n";
+			log_info('wordwrap exists, yay');
 			return wordwrap($name, $width, "<br />", TRUE);
 		}
 
@@ -544,9 +539,9 @@ ret;
 	/* This function is used in conjunction with usort - it sorts based on whether a file is a folder, then by extension, then alphabetically */
 	function tree_sort($a, $b)
 	{
-	//	global $debug_info, $this_dir;
+	//	global $this_dir;
 
-	//	$debug_info	.= "\$this_dir=$this_dir\n<br />\$a=$a\n<br />\$b=$b\n<br />\n";
+	//	log_info(null, array('this_dir' => $this_dir, 'a' => $a, 'b' => $b));
 		if($a == $b)
 			return 0;
 
@@ -556,7 +551,7 @@ ret;
 		$ab_type_cp	= strcasecmp($a_type, $b_type);
 		$ab_cp		= strcasecmp($a, $b);
 
-	//	$debug_info	.= "\$a_type=$a_type\n<br />\$b_type=$b_type\n<br />\$ab_type_cp=$ab_type_cp\n<br />\$ab_cp=$ab_cp\n<br />\n";
+	//	log_info(null, array('a_type' => $a_type, 'b_type' => $b_type, 'ab_type_cp' => $ab_type_cp, 'ab_cp' => $ab_cp));
 
 		if($ab_type_cp == 0)
 			return $ab_cp;

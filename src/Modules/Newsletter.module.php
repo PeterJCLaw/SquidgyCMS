@@ -44,7 +44,7 @@ class BlockNewsletter extends Block {
 	/* This function generates the link to the latest newsletter in the folder */
 	function date($args)
 	{
-		global $debug_info, $site_root, $NewsPath;
+		global $site_root, $NewsPath;
 		list($when, $prefix, $postfix, $day)	= array();
 		extract($args, EXTR_IF_EXISTS);
 
@@ -62,18 +62,18 @@ class BlockNewsletter extends Block {
 		$folder		= $site_root."/$NewsPath/$year";
 		$file		= $folder."/".$prefix.$date.$postfix;
 
-		$debug_info	.= "\n\$date=$date\n<br />\$when=$when\n<br />\$year=$year\n<br />\$file=$file\n<br />\$stamp=$stamp\n<br />\n";
+		log_info('Newsletter.date', array('date' => $date, 'when' => $when, 'year' => $year, 'file' => $file, 'stamp' => $stamp));
 
 		if(file_exists($file))
 			return $file;
-			
+
 		$first_day	= $this->firstDay(array('year'=>$year, 'day'=>$day));
 		if(is_dir($folder)) {
 			for($stamp = strtotime("-1 week", $stamp); $stamp >= $first_day; $stamp = strtotime("-1 week", $stamp))
 			{
 				$date	= date('Y-m-d', $stamp);
 				$file	= $folder."/".$prefix.$date.$postfix;
-				$debug_info	.= "\n\$file=$file\n<br />\$stamp=$stamp\n<br />\n";
+				log_info('Newletter.date is_dir', array('file' => $file, 'stamp' => $stamp));
 				if(file_exists($file))
 					return $file;
 			}

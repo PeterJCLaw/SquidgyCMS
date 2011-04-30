@@ -57,7 +57,6 @@ class AdminUserGroups extends Admin {
 	function submit($content=0) {
 		list($user, $weight, $group_name) = array();
 		extract($_POST, EXTR_IF_EXISTS);
-		global $debug_info;
 
 		foreach($group_name as $group_id => $new_name) {
 			$group = array();

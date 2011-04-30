@@ -42,7 +42,7 @@ class AdminEvents extends Admin {
 		list($start_hour, $start_minute, $start_day, $start_month, $start_year) = array();
 		list($finish_hour, $finish_minute, $finish_day, $finish_month, $finish_year, $event_title, $header_link) = array();
 		extract($_POST, EXTR_IF_EXISTS);
-		global $debug_info, $mail_webmsater_on_event;
+		global $mail_webmsater_on_event;
 
 		$this->get_data();
 		$error	= "";
@@ -63,7 +63,7 @@ class AdminEvents extends Admin {
 
 		array_push($this->data , array('time'=>time(), 'start'=>$start_time, 'finish'=>$finish_time, 'title'=>htmlspecialchars($event_title), 'content'=>$content));
 
-		$debug_info .= "\$start_time=$start_time\n<br />\$finish_time=$finish_time\n<br />\n";
+		log_info(null, array('start_time' => $start_time, 'finish_time' => $finish_time));
 
 		if($mail_webmsater_on_event) {
 			$body	= "Title = $event_title\nDescription = ".strip_tags($content)."\n\n"
@@ -71,7 +71,7 @@ class AdminEvents extends Admin {
 					."Finish_hour = $finish_hour\nFinish_minute = $finish_minute\nFinish_month = $finish_month\nFinish_day = $finish_day\nFinish_year = $finish_year\n"
 					."\n--\n"."X-Mailer: PHP/".phpversion();	//mail signature, including php version
 
-		
+
 			mail(email_addr("webmaster"), "New $website_name_short Event by $username: '$event_title'", $body, "From: $website_name_short Admin Form <$website_form_email>");
 		}
 
@@ -89,8 +89,6 @@ class BlockEvents extends Block {
 
 	function block($args)
 	{
-		global $debug_info;
-
 		$this->get_data();
 
 		if(empty($this->data))
@@ -104,7 +102,7 @@ class BlockEvents extends Block {
 		multi2dSortAsc($this->data, 'start');	//uses array_multisort
 
 		$out	= '';
-		$debug_info	.= "args = $args, event_file = '$this->data_file', date_format = '$date_format'\n<br />\n";
+		log_info(null, array('args' => $args, 'event_file' => $this->data_file, 'date_format' => $date_format));
 
 		foreach($this->data as $val) {
 			if($val['start'] > time())

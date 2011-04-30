@@ -20,7 +20,8 @@ if(empty($type))
 //strip slashes and convert php opening or closing tags to their html equivalents to prevent malicious code from running
 if(!empty($_POST['admin_content']))
 	$admin_content	= stripslashes(str_replace(array('<?', '?>'), array('&lt;?', '?&gt;'), $_POST['admin_content']));
-$debug_info .= @"\$type=$type\n<br />\$content='$content'\n<br />\n";
+
+log_info(null, array('type' => $type, 'content' => $content));
 
 if($debug) {
 	echo "\n<br />POST:\n<br />";
@@ -41,7 +42,7 @@ if(!class_exists($class_name))
 else {
 	$type_obj	= new $class_name();
 
-	$debug_info	.= "\nClass $type exists!\n<br />\ntype:".$type_obj->get_my_class()."\n<br />\n";
+	log_info("Class $type exists!", $type_obj->get_my_class());
 
 	$error	= $type_obj->submit($admin_content);
 
