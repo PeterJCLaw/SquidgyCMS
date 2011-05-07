@@ -15,7 +15,7 @@ class Email {
 		$this->cc	= array();
 		$this->bcc	= array();
 		$this->from	= array();
-		$this->headers	= '';
+		$this->headers	= array();
 	}
 
 	/* add a recipient */
@@ -39,9 +39,9 @@ class Email {
 		$this->from[$email] = $name;
 	}
 
-	/* add headers */
-	function add_headers($headers) {
-		$this->headers .= $headers;
+	/* add a single header line */
+	function add_header($header) {
+		$this->headers[] = trim($header);
 	}
 
 	/* add a subject */
@@ -68,10 +68,14 @@ class Email {
 
 		foreach(array('cc'=>'CC', 'bcc'=>'BCC', 'from'=>'From') as $name => $label) {
 			if(!empty($this->$name))
-				$this->headers .= "$label: ".$this->addresses_to_string($this->$name)."\r\n";
+			{
+				$this->add_headers($label.': '.$this->addresses_to_string($this->$name));
+			}
 		}
 
-		return @mail($to, $this->subject, $this->body, $this->headers);
+		$headers = implode("\r\n", $this->headers);
+
+		return @mail($to, $this->subject, $this->body, $headers);
 	}
 }
 
