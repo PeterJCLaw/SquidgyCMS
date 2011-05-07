@@ -7,6 +7,7 @@
 
 class AdminStatus extends Admin {
 	function AdminStatus() {
+		$this->no_submit = True;
 		parent::__construct();
 	}
 
@@ -64,9 +65,6 @@ class AdminStatus extends Admin {
 
 	function WebServerStatus() {
 		$this->data['Web server'] = $_SERVER['SERVER_SOFTWARE'];
-	}
-
-	function submit($content=0) {
 	}
 }
 
