@@ -1,0 +1,3 @@
+menu|:|href|:|text|:|title|:|weight
+Primary|:|./admin|:|Admin|:|The administration pages|:|20
+Primary|:|<home>|:|Home|:|The homepage|:|0
