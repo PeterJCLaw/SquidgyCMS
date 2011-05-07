@@ -183,8 +183,6 @@ function send_mail($to, $subject, $message, $headers)
 /* This function prints the success item on the admin page */
 function print_success($success)
 {
-	global $page_n;
-
 	$out	= '<span class="f_right" id="success">Your ';
 
 	if($success != 1)
@@ -192,7 +190,7 @@ function print_success($success)
 	else
 		$suc	= "";
 
-	if($page_n == "Admin")
+	if($GLOBALS['page_id'] == "admin")
 		$out	.= "changes were$suc saved";
 	else
 		$out	.= "email was$suc sent";
