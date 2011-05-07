@@ -47,33 +47,3 @@ a:hover, a:visited:hover, a:active	{ text-decoration: none; color: red; }
 #login	{ width: 600px; }
 #login th	{ font-weight: normal; text-align: right; width: 230px; }
 #login td input { width: 200px; margin: 1px; }
-
-/* Admin sections */
-
-#AdminStatus .t {
-	text-align: right;
-	padding: 3px 7px 3px 20px;
-	display: table-cell;
-}
-#AdminStatus .d {
-	display: table-cell;
-	padding: 3px 40px 3px 7px;
-}
-#AdminStatus li {
-	display: table-row;
-	width: 90%;
-}
-#AdminStatus li.info {
-	background-color: #FFFAB5;
-}
-#AdminStatus li.good {
-	background-color: #B4FFB0;
-}
-#AdminStatus li.bad {
-	background-color: #FF8080;
-	outline: 1px solid red;
-}
-#AdminStatus li .path {
-	font-family: monospace;
-	font-size: 0.9em;
-}

@@ -100,3 +100,33 @@ ul.tick_list li	{ vertical-align: middle; line-height: 1.5em; display: block; fl
 .admin_form_head .f_right input	{ text-align: center; width: 190px; font-size: 0.8em; }
 #success	{ float: right; font-weight: bold; color: green; border: 1px solid red; padding: 3px 5px; }
 #welcome	{ margin-top: 0; }
+
+/* Admin sections */
+
+#AdminStatus .t {
+	text-align: right;
+	padding: 3px 7px 3px 20px;
+	display: table-cell;
+}
+#AdminStatus .d {
+	display: table-cell;
+	padding: 3px 40px 3px 7px;
+}
+#AdminStatus li {
+	display: table-row;
+	width: 90%;
+}
+#AdminStatus li.info {
+	background-color: #FFFAB5;
+}
+#AdminStatus li.good {
+	background-color: #B4FFB0;
+}
+#AdminStatus li.bad {
+	background-color: #FF8080;
+	outline: 1px solid red;
+}
+#AdminStatus li .path {
+	font-family: monospace;
+	font-size: 0.9em;
+}
