@@ -11,7 +11,10 @@
 </head>
 <body>
 <div id="top"></div>
-<div id="header"></div>
+<div id="header">
+	<div id="tagline">{{Something  witty goes here}}</div>
+	<h1 id="title">Be Squidgy!</h1>
+</div>
 <table id="main_tbl">
 	<tr>
 		<td id="left_cell" rowspan="2">

@@ -16,9 +16,9 @@ a	{ text-decoration: none; color: blue; }
 a:visited	{ text-decoration: none; color: purple; }
 a:hover, a:visited:hover, a:active	{ text-decoration: none; color: red; }
 
-#header	{ border-bottom: 1px solid black; height: 104px; margin: 0 0 10px; }
-#All_Squidgy	{ margin: 0 0 15px 9px; }
-#Home_of	{ margin: 31px 15px 0 0; }
+#header	{ border-bottom: 1px solid black; margin: 0 0 10px; }
+#header #title	{ margin: 20px 30px; }
+#header #tagline	{ float: right; margin: 10px 50px 0 0; font-size: 1.5em; }
 
 #top, #footer	{ margin: 0 -10px; background-repeat: repeat-x; }
 #top	{ background-image: url('PurpleTopGreenBottom.png'); height: 50px; background-position: top; }
