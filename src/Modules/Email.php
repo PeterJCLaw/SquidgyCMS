@@ -33,8 +33,8 @@ class Email {
 		$this->bcc[$email] = $name;
 	}
 
-	/* add a From address */
-	function add_from($email, $name=FALSE) {
+	/* set a From address */
+	function set_from($email, $name=FALSE) {
 		$this->from = array();	//only allow one from address, so clear any previous ones
 		$this->from[$email] = $name;
 	}
@@ -44,13 +44,13 @@ class Email {
 		$this->headers[] = trim($header);
 	}
 
-	/* add a subject */
-	function add_subject($subject) {
+	/* set the subject */
+	function set_subject($subject) {
 		$this->subject = $subject;
 	}
 
-	/* add a body */
-	function add_body($body) {
+	/* set the message body */
+	function set_body($body) {
 		$this->body = $body;
 	}
 
