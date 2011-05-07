@@ -68,8 +68,8 @@ if(!empty($debug) && $debug > 1) {
 ?>
 	<div id="admin">
 		<div class="admin_head">
-			<span class="f_left" id="welcome">Welcome, <?php echo $_SITE_USER->get_first_name(); ?></span>
 <?php if(isset($success)) echo print_success($success)."\n"; ?>
+			<p id="welcome">Welcome, <?php echo $_SITE_USER->get_first_name(); ?></p>
 		</div>
 		<p>Please note that only changes to the one form that you submit will be saved.</p>
 		<ul id="admin_TOC"><?php

@@ -57,7 +57,7 @@ ul.tick_list li	{ vertical-align: middle; line-height: 1.5em; display: block; fl
 #admin_TOC a:visited:hover	{ color: red; }
 #admin_TOC a.got, #admin_TOC a.got:hover	{ font-weight: bold; color: black !important; cursor: default; }
 
-.admin_head	{ height: 2.5em; vertical-align: middle; }
+.admin_head	{ vertical-align: middle; }
 .admin_form_head	{ margin: 6px 0 10px; }
 .admin_form	{ clear: none; }
 .admin_form h4	{ margin-top: 0.2em; }
@@ -98,5 +98,5 @@ ul.tick_list li	{ vertical-align: middle; line-height: 1.5em; display: block; fl
 #article_select_div select	{ margin: 0 20px 7px; }
 
 .admin_form_head .f_right input	{ text-align: center; width: 190px; font-size: 0.8em; }
-#success	{ font-weight: bold; color: green; border: 1px solid red; padding: 3px 5px; }
-#welcome	{ margin: 0.6em 0; }
+#success	{ float: right; font-weight: bold; color: green; border: 1px solid red; padding: 3px 5px; }
+#welcome	{ margin-top: 0; }

@@ -183,7 +183,7 @@ function send_mail($to, $subject, $message, $headers)
 /* This function prints the success item on the admin page */
 function print_success($success)
 {
-	$out	= '<span class="f_right" id="success">Your ';
+	$out	= '<span id="success">Your ';
 
 	if($success != 1)
 		$suc	= ' <span style="color: blue;">not</span>';
