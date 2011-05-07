@@ -189,7 +189,7 @@ class Admin extends ModuleTemplate {
 		<br />
 		<input type="reset" value="Reset - <?php echo $this->section_human; ?>" />
 	</span>
-	<?php echo $this->sect_title; ?>:
+	<p><?php echo $this->sect_title; ?>:</p>
 	<input type="hidden" name="type" value="<?php echo $this->section; ?>" />
 </div>
 <div class="admin_form">
