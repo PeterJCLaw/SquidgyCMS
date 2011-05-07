@@ -15,11 +15,22 @@ class AdminStatus extends Admin {
 		$this->things_to_check = array('User', 'Data', 'PHP', 'SquidgyCMS', 'WebServer');
 		sort($this->things_to_check);
 		$this->get_status();
-		echo '<dl>';
+		echo '<ul>';
 		foreach($this->data as $thing => $value) {
-			echo "<dt>$thing</dt><dd>$value</dd>";
+			if (is_array($value))
+			{
+				$class = $value['ok?'] ? 'good' : 'bad';
+				$comment = $value['comment'];
+			}
+			else
+			{
+				$class = 'info';
+				$comment = $value;
+			}
+			$class = ' class="'.$class.'"';
+			echo "<li$class><span class=\"t\">$thing</span><span class=\"d\">$comment</span></li>";
 		}
-		echo '</dl>';
+		echo '</ul>';
 	}
 
 	function get_status() {
@@ -38,20 +49,27 @@ class AdminStatus extends Admin {
 	}
 
 	function DirStatus($store, $path) {
+		// init the array, assume failure
+		$this->data[$store] = array(
+				'ok?' => False,
+				'comment' => 'Folder (<em class="path">'.$path.'</em>) '
+			);
+
 		if(!file_exists($path) || !is_dir($path)) {
-			$this->data[$store] = 'Folder does not exist';
+			$this->data[$store]['comment'] .= 'does not exist!';
 			return;
 		}
 		if(!is_readable($path)) {
-			$this->data[$store] = 'Folder is not readable';
+			$this->data[$store]['comment'] .= 'is not readable!';
 			return;
 		}
 		if(!is_writeable($path)) {
-			$this->data[$store] = 'Folder is not writable';
+			$this->data[$store]['comment'] .= 'is not writable!';
 			return;
 		}
 
-		$this->data[$store] = 'Folder OK';
+		$this->data[$store]['ok?'] = True;
+		$this->data[$store]['comment'] = 'Folder OK';
 		return;
 	}
 
