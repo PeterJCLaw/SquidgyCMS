@@ -78,7 +78,7 @@ class AdminStatus extends Admin {
 	}
 
 	function SquidgyCMSStatus() {
-		$this->data['SquidgyCMS Version'] = $GLOBALS['version'];
+		$this->data['SquidgyCMS Version'] = $GLOBALS['SquidgyCMS_version'];
 	}
 
 	function WebServerStatus() {
