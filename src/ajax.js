@@ -39,6 +39,6 @@ function ajax(method, url, params, do_this)
 		xmlHttp.open(method, url+"?"+params, true);
 		xmlHttp.send(null);
 	}
-	
+
 	window.LOG	+= "\n"+method+": "+url+"?"+params;
 }
