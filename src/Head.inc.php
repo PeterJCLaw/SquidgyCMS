@@ -10,7 +10,7 @@ $page_heading	= "Error!";
 $page_n == "mail handler" ? 'Contact_Us.php' : 'Admin';	//lie to the page enabling bit
 
 //actually print the header stuff
-echo content::SquidgyParser($template_file, 0, '[[Block::Site-Content]]').'
+echo Content::SquidgyParserFile($template_file, 0, '[[Block::Site-Content]]').'
 	<div id="content" class="maincol">
 ';
 

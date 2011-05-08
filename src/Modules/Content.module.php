@@ -143,8 +143,14 @@ class Content {
 			return $argArray;
 	}
 
-	/* parses the squidgyCMS wiki-style pages and makes html */
-	function SquidgyParser($page_file, $start = 0, $finish = 0) {
+	/**
+	 * Wrapper for SquidgyParser that allows it to be easily applied to files.
+	 * It also allows for a subsection of the file to be parsed, either by index position or search string.
+	 * @param page_file The file to get the contents from.
+	 * @param start An indicator of the position to begin parsing at.
+	 * @param finish An indicator of the position to stop parsing at.
+	 */
+	function SquidgyParserFile($page_file, $start = 0, $finish = 0) {
 		global $debug, $debug_info;
 		$page	= file_get_contents($page_file);
 		$len	= strlen($page);
@@ -176,7 +182,15 @@ class Content {
 		}
 
 		$debug_info	.= "<br />\n";
+		return Content::SquidgyParser($page);
+	}
 
+	/**
+	 * Parses SquidgyML, substituting the markup for the evaluated contents of the blocks.
+	 * @param page A strng containing the markup to parse.
+	 */
+	function SquidgyParser($page) {
+		global $debug, $debug_info;
 		$enabled_modules	= Module::list_enabled(true);
 		$len	= strlen($page);
 		$i	= 0;

@@ -43,7 +43,7 @@ MSG;
 	$page_heading	= 'Error!';
 	} else {
 		$chunk_title = Content::get_title_from_id($page_id);
-		$content = Content::SquidgyParser($chunk_file);
+		$content = Content::SquidgyParserFile($chunk_file);
 
 		if($page_alias == '<home>')
 			$page_heading	= $page_head_title	= $website_name_long;
@@ -66,14 +66,14 @@ PGSCRPT;
 	}
 }
 
-echo content::SquidgyParser($template_file, 0, '[[Block::Site-Content]]');
+echo Content::SquidgyParserFile($template_file, 0, '[[Block::Site-Content]]');
 echo <<<CONT
 	<div id="content" class="maincol">
 $content
 	</div><!-- end content div -->
 
 CONT;
-echo content::SquidgyParser($template_file, '[[Block::Site-Content]]');
+echo Content::SquidgyParserFile($template_file, '[[Block::Site-Content]]');
 
 if($debug < 0) {
 	echo $debug_info;
