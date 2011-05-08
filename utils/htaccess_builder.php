@@ -1,3 +1,4 @@
+<pre>
 <?php
 require_once('../src/Modules/FileSystem.php');
 require_once('../src/functions_General.inc.php');
@@ -25,6 +26,6 @@ ErrorDocument 500 ${install_root}index.php?id=500
 
 HTA;
 
-echo '<code><pre>'.htmlspecialchars($htaccess).'</pre></code>';
+echo htmlspecialchars($htaccess);
 
 
