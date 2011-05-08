@@ -18,6 +18,7 @@ ErrorDocument 404 ${install_root}index.php?id=404
 ErrorDocument 500 ${install_root}index.php?id=500
 
 <IfModule mod_rewrite.c>
+	RewriteBase $install_root
 	RewriteEngine on
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
