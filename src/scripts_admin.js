@@ -11,6 +11,100 @@ function TBrefresh(thing) {
 	//do the refresh stuff
 }
 
+/**
+ * Makes an AJAX call to get some content parsed & put into the preview window.
+ * @param content The content to parse & show.
+ */
+function get_content_preview(content)
+{
+	ajax('post', 'ajax.php?type=block&module=Content', 'content='+content,
+		function(ajaxobj) {
+			$('content-preview').parentNode.style.display = 'block';
+			$('content-preview').innerHTML = ajaxobj.responseText;
+		}
+	);
+}
+
+/**
+ * Class that tracks changes in a text input field,
+ * folding temporally close changes together before acting upon them.
+ */
+function ChangeMonitor(id)
+{
+	// since we're called by the keyDown event, this will be the value before any changes.
+	var _original = $(id).value;
+
+	var _time = new Date();
+
+	var _timeoutHandle = setupTimeout();
+
+	// how long to wait before sending the update call.
+	var _delay = 200;
+
+	// the longest we'll wait before updating anyway.
+	var _maxWait = 500;
+
+	function setupTimeout()
+	{
+	//	console.log('setupTimeout');
+		return setTimeout(showChange, _delay);
+	}
+
+	this.changed = function()
+	{
+	//	console.log('changed');
+		if ( (new Date() - _time) < _maxWait )
+		{
+			clearTimeout(_timeoutHandle);
+			_timeoutHandle = setupTimeout();
+		}
+		else
+		{
+			// we're going to let it run the update,
+			// so clear the instance so that we begin again
+			monitor_changes_static = null;
+			// and then propogate the change call:
+			monitor_changes(id);
+		}
+	}
+
+	function showChange()
+	{
+		var newValue = $(id).value;
+	//	console.log('showChange');
+	//	console.log('newValue:'+newValue);
+	//	console.log('_original:'+_original);
+		if (newValue != _original)
+		{
+			get_content_preview(newValue);
+		}
+	}
+}
+
+var monitor_changes_static = null;
+
+ChangeMonitor.getInstance = function(id)
+{
+	if (monitor_changes_static == null)
+	{
+		monitor_changes_static = new ChangeMonitor(id);
+	}
+	return monitor_changes_static;
+}
+
+/**
+ * Called by the onchange handler for a textarea.
+ */
+function monitor_changes(id)
+{
+	// can't do the live preview if ajax is unavailable
+	if (!window.AJAX_enabled)
+	{
+		return;
+	}
+	ChangeMonitor.getInstance(id).changed();
+}
+
 // Add a row of articles
 function add_article_row() {
 	var num_rows	= $('num_rows').value;

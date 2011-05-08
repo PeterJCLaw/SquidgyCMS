@@ -33,7 +33,11 @@ class AdminContent extends Admin {
 				<?php $this->print_select_cells($chunks, $chunk_req); ?>
 			</tr></table>
 <?php
-		$this->printTextarea($content);
+		$this->printTextarea($content, array('onkeydown' => 'monitor_changes(this.id);'));
+		echo "\n	<fieldset style=\"display: none;\">";
+		echo "\n		<legend>Live Preview</legend>";
+		echo "\n		<div id=\"content-preview\">", Content::SquidgyParser($content), "</div>";
+		echo "\n	</fieldset>";
 		return;
 	}
 
@@ -100,6 +104,11 @@ class BlockContent extends Block {
 				return file_get_contents($file);
 		}
 		return 'Foo[[Block::Content-Chunk]]GaFoo[[Block::Content-Chunk]]Gamm';
+	}
+
+	function ajax() {
+		$content = $_REQUEST['content'];
+		return Content::SquidgyParser($content);
 	}
 
 	function UseTemplate($args) {
