@@ -1,11 +1,13 @@
 <?php
-include 'Modules/FileSystem.php';
-include 'functions_General.inc.php';
+require_once('../src/Modules/FileSystem.php');
+require_once('../src/functions_General.inc.php');
 
 //find the current path to this file from the url - ie get the web site root
 //figure out the root of this install the location of this file and compare
 
-list($install_root) = get_page_basics();
+list($root) = get_page_basics();
+
+$install_root = substr($root, 0, -6).'src/';
 
 $htaccess = <<<HTA
 ErrorDocument 400 ${install_root}index.php?id=400
