@@ -66,7 +66,7 @@ class BlockNewsletter extends Block {
 
 		if(file_exists($file))
 			return $file;
-			
+
 		$first_day	= $this->firstDay(array('year'=>$year, 'day'=>$day));
 		if(is_dir($folder)) {
 			for($stamp = strtotime("-1 week", $stamp); $stamp >= $first_day; $stamp = strtotime("-1 week", $stamp))

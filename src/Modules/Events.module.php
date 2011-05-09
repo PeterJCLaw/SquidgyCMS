@@ -71,7 +71,7 @@ class AdminEvents extends Admin {
 					."Finish_hour = $finish_hour\nFinish_minute = $finish_minute\nFinish_month = $finish_month\nFinish_day = $finish_day\nFinish_year = $finish_year\n"
 					."\n--\n"."X-Mailer: PHP/".phpversion();	//mail signature, including php version
 
-		
+
 			mail(email_addr("webmaster"), "New $website_name_short Event by $username: '$event_title'", $body, "From: $website_name_short Admin Form <$website_form_email>");
 		}
 
