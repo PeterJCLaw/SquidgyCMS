@@ -130,3 +130,18 @@ ul.tick_list li	{ vertical-align: middle; line-height: 1.5em; display: block; fl
 	font-family: monospace;
 	font-size: 0.9em;
 }
+
+/* Files Block */
+
+ul.files-listing li {
+	float: left;
+	list-style-type: none;
+	width: 200px;
+}
+ul.files-listing li img {
+	display: block;
+	margin: 0 auto;
+}
+ul.files-listing li p {
+	text-align: center;
+}
