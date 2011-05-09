@@ -44,7 +44,6 @@ class AdminContent extends Admin {
 	function submit($content=0) {
 		list($chunk_title, $chunk_id, $header_link) = array();
 		extract($_POST, EXTR_IF_EXISTS);
-		global $debug_info;
 
 		$error	= "";
 
@@ -71,7 +70,7 @@ class AdminContent extends Admin {
 			$chunk_id	= urlencode($chunk_id);
 		}
 
-		$debug_info .= @"\$old_chunk_id = '$old_chunk_id', \$chunk_id = '$chunk_id'\n<br />\n";
+		log_info('AdminContent', array('old_chunk_id' => $old_chunk_id, 'chunk_id' => $chunk_id));
 
 		$header_link	= "&p=$chunk_id";
 
@@ -160,11 +159,10 @@ class Content {
 	 * @param finish An indicator of the position to stop parsing at.
 	 */
 	function SquidgyParserFile($page_file, $start = 0, $finish = 0) {
-		global $debug, $debug_info;
 		$page	= file_get_contents($page_file);
 		$len	= strlen($page);
 
-		$debug_info	.= "Parser: start = $start, finish = $finish, ";
+		log_info('Parser', array('start' => $start, 'finish' => $finish));
 
 		if(!empty($start) || !empty($finish)) {	//then we need to shorten it
 			if(!empty($start))
@@ -177,7 +175,7 @@ class Content {
 			else
 				$finish_pos	= -1;
 
-			$debug_info	.= "start_pos = $start_pos, finish_pos = $finish_pos<br />\n";
+			log_info('Parser', array('start_pos' => $start_pos, 'finish_pos' => $finish_pos));
 
 			if($start_pos >= $len || ($start_pos >= $finish_pos && $finish_pos != -1) || $start_pos === $finish_pos)
 				return FALSE;
@@ -190,7 +188,6 @@ class Content {
 				$page	= substr($page, (int)$start_pos, ((int)$finish_pos)-((int)$start_pos));
 		}
 
-		$debug_info	.= "<br />\n";
 		return Content::SquidgyParser($page);
 	}
 
@@ -199,7 +196,6 @@ class Content {
 	 * @param page A strng containing the markup to parse.
 	 */
 	function SquidgyParser($page) {
-		global $debug, $debug_info;
 		$enabled_modules	= Module::list_enabled(true);
 		$len	= strlen($page);
 		$i	= 0;
@@ -213,7 +209,7 @@ class Content {
 			$args	= substr($block_call, strlen($type)+2);	//grab the arguments
 			$args	= Content::SquidgyParseArgs($args);	//turn them into a useful array
 
-			$debug_info	.= "block_call = '$block_call', i = '$i', type = '$type', args = '".print_r($args, true)."'\n<br />\n";
+			log_info('Parser', array('block_call' => $block_call, 'i' => $i, 'type' => $type, 'args' => $args));
 
 			$block_html	= '';
 

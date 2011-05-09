@@ -138,7 +138,7 @@ class Admin extends ModuleTemplate {
 	function print_select_cells($list, $req = '') {
 	$type	= $this->section;
 	$type_h	= str_replace("_", " ", ucwords($type));
-	global $page_n, $debug_info;
+	global $page_n;
 	if(!in_array($req, $list))
 		$req	= '';
 	?>
@@ -219,7 +219,6 @@ class Admin extends ModuleTemplate {
 	/* This function generates a Time selector */
 	function genTimeSelector($prefix, $hour = 19, $min = 0)
 	{
-		global $debug_info;
 		echo "\n<select name=\"${prefix}hour\">";
 
 		for($i = 0; $i <= 23; $i++)
@@ -231,7 +230,6 @@ class Admin extends ModuleTemplate {
 		for($i = 0; $i <= 56; $i++)
 		{
 			if($i % 5 == 0) {
-				$debug_info .= "\$i=$i\n<br />\n";
 				echo "\n	<option value=\"$i\"" . ($i == $min ? ' selected="selected"' : "") . ">".($i<10?"0":"")."$i</option>";
 			}
 		}

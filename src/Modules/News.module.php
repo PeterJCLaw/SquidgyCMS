@@ -12,13 +12,13 @@ class AdminNews extends Admin {
 	}
 
 	function printFormAdmin() {
-		global $debug_info;	?>
+?>
 			<table><tr>
 			<th>Valid Until:</th><td>
 				<?php
 				list($day, $month, $year) = split(".",date("j.n.Y", strtotime('+7 days')));
 
-				$debug_info .= "\$day=$day,	\$month=$month,	\$year=$year\n<br />\n";
+				log_info('Valid Until', array('day' => $day, 'month' => $month, 'year' => $year));
 
 				$this->genDateSelector("", 'News_form', $day, $month, $year);
 				?>

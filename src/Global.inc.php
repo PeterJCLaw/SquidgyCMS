@@ -1,5 +1,4 @@
 <?php
-$debug_info	= "";
 $debug		= 0;
 $ajax		= 1;	//just to be sure
 $allow_logging	= true;
@@ -53,8 +52,8 @@ else
 	$page_req	= urlencode($p);
 
 //use cookies only to handle session stuff
-$debug_info		.="\n ini_set(\"session.use_only_cookies\", \"1\") = ".ini_set("session.use_only_cookies", "1")."\n<br />";
-$debug_info		.="\n ini_set('url_rewriter.tags', '') = ".ini_set('url_rewriter.tags', '')."\n<br />";
+log_info("Global ini_set('session.use_only_cookies', '1')", ini_set('session.use_only_cookies', '1'));
+log_info("Global ini_set('url_rewriter.tags', '')", ini_set('url_rewriter.tags', ''));
 
 $referrer		= isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : "";
 

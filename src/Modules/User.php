@@ -158,9 +158,8 @@ class User {
 
 	/* This function prints the logon form on any page its needed */
 	function print_logon_form() {
-		global $debug_info;
 		$username = $_POST['username'];
-		$debug_info	.= "(login_form)\$username=$username\n<br />\n";
+		log_info('login_form', array('username' => $username));
 ?>
 <form id="login_form" method="post" action="" onsubmit="this.action = window.location.hash;">
 <table id="login"><?php
@@ -192,7 +191,7 @@ class UserLogin extends User {
 	function UserLogin() {
 		session_start();	//start the php session, just in case
 		$this->logged_in = FALSE;
-		global $debug_info, $cookie_name;
+		global $cookie_name;
 
 		if(!empty($_GET['logout'])) {	//do a logout if requested
 			$this->logout();
@@ -214,7 +213,7 @@ class UserLogin extends User {
 			$type = 'new';
 		}
 
-		$debug_info	.= "(UserLogin)\$username=$username\n<br />\n";
+		log_info('UserLogin', array('username' => $username));
 
 		//if the username is blank, or construction fails then bail
 		if(empty($username) || !parent::__construct($username))
@@ -225,7 +224,7 @@ class UserLogin extends User {
 
 		if($type == 'new')
 			if($remember_me) {	//if they want: set a cookie to expire in 100 days, only valid for this sub-site
-				$debug_info .= "Remember Me is on\n<br />\n";
+				log_info('UserLogin - Remember Me is on');
 				$this->setcookie($cookie_name, $this->id);
 				$this->setcookie($cookie_name.'_hash', $this->pass_hash);
 				$type = 'cookie';
@@ -264,7 +263,7 @@ class UserLogin extends User {
 
 	/* This function logs the user out */
 	function logout() {
-		global $debug_info, $username, $referrer, $cookie_name;
+		global $username, $referrer, $cookie_name;
 
 		$_SESSION['hash'] = $_SESSION['user'] = $username = "";	//unset all indications of the user being logged in
 		if(isset($_COOKIE[$cookie_name]))
@@ -275,7 +274,7 @@ class UserLogin extends User {
 		$ref	= str_replace("success=1", "", $referrer);
 		$ref	= str_replace("success=0", "", $ref);
 		$ref	= str_replace("logout=1", "", $ref);
-		$debug_info	.= "User has been logged out\n<br />\$ref=$ref\n<br />\n";
+		log_info('User has been logged out', array('ref' => $ref));
 		header("Location: $ref");
 		return;
 	}

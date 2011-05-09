@@ -61,7 +61,6 @@ OUT;
 	function submit($content=0) {
 		list($del, $publish, $enable, $alias) = array();
 		extract($_POST, EXTR_IF_EXISTS);
-		global $debug_info;
 		$error	= "";
 
 		if(!empty($del)) {

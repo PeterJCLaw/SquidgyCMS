@@ -120,8 +120,6 @@ function cmp_by_filename_id($a, $b)
 /* get the next id for the appropriate item */
 function get_next_id($where, $filter)
 {
-	global $debug_info;
-
 	$list	= FileSystem::Filtered_File_List($where, $filter);
 
 	$id_list	= array();
@@ -141,7 +139,7 @@ function get_next_id($where, $filter)
 */
 function send_mail($to, $subject, $message, $headers)
 {
-	global $committee_email, $comm_email_postfix, $website_name, $debug_info;
+	global $committee_email, $comm_email_postfix, $website_name;
 
 	$to_string	= is_array($to) ? implode(", ", $to) : $to;	//convert it to a string for analysis if needed
 	$bed_to	= !strpos($to_string, "@");	//find if the passed email has an @ char
@@ -174,8 +172,8 @@ function send_mail($to, $subject, $message, $headers)
 		$subject	= "[FAO: ".implode(", ", $to_list)."]".$subject;
 	}
 
-	$debug_info	.="\n[send_mail]\n<br />\$to=$to\n<br />\$to_string=$to_string\n<br />\$_to_=$_to_\n<br />\$subject=$subject\n<br />\$message=$message\n<br />"
-		."\$headers=$headers\n<br />\$separate_emails=".($separate_emails ? "True" : "False")."\n<br />\n[/send_mail]\n";
+	log_info('send_mail', array('to' => $to, 'to_string' => $to_string, '_to_' => $_to_, 'subject' => $subject,
+		'message' => $message, 'headers' => $headers, 'separate_emails' => $separate_emails));
 
 	return mail($_to_, $subject, $message, $headers);
 }

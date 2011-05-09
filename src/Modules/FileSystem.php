@@ -111,7 +111,7 @@ class FileSystem {
 	/* This function takes in the file name and retruns true or false depending on whether it's been declared as a file to ignore (in config.inc) */
 	function ignore_file($file)
 	{
-		global $ignore_files, $ignore_exts, $ignore_parts, $debug_info, $show_all;
+		global $ignore_files, $ignore_exts, $ignore_parts, $show_all;
 
 		if(is_array($ignore_files))			//list of filenames to ignore
 			$file_block = in_array(FileSystem::returnFileName($file), $ignore_files);
@@ -132,7 +132,7 @@ class FileSystem {
 		else
 			$part_block = stristr($file, $part_val) ? TRUE : FALSE;
 
-	//	$debug_info	.= "ingore_file: $file,	ext_block=".($ext_block ? 'TRUE' : 'FALSE').",	file_block=".($file_block ? 'TRUE' : 'FALSE').",	part_block=".($part_block ? 'TRUE' : 'FALSE')."\n<br />\n";
+		log_info(null, array('ingore_file' => $file, 'ext_block' => $ext_block, 'file_block' => $file_block, 'part_block' => $part_block));
 
 		return ((($ext_block || $file_block || $part_block) && !$show_all) || FileSystem::secure_dir($file));
 	}
