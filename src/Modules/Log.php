@@ -74,12 +74,12 @@ class Log {
 	}
 }
 
-function log_error($text, $vars_arr = '')
+function log_error($text, $vars = null)
 {
 	Log::getInstance()->error($text, $vars);
 }
 
-function log_info($text, $vars = '')
+function log_info($text, $vars = null)
 {
 	if(empty($GLOBALS['debug']))
 		return;
