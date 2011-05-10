@@ -84,11 +84,20 @@ TPL;
 	}
 
 	/**
+	 * Returns the real path to the item.
+	 */
+	function getRealPath($itemName)
+	{
+		return "$this->pathOffset/$itemName";
+	}
+
+	/**
 	 * Returns the link to the item, be it a file or folder, adjusted for immediate use.
 	 */
 	function getLinkFor($itemName)
 	{
-		$link = "$this->pathOffset/$itemName";
+		// TODO: do we want to make these links absolute?
+		$link = $this->getRealPath($itemName);
 		if (is_dir($link))
 		{
 			// TODO: make this work, this is wrong
