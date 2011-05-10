@@ -21,7 +21,6 @@ ErrorDocument 500 ${install_root}index.php?id=500
 	RewriteBase $install_root
 	RewriteEngine on
 	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*)$ ${install_root}index.php?s=$1 [L,QSA]
 </IfModule>
 
