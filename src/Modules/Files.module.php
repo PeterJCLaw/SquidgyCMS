@@ -43,7 +43,7 @@ class BlockFiles extends Block {
 			$folder = Path::tidy($folder);
 			if ($folder[0] == '/' || strpos($folder, '../') != False)
 			{
-				log_error('BlockFiles->Listing : Invalid path', array('path' => $path, 'args' => $args));
+				log_error('BlockFiles->Listing : Invalid folder specified', array('folder' => $folder, 'args' => $args));
 				return False;
 			}
 
