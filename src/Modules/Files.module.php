@@ -41,7 +41,7 @@ class BlockFiles extends Block {
 		{
 			$folder = $args[0];
 			$folder = Path::tidy($folder);
-			if ($folder[0] == '/' || strpos($folder, '../') != False)
+			if (!Path::isBelow($folder))
 			{
 				log_error('BlockFiles->Listing : Invalid folder specified', array('folder' => $folder, 'args' => $args));
 				return False;
@@ -52,6 +52,13 @@ class BlockFiles extends Block {
 
 		// TODO: actually getting $dir from the url or $_GET
 		$dir = '.';
+		if (!Path::isBelow($dir))
+		{
+			log_error('BlockFiles->Listing : Blocked an attempt to view an external folder', array('dir' => $dir, 'args' => $args));
+			// TODO: do we want to 403 here?
+			return '<strong>Access to paths not below the root are not allowed!</strong>';
+		}
+
 		$files = Folder::scan("$this->pathOffset/$dir");
 
 		$out = '<ul class="files-listing">';
@@ -214,6 +221,22 @@ class Path
 		$info = pathinfo($path);
 		$base = basename($path, $info['extension']);
 		return $base;
+	}
+
+	/**
+	 * Inspects a path to determine if it points at a directory below itself or not.
+	 * Examples:
+	 *   ../.. => False
+	 *   foo/bar => True
+	 *   foo/.. => False
+	 */
+	function isBelow($path)
+	{
+		$tidy = self::tidy($path);
+		$isBelow = $tidy[0] != '/' && $tidy !== '..'
+		            && strpos($tidy, '../') === False
+		            && strpos($tidy, '/..') === False;
+		return $isBelow;
 	}
 
 	/**
