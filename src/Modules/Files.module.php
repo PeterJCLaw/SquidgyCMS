@@ -205,7 +205,8 @@ class Path
 	function getExtension($path)
 	{
 		$info = pathinfo($path);
-		return $info['extension'];
+		$extension = isset($info['extension']) ? $info['extension'] : '';
+		return $extension;
 	}
 
 	function getFileNameWithoutExtension($path)
