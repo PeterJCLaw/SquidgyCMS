@@ -189,7 +189,7 @@ TPL;
 	function getImageFor($name)
 	{
 		$ext = Path::getExtension($name);
-		$type = $this->getIconTypeFor($ext);
+		$type = self::getIconTypeFor($ext);
 		return $this->getIconFor($type);
 	}
 }
