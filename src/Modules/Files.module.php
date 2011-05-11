@@ -35,6 +35,35 @@ class BlockFiles extends Block {
 		$this->pathOffset = "Sites/$GLOBALS[site]/Files";
 	}
 
+	function Breadcrumbs($args)
+	{
+		$dir = $this->getRequestedFolder();
+		$tidy = Path::tidy($dir);
+		if (!Path::isBelow($tidy))
+		{
+			log_error('BlockFiles->Breadcrumbs : Blocked an attempt to view an external folder', array('dir' => $dir, 'args' => $args));
+			return False;
+		}
+
+		// TODO: get the actual page name from somewhere
+		$rootItem = new FilesRootItem('$page-name', $this->pathOffset);
+		$parts[] = $rootItem->getLinkHTML();
+
+		if (!Path::areSame($tidy, '.'))
+		{
+			$before = '.';
+			foreach (explode('/', $tidy) as $part)
+			{
+				$relativePath = Path::combine($before, $part);
+				$item = new FilesItem($relativePath, $this->pathOffset);
+				$parts[] = $item->getLinkHTML();
+				$before = $relativePath;
+			}
+		}
+
+		return implode(' / ', $parts);
+	}
+
 	function Listing($args)
 	{
 		if (!empty($args[0]))
@@ -204,6 +233,19 @@ TPL;
 	}
 
 	/**
+	 * Returns a full HTML link to the item.
+	 * Used for the breadcrumbs.
+	 */
+	function getLinkHTML()
+	{
+		$href = $this->getHref();
+		$name = $this->getName();
+		$title = $this->getTitle();
+		$link = "<a href=\"$href\" title=\"$title\">$name</a>";
+		return $link;
+	}
+
+	/**
 	 * Returns the real path to the item.
 	 */
 	function getRealPath()
@@ -280,6 +322,31 @@ TPL;
 }
 
 /**
+ * Represents the root item in the breadcrumb listing.
+ */
+class FilesRootItem extends FilesItem
+{
+	/**
+	 * Returns the link to the root page that we're actually viewing the files from.
+	 */
+	function getHref()
+	{
+		// TODO: $page/path/to/folder
+		return '?';
+	}
+
+	function getTitle()
+	{
+		return 'Click to return to the original page';
+	}
+
+	function isDir()
+	{
+		return True;
+	}
+}
+
+/**
  * A static class containing a collection of path related helper functions.
  */
 class Path
@@ -311,6 +378,17 @@ class Path
 		$info = pathinfo($path);
 		$base = basename($path, $info['extension']);
 		return $base;
+	}
+
+	/**
+	 * Compares the two paths to see if they point at the same file.
+	 */
+	function areSame($a, $b)
+	{
+		$a_tidy = self::tidy($a);
+		$b_tidy = self::tidy($b);
+		$areSame = $a_tidy === $b_tidy;
+		return $areSame;
 	}
 
 	/**
