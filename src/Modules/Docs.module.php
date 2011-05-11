@@ -240,7 +240,7 @@ class Docs {	//parent class for useful functions
 								$href			= "javascript:toggle_FE('FE_$item_id', 'FE_LI_$item_id');\" class=\"js_link";
 							}
 							$li_insert		= " id=\"FE_LI_$item_id\" class=\"$li_ins_class\"";
-							log_info('item_sub_val' => $item_sub_val, 'li_insert' => $li_insert));
+							log_info('file_tree.foreach is_dir', array('item_sub_val' => $item_sub_val, 'li_insert' => $li_insert));
 						} else {
 							$item_name	= FileSystem::returnFileName($item_name); //gives us just the name (no extension) of the file
 							$title		= "Go to $item_name";
@@ -261,7 +261,7 @@ class Docs {	//parent class for useful functions
 		else
 			return '<span style="display: none;">No files to display</span>';
 
-		log_info('path' => $path, 'base_id' => $base_id, 'tabs' => "/$tabs/"));
+		log_info('file_tree (end)', array('path' => $path, 'base_id' => $base_id, 'tabs' => "/$tabs/"));
 
 		return $retval;
 	}

@@ -83,7 +83,7 @@ class AdminProfile extends Admin {
 			$user->change_password($old_pass, $new_pass, $confirm_pass);
 
 		log_info(null, array('Password' => array('out_hash' => $out_hash, 'new_hash' => $new_hash, 'pass_hash' => $pass_hash),
-			'Spiel' => $content, 'Photo' => $image_path, 'Gender' => $n_gender, 'Name' => $new_name);
+			'Spiel' => $content, 'Photo' => $image_path, 'Gender' => $n_gender, 'Name' => $new_name));
 
 		return $user->save();
 	}
