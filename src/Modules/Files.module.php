@@ -327,6 +327,11 @@ class Path
 	 */
 	function tidy($path)
 	{
+		if (empty($path))
+		{
+			return '';
+		}
+
 		if (substr($path, 0, 2) === './')
 		{
 			$path = substr($path, 2);
