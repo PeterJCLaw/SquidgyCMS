@@ -93,7 +93,7 @@ ChangeMonitor.getInstance = function(id)
 }
 
 /**
- * Called by the onchange handler for a textarea.
+ * Called by the onkeydown handler for a textarea.
  */
 function monitor_changes(id)
 {
