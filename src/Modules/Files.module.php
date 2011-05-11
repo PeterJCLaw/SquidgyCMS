@@ -280,6 +280,11 @@ TPL;
  */
 class Path
 {
+	function Path()
+	{
+		trigger_error('Instance of static class '.__CLASS__.' not allowed.', E_USER_ERROR);
+	}
+
 	/**
 	 * Combine an arbitrary number of paths into one path, using '/' as a separator.
 	 */
@@ -361,6 +366,11 @@ class Path
  */
 class Folder
 {
+	function Folder()
+	{
+		trigger_error('Instance of static class '.__CLASS__.' not allowed.', E_USER_ERROR);
+	}
+
 	/**
 	 * Folder scanning function similar to PHP5 scandir, and uses that if available.
 	 * @param directory The directory that will be scanned.
