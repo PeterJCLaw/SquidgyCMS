@@ -29,7 +29,7 @@ function get_content_preview(content)
  * Class that tracks changes in a text input field,
  * folding temporally close changes together before acting upon them.
  */
-function ChangeMonitor(id)
+function ChangeMonitor(id, changeCallBack)
 {
 	// since we're called by the keyDown event, this will be the value before any changes.
 	var _original = $(id).value;
@@ -76,18 +76,18 @@ function ChangeMonitor(id)
 	//	console.log('_original:'+_original);
 		if (newValue != _original)
 		{
-			get_content_preview(newValue);
+			changeCallBack(newValue);
 		}
 	}
 }
 
 var monitor_changes_static = null;
 
-ChangeMonitor.getInstance = function(id)
+ChangeMonitor.getInstance = function(id, changeCallBack)
 {
 	if (monitor_changes_static == null)
 	{
-		monitor_changes_static = new ChangeMonitor(id);
+		monitor_changes_static = new ChangeMonitor(id, changeCallBack);
 	}
 	return monitor_changes_static;
 }
@@ -102,7 +102,7 @@ function monitor_changes(id)
 	{
 		return;
 	}
-	ChangeMonitor.getInstance(id).changed();
+	ChangeMonitor.getInstance(id, get_content_preview).changed();
 }
 
 // Add a row of articles
