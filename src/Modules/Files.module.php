@@ -166,6 +166,9 @@ class BlockFiles extends Block {
 	}
 }
 
+/**
+ * Represents a single item in a folder, be it a folder or a file.
+ */
 class FilesItem
 {
 	var $isDir = null;
