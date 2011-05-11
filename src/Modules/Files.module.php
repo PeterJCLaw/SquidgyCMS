@@ -50,8 +50,7 @@ class BlockFiles extends Block {
 			$this->pathOffset = "$this->pathOffset/$folder";
 		}
 
-		// TODO: actually getting $dir from the url or $_GET
-		$dir = '.';
+		$dir = $this->getRequestedFolder();
 		if (!Path::isBelow($dir))
 		{
 			log_error('BlockFiles->Listing : Blocked an attempt to view an external folder', array('dir' => $dir, 'args' => $args));
@@ -111,6 +110,17 @@ TPL;
 			return $itemName;
 		}
 		return $link;
+	}
+
+	/**
+	 * Returns the folder that the user requested, tidied.
+	 */
+	function getRequestedFolder()
+	{
+		// TODO: support $page/path/to/folder
+		$dir = empty($_GET['dir']) ? '.' : $_GET['dir'];
+		$tidy = Path::tidy($dir);
+		return $tidy;
 	}
 
 	/**
