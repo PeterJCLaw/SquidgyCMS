@@ -181,7 +181,6 @@ function get(type, orig) {
 	var SI		= that.selectedIndex;
 	var SI_len	= that.length;
 
-
 	if(that.value == orig && !window.AJAX_enabled) {	//if its unchanged
 		$(type+'_form').reset();
 		return;
