@@ -64,52 +64,12 @@ class BlockFiles extends Block {
 		foreach ($files as $file)
 		{
 			// TODO: filtering
-			$out .= $this->getTemplate("$dir/$file");
+			$item = new FilesItem("$dir/$file", $this->pathOffset);
+			$out .= $item->getTemplate($this);
 		}
 		$out .= '</ul>';
 		return $out;
 
-	}
-
-	/**
-	 * Wraps the given item in the template for display.
-	 * @param relativePath The path to the item, relative to our localised filesystem root.
-	 */
-	function getTemplate($relativePath)
-	{
-		$itemName = basename($relativePath);
-		$itemName_wrap = wordwrap($itemName, 13, "<br />\n");
-		$link = $this->getLinkFor($relativePath);
-		$image = $this->getImageFor($itemName);
-		return <<<TPL
-<li>
-	<img src="$image" title="Click to download/view $itemName" />
-	<p>$itemName_wrap</p>
-</li>
-TPL;
-	}
-
-	/**
-	 * Returns the real path to the item.
-	 */
-	function getRealPath($itemName)
-	{
-		return "$this->pathOffset/$itemName";
-	}
-
-	/**
-	 * Returns the link to the item, be it a file or folder, adjusted for immediate use.
-	 */
-	function getLinkFor($itemName)
-	{
-		// TODO: do we want to make these links absolute?
-		$link = $this->getRealPath($itemName);
-		if (is_dir($link))
-		{
-			// TODO: make this work, this is wrong
-			return $itemName;
-		}
-		return $link;
 	}
 
 	/**
@@ -193,14 +153,125 @@ TPL;
 	}
 
 	/**
-	 * Returns the path to an image to display for a file.
-	 * We display an icon based on the type of the file.
+	 * Callback to get the image for a FilesItem.
+	 * Architected thus so that changing the image should be relatively easy,
+	 * and because the sizing stuff shouldn't be in the FilesItem instance.
 	 */
-	function getImageFor($name)
+	function getImageFor($item)
 	{
+		$name = $item->getName();
 		$ext = Path::getExtension($name);
 		$type = self::getIconTypeFor($ext);
 		return $this->getIconFor($type);
+	}
+}
+
+class FilesItem
+{
+	var $isDir = null;
+	var $name;
+	var $pathOffset;
+	var $relativePath;
+
+	function FilesItem($relativePath, $pathOffset)
+	{
+		$this->relativePath = Path::tidy($relativePath);
+		$this->pathOffset = Path::tidy($pathOffset);
+	}
+
+	/**
+	 * Wraps the given item in the template for display.
+	 * @param provider An image provider. Must have a method called getImageFor that accepts a FilesItem as its only argument.
+	 */
+	function getTemplate($provider)
+	{
+		$name = $this->getName();
+		$name_wrap = wordwrap($name, 13, "<br />\n");
+		$link = $this->getLink();
+		$title = $this->getTitle();
+		$image = $this->getImage($provider);
+		return <<<TPL
+<li>
+	<a href="$link" title="$title">
+		<img src="$image" />
+		<p>$name_wrap</p>
+	</a>
+</li>
+TPL;
+	}
+
+	/**
+	 * Returns the real path to the item.
+	 */
+	function getRealPath()
+	{
+		return "$this->pathOffset/$this->relativePath";
+	}
+
+	/**
+	 * Returns whether or not this FilesItem is a directory.
+	 */
+	function isDir()
+	{
+		// TODO: cache this result
+		$real = $this->getRealPath();
+		$isDir = is_dir($real);
+		return $isDir;
+	}
+
+	/**
+	 * Returns a title for a link to the item
+	 */
+	function getTitle()
+	{
+		$isDir = $this->isDir();
+		$name = $this->getName();
+		$title = 'Click to '.($isDir ? 'open' : 'download/view').' '.$name;
+		return $title;
+	}
+
+	/**
+	 * Returns the name of the item.
+	 */
+	function getName()
+	{
+		// TODO: cache this?
+		$name = basename($this->relativePath);
+		return $name;
+	}
+
+	/**
+	 * Returns the link to the item, be it a file or folder, adjusted for immediate use.
+	 */
+	function getLink()
+	{
+		// TODO: do we want to make these links absolute?
+		if ($this->isDir())
+		{
+			return "?dir=$this->relativePath";
+		}
+		$link = $this->getRealPath();
+		return $link;
+	}
+
+	/**
+	 * Returns the path to an image to display for a file, using the given provider.
+	 * @param provider An image provider. Must have a method called getImageFor that accepts a FilesItem as its only argument.
+	 */
+	function getImage($provider)
+	{
+		$this->_checkImageProvider($provider);
+		$image = $provider->getImageFor($this);
+		return $image;
+	}
+
+	function _checkImageProvider($provider)
+	{
+		$exists = method_exists($provider, 'getImageFor');
+		if (!$exists)
+		{
+			trigger_error('Image provider does not contain required method "getImageFor".', E_USER_ERROR);
+		}
 	}
 }
 
