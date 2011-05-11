@@ -190,12 +190,12 @@ class FilesItem
 	{
 		$name = $this->getName();
 		$name_wrap = wordwrap($name, 13, "<br />\n");
-		$link = $this->getLink();
+		$href = $this->getHref();
 		$title = $this->getTitle();
 		$image = $this->getImage($provider);
 		return <<<TPL
 <li>
-	<a href="$link" title="$title">
+	<a href="$href" title="$title">
 		<img src="$image" />
 		<p>$name_wrap</p>
 	</a>
@@ -245,8 +245,9 @@ TPL;
 
 	/**
 	 * Returns the link to the item, be it a file or folder, adjusted for immediate use.
+	 * Note that this is the (partial) url to the item, not an HTML anchor.
 	 */
-	function getLink()
+	function getHref()
 	{
 		// TODO: do we want to make these links absolute?
 		if ($this->isDir())
