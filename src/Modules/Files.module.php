@@ -426,6 +426,10 @@ class Path
 
 		if (substr($path, 0, 2) === './')
 		{
+			if (strlen($path) == 2)
+			{
+				return '';
+			}
 			$path = substr($path, 2);
 		}
 
