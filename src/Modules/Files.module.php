@@ -419,14 +419,14 @@ class Path
 			return '';
 		}
 
+		while (strpos($path, '/./') !== False)
+		{
+			$path = str_replace('/./', '/', $path);
+		}
+
 		if (substr($path, 0, 2) === './')
 		{
 			$path = substr($path, 2);
-		}
-
-		while (strpos($path, '/./') !== False)
-		{
-			$path = str_replace('/./', '', $path);
 		}
 
 		while (strpos($path, '//') !== False)
