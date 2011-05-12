@@ -419,6 +419,8 @@ class Path
 			return '';
 		}
 
+		$path .= '/';
+
 		while (strpos($path, '/./') !== False)
 		{
 			$path = str_replace('/./', '/', $path);
@@ -438,14 +440,14 @@ class Path
 			$path = str_replace('//', '/', $path);
 		}
 
-		while (strpos($path, '../', 1) !== False)
+		while ( strlen($path) > 4 && strpos($path, '../', 1) !== False )
 		{
 			$path = preg_replace('/[^\/]+\/\.\.\//', '', $path);
 		}
 
-		if ($path === '.')
+		if (strlen($path) > 0 && $path[strlen($path)-1] === '/')
 		{
-			return '';
+			$path = substr($path, 0, -1);
 		}
 
 		return $path;
