@@ -411,6 +411,51 @@ class Path
 	 * Tidies a path, removing duplicate slashes etc.
 	 * Note that this is not the same as realpath,
 	 *  as the resulting path is still relative, and is not required to exist.
+	 * This is a second implementation that differs from tidy.
+	 * Here we do what a human does when inspecting a path,
+	 *  that is look at each component in turn, rather than trying to
+	 *  apply a collection of replacement tools.
+	 */
+	function tidy2($path)
+	{
+		if (empty($path))
+		{
+			return '';
+		}
+
+		$origParts = explode('/', $path);
+		$parts = array();
+
+		foreach ($origParts as $part)
+		{
+			// Ignore empties or current dirs.
+			if ($part == '' || $part == '.')
+			{
+				continue;
+			}
+
+			if ($part == '..')
+			{
+				// If the previous value was not parent, then pop a value
+				$count = count($parts);
+				if ($count > 0 && $parts[$count-1] != '..')
+				{
+					array_pop($parts);
+					continue;
+				}
+			}
+
+			$parts[] = $part;
+		}
+
+		$tidy = implode('/', $parts);
+		return $tidy;
+	}
+
+	/**
+	 * Tidies a path, removing duplicate slashes etc.
+	 * Note that this is not the same as realpath,
+	 *  as the resulting path is still relative, and is not required to exist.
 	 */
 	function tidy($path)
 	{
