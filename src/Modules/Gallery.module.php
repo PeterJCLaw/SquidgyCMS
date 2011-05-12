@@ -52,6 +52,41 @@ class BlockGallery extends BlockFiles {
 	}
 
 	/**
+	 * Static method that determines the resized size of an image based on a box to resize it into.
+	 * @param boxWidth The width of the box to fit the dimensions in
+	 * @param boxHeight The height of the box to fit the dimensions in
+	 * @param origWidth The width of the item to be resized
+	 * @param origHeight The height of the item to be resized
+	 * @returns An array with keys 'width' and 'height' both guaranteed
+	 * to be less than their respective dimension of the fit box,
+	 * but in the same ratio as the original width & height.
+	 */
+	function fitInBox($boxWidth, $boxHeight, $origWidth, $origHeight)
+	{
+		$boxRatio = $boxWidth / $boxHeight;
+		$origRatio = $origWidth / $origHeight;
+
+		if ($boxRatio > $origRatio)
+		{
+			// the height is the determining dimension
+			$h = $boxHeight;
+			$w = $boxHeight * $origRatio;
+		}
+		else
+		{
+			// the width is the determining dimension
+			$w = $boxWidth;
+			$h = $boxWidth / $origRatio;
+		}
+
+		assert($w <= $boxWidth); // width too large
+		assert($h <= $boxHeight); // height too large
+
+		$ret = array('width' => $w, 'height' => $h);
+		return $ret;
+	}
+
+	/**
 	 * Static method that finds out what flavours of image we can support by querying the gd library.
 	 */
 	function getSupportedTypes()
