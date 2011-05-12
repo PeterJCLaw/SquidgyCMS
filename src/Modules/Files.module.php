@@ -443,6 +443,11 @@ class Path
 			$path = preg_replace('/[^\/]+\/\.\.\//', '', $path);
 		}
 
+		if ($path === '.')
+		{
+			return '';
+		}
+
 		return $path;
 	}
 }
