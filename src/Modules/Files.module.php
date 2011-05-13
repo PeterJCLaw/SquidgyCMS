@@ -148,10 +148,12 @@ class BlockFiles extends Block {
 	 * Returns the type that this extension represents.
 	 * Several extensions are grouped together into one type,
 	 *  for instance jpg, jpeg and png are all images.
+	 * @param ext The file extension.
+	 * @param isDir Whether or not the item is a folder.
 	 */
-	function getIconTypeFor($ext)
+	function getIconTypeFor($ext, $isDir)
 	{
-		if (empty($ext))
+		if ($isDir === True)
 		{
 			return 'folder-blue';
 		}
@@ -222,7 +224,8 @@ class BlockFiles extends Block {
 	{
 		$name = $item->getName();
 		$ext = Path::getExtension($name);
-		$type = self::getIconTypeFor($ext);
+		$isDir = $item->isDir();
+		$type = self::getIconTypeFor($ext, $isDir);
 		return $this->getIconFor($type);
 	}
 }
