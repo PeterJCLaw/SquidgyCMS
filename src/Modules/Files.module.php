@@ -244,8 +244,9 @@ class FilesItem
 		$href = $this->getHref();
 		$title = $this->getTitle();
 		$image = $this->getImage($provider);
+		$class = $this->getClass();
 		return <<<TPL
-<li>
+<li class="$class">
 	<a href="$href" title="$title">
 		<img src="$image" />
 		<p>$name_wrap</p>
@@ -284,6 +285,23 @@ TPL;
 		$real = $this->getRealPath();
 		$isDir = is_dir($real);
 		return $isDir;
+	}
+
+	/**
+	 * Returns a class for the list item
+	 */
+	function getClass()
+	{
+		$ext = Path::getExtension($this->getName());
+		if ($ext == '' && $this->isDir())
+		{
+			$class = 'folder';
+		}
+		else
+		{
+			$class = 'file file-'.$ext;
+		}
+		return $class;
 	}
 
 	/**
