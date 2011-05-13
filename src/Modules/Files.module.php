@@ -28,6 +28,7 @@ class BlockFiles extends Block {
 	var $size = 128;
 
 	var $pathOffset; // "Sites/$site/Files/$whateverTheySpecInThePage";
+	var $showHiddenFiles = False; // whether or not to show files starting with .
 
 	// TODO: do we even want to spec 'Files' here?
 	function BlockFiles() {
@@ -92,13 +93,34 @@ class BlockFiles extends Block {
 		$out = '<ul class="files-listing">';
 		foreach ($files as $file)
 		{
-			// TODO: filtering
-			$item = new FilesItem("$dir/$file", $this->pathOffset);
-			$out .= $item->getTemplate($this);
+			if ($this->isValid($file))
+			{
+				$item = new FilesItem("$dir/$file", $this->pathOffset);
+				$out .= $item->getTemplate($this);
+			}
 		}
 		$out .= '</ul>';
 		return $out;
+	}
 
+	/**
+	 * Filter out unwanted files.
+	 */
+	function isValid($filename)
+	{
+		// never show nothings, . or ..
+		if (empty($filename) || $filename == '.' || $filename == '..')
+		{
+			return False;
+		}
+
+		// *nix hidden files
+		if (!$this->showHiddenFiles && $filename[0] == '.')
+		{
+			return False;
+		}
+
+		return True;
 	}
 
 	/**
