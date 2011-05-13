@@ -411,12 +411,11 @@ class Path
 	 * Tidies a path, removing duplicate slashes etc.
 	 * Note that this is not the same as realpath,
 	 *  as the resulting path is still relative, and is not required to exist.
-	 * This is a second implementation that differs from tidy.
 	 * Here we do what a human does when inspecting a path,
 	 *  that is look at each component in turn, rather than trying to
 	 *  apply a collection of replacement tools.
 	 */
-	function tidy2($path)
+	function tidy($path)
 	{
 		if (empty($path))
 		{
@@ -450,52 +449,6 @@ class Path
 
 		$tidy = implode('/', $parts);
 		return $tidy;
-	}
-
-	/**
-	 * Tidies a path, removing duplicate slashes etc.
-	 * Note that this is not the same as realpath,
-	 *  as the resulting path is still relative, and is not required to exist.
-	 */
-	function tidy($path)
-	{
-		if (empty($path))
-		{
-			return '';
-		}
-
-		$path .= '/';
-
-		while (strpos($path, '/./') !== False)
-		{
-			$path = str_replace('/./', '/', $path);
-		}
-
-		if (substr($path, 0, 2) === './')
-		{
-			if (strlen($path) == 2)
-			{
-				return '';
-			}
-			$path = substr($path, 2);
-		}
-
-		while (strpos($path, '//') !== False)
-		{
-			$path = str_replace('//', '/', $path);
-		}
-
-		while ( strlen($path) > 4 && strpos($path, '../', 1) !== False )
-		{
-			$path = preg_replace('/[^\/]+\/\.\.\//', '', $path);
-		}
-
-		if (strlen($path) > 0 && $path[strlen($path)-1] === '/')
-		{
-			$path = substr($path, 0, -1);
-		}
-
-		return $path;
 	}
 }
 

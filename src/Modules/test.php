@@ -68,7 +68,7 @@ $paths = array(
 
 echo '<table><tr>';
 
-echo '<th>'.implode('</th><th>', array('start', 'end', 'tidy', 'tidy matches end', 'tidy2', 'tidy2 matches end', 'areSame')).'</th>';
+echo '<th>'.implode('</th><th>', array('start', 'end', 'tidy', 'tidy matches end', 'areSame')).'</th>';
 
 foreach ($paths as $start => $end)
 {
@@ -76,13 +76,10 @@ foreach ($paths as $start => $end)
 	echo "</tr><tr$class>";
 
 	$tidy = Path::tidy($start);
-	$tidy2 = Path::tidy2($start);
 	$areSame = Path::areSame($start, $end);
 
 	echo "<td>$start</td><td>$end</td><td>$tidy</td><td>";
 	var_dump($tidy === $end);
-	echo "</td><td>$tidy2</td><td>";
-	var_dump($tidy2 === $end);
 	echo '</td><td>';
 	var_dump($areSame);
 	echo '</td>';
