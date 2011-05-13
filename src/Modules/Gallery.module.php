@@ -319,5 +319,6 @@ class GalleryImage
 	function getMD5()
 	{
 		$md5 = md5_file($this->path);
+		return $md5;
 	}
 }
