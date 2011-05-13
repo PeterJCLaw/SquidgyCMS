@@ -63,16 +63,16 @@ class BlockGallery extends BlockFiles {
 		extract($_GET, EXTR_IF_EXISTS);
 
 		$image = new GalleryImage($path);
-		$resource = $image->createResizedImage($width, $height);
+		$thumbPath = $image->getOrCreateResizedImage($this->cacheFolder, $width, $height);
 
-		// TODO: proper caching
-		$file = $this->cacheFolder.'/'.basename($path).'.jpg';
-		$ret = imagejpeg($resource, $file);
-		var_dump($ret);
-		// free memory
-		imagedestroy($resource);
+		// something went wrong
+		if ($thumbPath === null)
+		{
+			// TODO: show an error image?
+			return null;
+		}
 
-		Header("Location: $file");
+		Header("Location: $thumbPath");
 	}
 
 	/**
@@ -215,6 +215,51 @@ class GalleryImage
 	}
 
 	/**
+	 * Gets a resized version of the image by first searching the cache
+	 *  for a suitable image, and if that fails by creating one, and then
+	 *  storing that new image in the cache.
+	 * @param cacheFolder The cache folder to uses.
+	 * @param width The (maximum) width of the new image.
+	 * @param height The (maximum) height of the new image.
+	 * @param keepRatio Whether or not to preserve the current aspect ratio of the image.
+	 * @returns The path to the resized image file.
+	 */
+	function getOrCreateResizedImage($cacheFolder, $width, $height, $keepRatio = True)
+	{
+		if ($keepRatio === True)
+		{
+			$newSize = $this->getSizeInBox($width, $height);
+			$height = $newSize['height'];
+			$width = $newSize['width'];
+		}
+
+		$cachedName = $this->getCachedName($width, $height);
+		$cachedPath = "$cacheFolder/$cachedName";
+
+		// if it's missing then create it if we can.
+		if (!is_file($cachedPath) && is_writable($cacheFolder))
+		{
+			$resource = $this->createResizedImage($width, $height, $keepRatio);
+			if ($resource !== null)
+			{
+				// all cached images are jpg.. it's just simpler that way.
+				imagejpeg($resource, $cachedPath);
+				imagedestroy($resource);
+			}
+			else
+			{
+				log_error('GalleryImage->getOrCreateResizedImage: Unable to create resized image!');
+			}
+		}
+		elseif (!is_writable($cacheFolder))
+		{
+			log_error('GalleryImage->getOrCreateResizedImage: Cache folder not writable!', array('cacheFolder' => $cacheFolder));
+			return null;
+		}
+		return $cachedPath;
+	}
+
+	/**
 	 * Creates a new image that is a copy of the current one,
 	 *  resized to fit in the specified box.
 	 * @param width The (maximum) width of the new image.
@@ -287,6 +332,17 @@ class GalleryImage
 			$resource = imagecreatefromjpeg($this->path);
 		}
 		return $resource;
+	}
+
+	/**
+	 * Get the cached name of the image, for a given width & height.
+	 */
+	function getCachedName($width, $height)
+	{
+		$md5 = $this->getMD5();
+		// all cached images are jpg.. it's just simpler that way.
+		$name = $md5.'-'.$width.'x'.$height.'.jpg';
+		return $name;
 	}
 
 	/**
