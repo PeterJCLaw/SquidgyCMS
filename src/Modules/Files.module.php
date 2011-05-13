@@ -90,7 +90,9 @@ class BlockFiles extends Block {
 
 		$files = Folder::scan("$this->pathOffset/$dir");
 
-		$out = '<ul class="files-listing">';
+		$class = $this->getClass('listing');
+
+		$out = '<ul class="'.$class.'">';
 		foreach ($files as $file)
 		{
 			if ($this->isValid($file))
@@ -132,6 +134,14 @@ class BlockFiles extends Block {
 		$dir = empty($_GET['dir']) ? '.' : $_GET['dir'];
 		$tidy = Path::tidy($dir);
 		return $tidy;
+	}
+
+	/**
+	 * Returns the class for the list element.
+	 */
+	function getClass($methodName)
+	{
+		return 'files-'.strtolower($methodName);
 	}
 
 	/**

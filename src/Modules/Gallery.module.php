@@ -45,6 +45,19 @@ class BlockGallery extends BlockFiles {
 		return $url.'?'.$query;
 	}
 
+	/**
+	 * Returns the class for the list element.
+	 * Overridden to add ourselves, but not replacing
+	 * so that we can inherit most of the styling.
+	 */
+	function getClass($methodName)
+	{
+		$myClass = 'gallery-'.strtolower($methodName);
+		$parentClass = parent::getClass($methodName);
+		$class = $myClass.' '.$parentClass;
+		return $class;
+	}
+
 	function ajax()
 	{
 		// TODO: make this resize the image
