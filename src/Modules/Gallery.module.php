@@ -30,15 +30,14 @@ class BlockGallery extends BlockFiles {
 	{
 		// we only support some image types..
 		$name = $item->getName();
-		$ext = Path::getExtension($name);
-		$supportedTypes = self::getSupportedTypes();
-		if (!in_array($ext, $supportedTypes))
+		if (!self::isFileTypeSupported($name))
 		{
 			return parent::getImageFor($item);
 		}
 
 		$queryParams = array('type' => 'block', 'module' => 'Gallery');
 		$queryParams['width'] = $queryParams['height'] = $this->size;
+		$queryParams['path'] = $item->getRealPath();
 
 		$url = 'ajax.php';
 		$query = toQueryString($queryParams);
@@ -60,6 +59,14 @@ class BlockGallery extends BlockFiles {
 
 	function ajax()
 	{
+		$width = $height = $path = null;
+		extract($_GET, EXTR_IF_EXISTS);
+
+		if (!self::isFileTypeSupported($path))
+		{
+			die('File type not supported for resizing on the fly.');
+		}
+
 		// TODO: make this resize the image
 		Header('Location: Modules/Files/Oxygen/128/application-pdf.png');
 	}
@@ -100,10 +107,30 @@ class BlockGallery extends BlockFiles {
 	}
 
 	/**
+	 * Static convenience method that checks that the file type
+	 *  of the given file is supported for resizing.
+	 * Currently this is based on the file extension,
+	 *  but eventually I'd like to do something cleverer.
+	 * @param path The path to the file in question.
+	 * @returns (bool) Whether or not the file can be resized.
+	 */
+	function isFileTypeSupported($path)
+	{
+		$ext = Path::getExtension($path);
+		$supportedTypes = self::getSupportedTypes();
+		if (!in_array($ext, $supportedTypes))
+		{
+			return False;
+		}
+		return True;
+	}
+
+	/**
 	 * Static method that finds out what flavours of image we can support by querying the gd library.
 	 */
 	function getSupportedTypes()
 	{
+		// TODO: cache the result
 		$info = gd_info();
 		$types = array();
 
