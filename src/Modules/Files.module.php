@@ -487,9 +487,9 @@ class Folder
 	/**
 	 * Folder scanning function similar to PHP5 scandir, and uses that if available.
 	 * @param directory The directory that will be scanned.
-	 * @param directory By default, the sorted order is alphabetical in ascending order.
-	 *                  If the optional sorting_order is set to non-zero,
-	 *                   then the sort order is alphabetical in descending order.
+	 * @param sorting_order By default, the sorted order is alphabetical in ascending order.
+	 *                      If the optional sorting_order is set to non-zero,
+	 *                       then the sort order is alphabetical in descending order.
 	 * @return Returns an array of filenames on success, or FALSE on failure.
 	 *         If directory is not a directory, then boolean FALSE is returned,
 	 *          and an error of level E_WARNING is generated.
@@ -516,6 +516,15 @@ class Folder
 		}
 
 		closedir($handle);
+
+		if ($sorting_order !== 0)
+		{
+			rsort($files);
+		}
+		else
+		{
+			sort($files);
+		}
 
 		return $files;
 	}
