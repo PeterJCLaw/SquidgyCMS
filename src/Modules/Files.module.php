@@ -40,7 +40,7 @@ class BlockFiles extends Block {
 	{
 		$dir = $this->getRequestedFolder();
 		$tidy = Path::tidy($dir);
-		if (!Path::isBelow($tidy))
+		if (Path::isAbove($tidy))
 		{
 			log_error('BlockFiles->Breadcrumbs : Blocked an attempt to view an external folder', array('dir' => $dir, 'args' => $args));
 			return False;
@@ -81,11 +81,11 @@ class BlockFiles extends Block {
 		}
 
 		$dir = $this->getRequestedFolder();
-		if (!Path::isBelow($dir))
+		if (Path::isAbove($dir))
 		{
 			log_error('BlockFiles->Listing : Blocked an attempt to view an external folder', array('dir' => $dir, 'args' => $args));
 			// TODO: do we want to 403 here?
-			return '<strong>Access to paths not below the root are not allowed!</strong>';
+			return '<strong>Access to paths above the root are not allowed!</strong>';
 		}
 
 		$files = Folder::scan("$this->pathOffset/$dir");
@@ -445,6 +445,20 @@ class Path
 	}
 
 	/**
+	 * Inspects a path to determine if it points at a directory above itself or not.
+	 * Examples:
+	 *   ../.. => True
+	 *   foo/bar => False
+	 *   foo/.. => False
+	 */
+	function isAbove($path)
+	{
+		$self = self::areSame($path, '.');
+		$isAbove = !self::isBelow($path) && !$self;
+		return $isAbove;
+	}
+
+	/**
 	 * Inspects a path to determine if it points at a directory below itself or not.
 	 * Examples:
 	 *   ../.. => False
@@ -454,7 +468,7 @@ class Path
 	function isBelow($path)
 	{
 		$tidy = self::tidy($path);
-		$isBelow = $tidy[0] != '/' && $tidy !== '..'
+		$isBelow = strlen($tidy) > 0 && $tidy[0] != '/' && $tidy !== '..'
 		            && strpos($tidy, '../') === False
 		            && strpos($tidy, '/..') === False;
 		return $isBelow;
