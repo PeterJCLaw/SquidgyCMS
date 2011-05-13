@@ -484,7 +484,7 @@ class Path
 	 */
 	function tidy($path)
 	{
-		if (empty($path))
+		if (empty($path) || $path === '.' || $path === './')
 		{
 			return '';
 		}
