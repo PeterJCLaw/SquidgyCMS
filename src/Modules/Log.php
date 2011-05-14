@@ -1,6 +1,6 @@
 <?php
 #name = Log
-#description = Enables the logging of debug informatin and errors
+#description = Enables the logging of debug information and errors
 #package = Core - required
 #type = system
 ###
