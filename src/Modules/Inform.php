@@ -14,8 +14,6 @@ class Inform
 	{
 		$this->infos =& $_SESSION['inform-infos'];
 		$this->errors =& $_SESSION['inform-errors'];
-		$this->info('Here is some information');
-		$this->error('Something went horribly wrong');
 	}
 
 	function getInstance()
