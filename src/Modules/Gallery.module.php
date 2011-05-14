@@ -46,8 +46,8 @@ class BlockGallery extends BlockFiles {
 		return <<<TPL
 <li class="$class">
 	<a href="$href" title="$title">
-		<div class="img" style="width: {$this->size};">
-			<div style="height: {$this->size}; width: {$this->size}px;">
+		<div class="img" style="width: {$this->size}px;">
+			<div style="height: {$this->size}px; width: {$this->size}px;">
 				<img src="$image" alt="A $ext file." />
 			</div>
 		</div>
