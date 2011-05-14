@@ -162,11 +162,8 @@ TPL;
 		}
 		if ($isResizable)
 		{
-			echo 'creating';
-			var_dump($path);
 			$image = new GalleryImage($path);
 			$mime = $image->getMIME();
-			var_dump($mime);
 			$isResizable = in_array($mime, $supportedTypes['mimes']);
 		}
 		return $isResizable;
