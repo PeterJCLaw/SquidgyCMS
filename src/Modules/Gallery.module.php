@@ -19,6 +19,10 @@ class BlockGallery extends BlockFiles {
 	{
 		parent::__construct();
 		$this->cacheFolder = Path::combine($this->data_root, 'gallery-cache');
+		if (!is_dir($this->cacheFolder))
+		{
+			mkdir($this->cacheFolder);
+		}
 	}
 
 	/**
