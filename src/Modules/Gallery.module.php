@@ -41,7 +41,7 @@ class BlockGallery extends BlockFiles {
 		$name_wrap = wordwrap($name, 13, "<br />\n");
 		$href = $item->getHref();
 		$title = $item->getTitle();
-		$image = self::getImageFor($item);
+		$image = self::getImageLinkFor($item);
 		$class = $item->getClass();
 		return <<<TPL
 <li class="$class">
@@ -61,15 +61,8 @@ TPL;
 	 * Create a link to the ajax call which we use to serve up
 	 *  a small version of the file in question.
 	 */
-	function getImageFor($item)
+	function getImageLinkFor($item)
 	{
-		// we only support some image types..
-		$name = $item->getName();
-		if (!self::isFileTypeSupported($name))
-		{
-			return parent::getImageFor($item);
-		}
-
 		$queryParams = array('type' => 'block', 'module' => 'Gallery');
 		$queryParams['width'] = $queryParams['height'] = $this->size;
 		$queryParams['path'] = $item->getRealPath();
