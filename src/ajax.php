@@ -39,5 +39,7 @@ switch($type) {
 		echo "Request type not recognised.";
 }
 
-if($debug)
-	echo "\$debug_info = <br />$debug_info<br />";
+if ($debug < 0)
+{
+	echo show_log();
+}
