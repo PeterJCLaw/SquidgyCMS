@@ -46,8 +46,9 @@ class BlockFiles extends Block {
 			return False;
 		}
 
-		// TODO: get the actual page name from somewhere
-		$rootItem = new FilesRootItem('$page-name', $this->pathOffset);
+		// TODO: sort this so that we don't need to use GLOBALS!
+		$page_name = $GLOBALS['chunk_title'];
+		$rootItem = new FilesRootItem($page_name, $this->pathOffset);
 		$parts[] = $rootItem->getLinkHTML();
 
 		if (!Path::areSame($tidy, '.'))
