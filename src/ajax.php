@@ -25,7 +25,7 @@ switch($type) {
 		} else
 			echo "Admin class not defined in module '$class'.";
 		break;
-	
+
 	case 'block':
 		if(has_method($class, 'ajax')) {
 			$thisobj	= new $class();
@@ -33,7 +33,7 @@ switch($type) {
 		} else
 			echo "Ajax method not defined in block '$class'.";
 		break;
-		
+
 	case 'preview':
 	default:
 		echo "Request type not recognised.";
