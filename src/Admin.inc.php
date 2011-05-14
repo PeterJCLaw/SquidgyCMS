@@ -69,6 +69,7 @@ if(!empty($debug) && $debug > 1) {
 	<div id="admin">
 		<div class="admin_head">
 <?php if(isset($success)) echo print_success($success)."\n"; ?>
+<?php echo Inform::getInstance()->show()."\n"; ?>
 			<p id="welcome">Welcome, <?php echo $_SITE_USER->get_first_name(); ?></p>
 		</div>
 		<p>Please note that only changes to the one form that you submit will be saved.</p>

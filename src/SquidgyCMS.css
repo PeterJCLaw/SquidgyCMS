@@ -159,3 +159,25 @@ ul.gallery-listing li div.img div img {
 	outline: 1px solid silver;
 	outline-offset: 3px;
 }
+
+/* Inform Listings */
+
+ul.inform {
+	margin: 7px 0;
+	outline-width: 1px;
+	outline-style: solid;
+	padding: 7px;
+}
+ul.inform.error {
+	background-color: #FF8080;
+	color: #800000;
+	outline-color: red;
+}
+ul.inform.info {
+	background-color: #B4FFB0;
+	color: #005000;
+	outline-color: green;
+}
+ul.inform li {
+	list-style-type: none;
+}

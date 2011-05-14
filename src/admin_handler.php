@@ -52,4 +52,7 @@ else {
 if(!empty($error) || $debug)
 	include "handler.php";
 else
-	header("Location: admin?success=1$header_link");
+{
+	Inform::getInstance()->info('Your changes were saved successfully');
+	header('Location: admin'.$header_link);
+}
