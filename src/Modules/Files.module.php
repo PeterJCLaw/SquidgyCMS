@@ -152,6 +152,7 @@ class BlockFiles extends Block {
 	function buildListingEntry($item)
 	{
 		$name = $item->getName();
+		$ext = Path::getExtension($name);
 		$name_wrap = wordwrap($name, 13, "<br />\n");
 		$href = $item->getHref();
 		$title = $item->getTitle();
@@ -160,7 +161,7 @@ class BlockFiles extends Block {
 		return <<<TPL
 <li class="$class">
 	<a href="$href" title="$title">
-		<img src="$image" />
+		<img src="$image" height="$this->size" width="$this->size" alt="A $ext file." />
 		<p>$name_wrap</p>
 	</a>
 </li>
