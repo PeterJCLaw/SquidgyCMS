@@ -98,7 +98,7 @@ class BlockFiles extends Block {
 			if ($this->isValid($file))
 			{
 				$item = new FilesItem("$dir/$file", $this->pathOffset);
-				$out .= $item->getTemplate($this);
+				$out .= $this->buildListingEntry($item);
 			}
 		}
 		$out .= '</ul>';
@@ -143,6 +143,31 @@ class BlockFiles extends Block {
 	{
 		return 'files-'.strtolower($methodName);
 	}
+
+	/**
+	 * Builds up the <li> for an item for a listing output.
+	 * @param item The FilesItem to build the entry for.
+	 * @returns HTML suitable for immediate output, including the <li> element.
+	 */
+	function buildListingEntry($item)
+	{
+		$name = $item->getName();
+		$name_wrap = wordwrap($name, 13, "<br />\n");
+		$href = $item->getHref();
+		$title = $item->getTitle();
+		$image = $this->getImageFor($item);
+		$class = $item->getClass();
+		return <<<TPL
+<li class="$class">
+	<a href="$href" title="$title">
+		<img src="$image" />
+		<p>$name_wrap</p>
+	</a>
+</li>
+TPL;
+	}
+
+
 
 	/**
 	 * Returns the type that this extension represents.
@@ -247,28 +272,6 @@ class FilesItem
 	}
 
 	/**
-	 * Wraps the given item in the template for display.
-	 * @param provider An image provider. Must have a method called getImageFor that accepts a FilesItem as its only argument.
-	 */
-	function getTemplate($provider)
-	{
-		$name = $this->getName();
-		$name_wrap = wordwrap($name, 13, "<br />\n");
-		$href = $this->getHref();
-		$title = $this->getTitle();
-		$image = $this->getImage($provider);
-		$class = $this->getClass();
-		return <<<TPL
-<li class="$class">
-	<a href="$href" title="$title">
-		<img src="$image" />
-		<p>$name_wrap</p>
-	</a>
-</li>
-TPL;
-	}
-
-	/**
 	 * Returns a full HTML link to the item.
 	 * Used for the breadcrumbs.
 	 */
@@ -351,26 +354,6 @@ TPL;
 		}
 		$link = $this->getRealPath();
 		return $link;
-	}
-
-	/**
-	 * Returns the path to an image to display for a file, using the given provider.
-	 * @param provider An image provider. Must have a method called getImageFor that accepts a FilesItem as its only argument.
-	 */
-	function getImage($provider)
-	{
-		$this->_checkImageProvider($provider);
-		$image = $provider->getImageFor($this);
-		return $image;
-	}
-
-	function _checkImageProvider($provider)
-	{
-		$exists = method_exists($provider, 'getImageFor');
-		if (!$exists)
-		{
-			trigger_error('Image provider does not contain required method "getImageFor".', E_USER_ERROR);
-		}
 	}
 }
 
