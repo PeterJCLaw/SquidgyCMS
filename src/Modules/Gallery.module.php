@@ -31,7 +31,7 @@ class BlockGallery extends BlockFiles {
 	 */
 	function buildListingEntry($item)
 	{
-		if (!self::isFileTypeSupported($item->getRealPath()))
+		if (!self::isResizable($item->getRealPath()))
 		{
 			return parent::buildListingEntry($item);
 		}
@@ -90,8 +90,13 @@ TPL;
 		$width = $height = $path = null;
 		extract($_GET, EXTR_IF_EXISTS);
 
-		$image = new GalleryImage($path);
-		$thumbPath = $image->getOrCreateResizedImage($this->cacheFolder, $width, $height);
+		$thumbPath = null;
+
+		if (self::isResizable($path))
+		{
+			$image = new GalleryImage($path);
+			$thumbPath = $image->getOrCreateResizedImage($this->cacheFolder, $width, $height);
+		}
 
 		// something went wrong, so fall back to using an icon.
 		if ($thumbPath === null)
@@ -139,53 +144,78 @@ TPL;
 	}
 
 	/**
-	 * Static convenience method that checks that the file type
-	 *  of the given file is supported for resizing.
-	 * Currently this is based on the file extension,
-	 *  but eventually I'd like to do something cleverer.
+	 * Static method that checks whether the file given can be resized on the fly.
+	 * This takes into account the actual MIME type of the file,
+	 *  and the availability of gd addons.
 	 * @param path The path to the file in question.
 	 * @returns (bool) Whether or not the file can be resized.
 	 */
-	function isFileTypeSupported($path)
+	function isResizable($path)
 	{
-		$ext = Path::getExtension($path);
 		$supportedTypes = self::getSupportedTypes();
-		if (!in_array($ext, $supportedTypes))
+		// Need jpeg to create the new image
+		$isResizable = in_array('image/jpeg', $supportedTypes['mimes']);
+		if ($isResizable)
 		{
-			return False;
+			$ext = Path::getExtension($path);
+			$isResizable = in_array($ext, $supportedTypes['extensions']);
 		}
-		return True;
+		if ($isResizable)
+		{
+			echo 'creating';
+			var_dump($path);
+			$image = new GalleryImage($path);
+			$mime = $image->getMIME();
+			var_dump($mime);
+			$isResizable = in_array($mime, $supportedTypes['mimes']);
+		}
+		return $isResizable;
 	}
 
 	/**
 	 * Static method that finds out what flavours of image we can support by querying the gd library.
+	 * @returns An array with two keys, 'mimes' and 'extensions',
+	 *  each containing a list of MIME types and file extensions respectively that we can resize.
 	 */
 	function getSupportedTypes()
 	{
-		// TODO: cache the result
-		$info = gd_info();
-		$types = array();
-
-		if ( empty($info['GD Version']) )
+		// this gets called for every file, so cache the result
+		static $types = null;
+		if ($types === null)
 		{
-			return $types;
-		}
+			$info = gd_info();
+			$mimes = array();
+			$extensions = array();
+			// ensure valid return value
+			$types = array('mimes' => $mimes, 'extensions' => $extensions);
 
-		if ( !empty($info['GIF Read Support']) && !empty($info['GIF Create Support']) )
-		{
-			$types[] = 'gif';
-		}
+			if ( empty($info['GD Version']) )
+			{
+				return $types;
+			}
 
-		// Support PHP > 5.3 AND PHP < 5.3
-		if ( !empty($info['JPEG Support']) || !empty($info['JPG Support']) )
-		{
-			$types[] = 'jpg';
-			$types[] = 'jpeg';
-		}
+			if ( !empty($info['GIF Read Support']) && !empty($info['GIF Create Support']) )
+			{
+				$mimes[] = 'image/gif';
+				$extensions[] = 'gif';
+			}
 
-		if ( !empty($info['PNG Support']) )
-		{
-			$types[] = 'png';
+			// Support PHP > 5.3 AND PHP < 5.3
+			if ( !empty($info['JPEG Support']) || !empty($info['JPG Support']) )
+			{
+				$mimes[] = 'image/jpeg';
+				$extensions[] = 'jpeg';
+				$extensions[] = 'jpg';
+			}
+
+			if ( !empty($info['PNG Support']) )
+			{
+				$mimes[] = 'image/png';
+				$extensions[] = 'png';
+			}
+
+			// fill the real values
+			$types = array('mimes' => $mimes, 'extensions' => $extensions);
 		}
 
 		return $types;
@@ -222,8 +252,7 @@ function toQueryString($query_data, $arg_separator = '&')
  * Class akin to the FilesItem, but for images in the Gallery.
  * As such it does not inherit from FilesItem, nor contain any of the templating functionality.
  * Instead it is used to help resize the images.
- * The only validation for image handling functionality is done in the constructor,
- *  which will error if it detects an unsupported type.
+ * Note that this class does no validation of the availability of the image functions it may try to use.
  */
  // TODO: review -- should we inherit from FilesItem?
  // TODO: review how we figure out which types are supported by using MIME types instead of file extensions.
@@ -236,10 +265,6 @@ class GalleryImage
 	{
 		$this->path = $path;
 		$this->info = getimagesize($this->path);
-		if (!BlockGallery::isFileTypeSupported($this->path))
-		{
-			trigger_error('File type not supported for resizing on the fly', E_USER_ERROR);
-		}
 	}
 
 	/**
@@ -271,6 +296,7 @@ class GalleryImage
 			if ($resource !== null)
 			{
 				// all cached images are jpg.. it's just simpler that way.
+				// TODO: what if jpeg support isn't available?
 				imagejpeg($resource, $cachedPath);
 				imagedestroy($resource);
 			}
