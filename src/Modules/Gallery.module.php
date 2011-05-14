@@ -93,11 +93,11 @@ TPL;
 		$image = new GalleryImage($path);
 		$thumbPath = $image->getOrCreateResizedImage($this->cacheFolder, $width, $height);
 
-		// something went wrong
+		// something went wrong, so fall back to using an icon.
 		if ($thumbPath === null)
 		{
-			// TODO: show an error image?
-			return null;
+			$item = new FilesItem($path, '');
+			$thumbPath = parent::getImageFor($item);
 		}
 
 		Header("Location: $thumbPath");
