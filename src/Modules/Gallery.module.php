@@ -2,7 +2,7 @@
 #name = Gallery
 #description = Image gallery based on the Files module
 #package = Core - optional
-#depends = Files
+#dependencies = Files
 #type = content
 ###
 
