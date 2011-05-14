@@ -26,9 +26,40 @@ class BlockGallery extends BlockFiles {
 	}
 
 	/**
-	 * Callback to get the image for a FilesItem.
-	 * This implementation creates a link to the ajax call,
-	 * which we use to serve up a small version of the file in question.
+	 * Wraps the given item in the template for display.
+	 * @param provider An image provider. Must have a method called getImageFor that accepts a FilesItem as its only argument.
+	 */
+	function buildListingEntry($item)
+	{
+		if (!self::isFileTypeSupported($item->getRealPath()))
+		{
+			return parent::buildListingEntry($item);
+		}
+
+		$name = $item->getName();
+		$ext = Path::getExtension($name);
+		$name_wrap = wordwrap($name, 13, "<br />\n");
+		$href = $item->getHref();
+		$title = $item->getTitle();
+		$image = self::getImageFor($item);
+		$class = $item->getClass();
+		return <<<TPL
+<li class="$class">
+	<a href="$href" title="$title">
+		<div class="img" style="width: {$this->size};">
+			<div style="height: {$this->size}; width: {$this->size}px;">
+				<img src="$image" alt="A $ext file." />
+			</div>
+		</div>
+		<p>$name_wrap</p>
+	</a>
+</li>
+TPL;
+	}
+
+	/**
+	 * Create a link to the ajax call which we use to serve up
+	 *  a small version of the file in question.
 	 */
 	function getImageFor($item)
 	{

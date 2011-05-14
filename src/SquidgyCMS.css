@@ -145,3 +145,17 @@ ul.files-listing li img {
 ul.files-listing li p {
 	text-align: center;
 }
+
+/* Gallery Block */
+
+ul.gallery-listing li div.img {
+	margin: 0 auto;
+}
+ul.gallery-listing li div.img div {
+	display: table-cell;
+	vertical-align: middle;
+}
+ul.gallery-listing li div.img div img {
+	outline: 1px solid silver;
+	outline-offset: 3px;
+}
