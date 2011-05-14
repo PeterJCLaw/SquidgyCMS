@@ -288,14 +288,14 @@ class GalleryImage
 		// can go no further if we don't have the resources.
 		if ($curImage === null || $newImage === null)
 		{
-			echo 'load or create fail';
+			log_error('GalleryImage->createResizedImage: Could not load or create image.', array('curImage' => $curImage, 'newImage' => $newImage));
 			return null;
 		}
 
 		$res = imagecopyresampled($newImage, $curImage, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
 		if (!$res)
 		{
-			echo 'resize fail';
+			log_error('GalleryImage->createResizedImage: Error during resize step.', array('res' => $res));
 			return null;
 		}
 		return $newImage;
