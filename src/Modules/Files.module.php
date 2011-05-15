@@ -188,13 +188,15 @@ TPL;
 		// TODO: does this want to be external, in a config file perhaps?
 		$typesMap = array(
 			'application-pdf'               => array('pdf'),
-			'application-vnd.ms-excel'      => array('xls', 'xlsx', 'ods'),
+			'application-vnd.ms-excel'      => array('xls', 'xlsm', 'xlst', 'xlsx', 'ods'),
 			'application-vnd.ms-powerpoint' => array('ppt', 'pptx', 'odp'),
 			'application-vnd.ms-word'       => array('doc', 'docx', 'odt'),
-			'image-jpeg2000'                => array('jpg', 'jpeg', 'png', 'ico', 'gif'),
+			'application-x-bzip-compressed-tar' => array('bz', 'gz', 'tar', 'zip'),
+			'application-x-kontour'         => array('svg'),
+			'image-jpeg2000'                => array('bmp', 'gif', 'ico', 'jpg', 'jpeg', 'png', 'tif', 'tiff', 'wmf'),
 			'audio-x-pn-realaudio-plugin'   => array('mp3', 'wma', 'aac'),
 			'text-plain'                    => array('txt', 'ini'),
-			'uri-mms'                       => array('avi', 'mkv', 'mp4', 'wmv'),
+			'uri-mms'                       => array('avi', 'mkv', 'mov', 'mp4', 'mpg', 'wmv'),
 			'text-xml'                      => array('xml', 'htm', 'html')
 		);
 
