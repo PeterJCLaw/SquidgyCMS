@@ -65,7 +65,7 @@ class AdminUsers extends Admin {
 	function submit($content=0) {
 		list($pass_reset, $del, $rights, $new_user) = array();
 		extract($_POST, EXTR_IF_EXISTS);
-		global $username, $website_name_short, $webmaster_email;
+		global $website_name_short, $webmaster_email;
 
 		$reset_list = $reset_error = $del_list = $del_error = '';
 
