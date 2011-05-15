@@ -20,7 +20,6 @@ if(empty($site) || !is_readable("Sites/$site/config.inc.php")) {
 $site_root	= "Sites/$site";
 $data_root	= "$site_root/Data";
 
-require_once("functions_FSPHP.inc.php");	//contains the File System PHP Gallery functions (both mine and the original ones)
 require_once("functions_General.inc.php");	//contains my general functions - the file system gallery ones are now separate
 require_once($site_root."/config.inc.php");			//these files are now included in all the cathsoc pages since I'm using lots of functions
 /*load the required core modules*/

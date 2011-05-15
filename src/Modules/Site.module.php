@@ -22,7 +22,6 @@ class BlockSite extends Block {
 		$out	= <<<HeadOne
 <title>$page_head_title</title>
 <!-- base href="$base_href" / -->
-<link rel="stylesheet" type="text/css" href="${base_href}FSPHP.css" />
 <link rel="stylesheet" type="text/css" href="${base_href}SquidgyCMS.css" />
 HeadOne;
 
