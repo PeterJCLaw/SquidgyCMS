@@ -1,3 +1,5 @@
 .htaccess
 Sites/*/Data/*
 Sites/*/Users/*
+html
+latex
