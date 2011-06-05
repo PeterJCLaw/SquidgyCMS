@@ -1,5 +1,7 @@
 <?php
-/* add a biit of JS to the page */
+/**
+ * Add a biit of JS to the page.
+ */
 function add_script($type, $src) {
 	global $script_files, $script_code;
 	if($type == 'file' && !in_array($src, $script_files))
@@ -9,7 +11,9 @@ function add_script($type, $src) {
 	return;
 }
 
-/* This function groups array elements by one property of those elements */
+/**
+ * This function groups array elements by one property of those elements.
+ */
 function has_method($class, $method) {
 	if(!class_exists($class))
 		return FALSE;
@@ -18,7 +22,9 @@ function has_method($class, $method) {
 	return in_array($method, $methods);
 }
 
-/* This function groups array elements by one property of those elements */
+/**
+ * This function groups array elements by one property of those elements.
+ */
 function group_array_by_key($arr, $col) {
 	$out = array();
 	foreach($arr as $key => $val) {
@@ -27,7 +33,9 @@ function group_array_by_key($arr, $col) {
 	return $out;
 }
 
-/* This function gets basic info abouot the current page */
+/**
+ * This function gets basic info abouot the current page.
+ */
 function get_page_basics() {
 	$SN_arr	= explode("/", $_SERVER['SCRIPT_NAME']);	//explode so I can deal with the bits individually
 	$RU_arr	= explode("/", $_SERVER['REQUEST_URI']);
@@ -41,7 +49,9 @@ function get_page_basics() {
 	return array(implode("/", $SN_arr)."/", $page, FileSystem::returnFileName($page));
 }
 
-/* prints an admin section, if it exsists */
+/**
+ * prints an admin section, if it exsists.
+ */
 function print_Admin_Section($val) {
 	if(!empty($val['obj']) && method_exists($val['obj'], 'submit') && method_exists($val['obj'], 'printFormAdmin')) {
 		$val['obj']->printFormHeader();
@@ -55,7 +65,9 @@ function print_Admin_Section($val) {
 	return;
 }
 
-/* add this PHP5.3 function if needed */
+/**
+ * Add this PHP5.3 function if needed..
+ */
 if(!function_exists('str_getcsv')) {
 function str_getcsv($s)
 {
@@ -63,8 +75,18 @@ function str_getcsv($s)
 }
 }
 
-/* add this PHP5 function if needed */
+/**
+ * Add this PHP5 function if needed..
+ */
 if(!function_exists('array_combine')) {
+/**
+ * Creates an array by using one array for keys and another for its values.
+ * Duplicates PHP5's functionality, for use when that's not present.
+ * @param keys Array of keys to be used.
+ *              Illegal values for key will be converted to strings using print_r.
+ * @param vals Array of values to be used.
+ * @returns The combined array, False if the number of elements for each array aren't equal or if the arrays are empty.
+ */
 function array_combine($keys, $vals)
 {
 	if(!is_array($keys) || !is_array($vals) || empty($keys) || empty($vals) || count($keys) != count($vals))
@@ -81,20 +103,26 @@ function array_combine($keys, $vals)
 }
 }
 
-/* get the id number of a generated page from its fileid (ie without the extension) */
+/**
+ * Get the id number of a generated page from its fileid (ie without the extension).
+ */
 function get_GEN_id($name)
 {
 	return substr($name, 0, strpos($name, "-"));
 }
 
-/* get the id number of a generated page from its fileid (ie without the extension) */
+/**
+ * Get the id number of a generated page from its fileid (ie without the extension).
+ */
 function get_GEN_title($name)
 {
 	$name	= urldecode($name);
 	return substr($name, strpos($name, "-")+1);
 }
 
-/* function adapted from http://www.prodevtips.com/2008/01/06/sorting-2d-arrays-in-php-anectodes-and-reflections/ */
+/**
+ * Function adapted from http://www.prodevtips.com/2008/01/06/sorting-2d-arrays-in-php-anectodes-and-reflections/.
+ */
 function multi2dSortAsc(&$arr, $sort_key)
 {
 	if(empty($sort_key) || empty($arr))
@@ -105,7 +133,9 @@ function multi2dSortAsc(&$arr, $sort_key)
 	array_multisort($sort_col, &$arr);
 }
 
-/* compare items by filename id */
+/**
+ * Compare items by filename id.
+ */
 function cmp_by_filename_id($a, $b)
 {
 	$Aid	= get_GEN_id($a);
@@ -117,7 +147,9 @@ function cmp_by_filename_id($a, $b)
 		return $Aid > $Bid ? 1 : -1;
 }
 
-/* get the next id for the appropriate item */
+/**
+ * Get the next id for the appropriate item.
+ */
 function get_next_id($where, $filter)
 {
 	$list	= FileSystem::Filtered_File_List($where, $filter);
@@ -133,9 +165,14 @@ function get_next_id($where, $filter)
 	return max($id_list)+1;
 }
 
-/* This function sends emails to the appropriate recipient
- *	to:	array or string contaning recipient identifiers - full email address OR
-	short email that can be converted using $comm_email_prefix.email($recip).$comm_email_postfix
+/**
+ * This function sends emails to the appropriate recipient
+ * @param to An array or string containing recipient identifiers.
+ *  - full email address OR
+ *  - short email that can be converted using $comm_email_prefix.email($recip).$comm_email_postfix.
+ * @param subject The message subject.
+ * @param message The message to be sent.
+ * @param headers Any additional message headers.
 */
 function send_mail($to, $subject, $message, $headers)
 {
@@ -178,7 +215,9 @@ function send_mail($to, $subject, $message, $headers)
 	return mail($_to_, $subject, $message, $headers);
 }
 
-/* This function prints the success item on the admin page */
+/**
+ * This function prints the success item on the admin page.
+ */
 function print_success($success)
 {
 	$out	= '<span id="success">Your ';
@@ -197,26 +236,34 @@ function print_success($success)
 	return $out;
 }
 
-/* This function returns the first word in a string using split as a delimiter */
+/**
+ * This function returns the first word in a string using split as a delimiter.
+ */
 function first_word($str, $split=' ')
 {
 	$arr = explode($split, $str, 2);
 	return $arr[0];
 }
 
-/* This function returns the name of the persons info file */
+/**
+ * This function returns the name of the persons info file.
+ */
 function info_name($name)
 {
 	return email(ucwords(strtolower(str_replace(".", " ", $name))));	//email copes with webmaster and those with spaces in
 }
 
-/* This function converts a job title into an email add-in */
+/**
+ * This function converts a job title into an email add-in.
+ */
 function email($job)
 {
 	return str_replace(" ", ".", $job);
 }
 
-/* This function finds the email of a user */
+/**
+ * This function finds the email of a user.
+ */
 function email_addr($job)
 {
 	global 	$comm_email_prefix, $comm_email_postfix, $webmaster_email;
@@ -227,7 +274,9 @@ function email_addr($job)
 	return $comm_email_prefix.email($job).$comm_email_postfix;
 }
 
-/* This function prints an email to link */
+/**
+ * This function prints an email to link.
+ */
 function email_link($text, $gender, $address, $subject, $cc, $bcc, $body)
 {
 	global $committee_email, $site_root;
