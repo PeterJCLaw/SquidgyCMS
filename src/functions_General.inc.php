@@ -1,5 +1,10 @@
 <?php
 /**
+ * @file
+ *  A collection of helper functions.
+ */
+
+/**
  * Add a biit of JS to the page.
  */
 function add_script($type, $src) {
@@ -50,7 +55,8 @@ function get_page_basics() {
 }
 
 /**
- * prints an admin section, if it exsists.
+ * Prints an admin section, if it exists.
+ * @param val An associative array containing suitable values about the section to print.
  */
 function print_Admin_Section($val) {
 	if(!empty($val['obj']) && method_exists($val['obj'], 'submit') && method_exists($val['obj'], 'printFormAdmin')) {
