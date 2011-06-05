@@ -35,10 +35,14 @@ function toQueryString($query_data, $arg_separator = '&')
  */
 function add_script($type, $src) {
 	global $script_files, $script_code;
-	if($type == 'file' && !in_array($src, $script_files))
-		array_push($script_files, $src);
-	elseif($type == 'code')
+	if ($type == 'file')
+	{
+		$script_files[] = $src;
+	}
+	elseif ($type == 'code')
+	{
 		$script_code .= "\n$src";
+	}
 	return;
 }
 

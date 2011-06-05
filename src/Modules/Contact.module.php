@@ -30,6 +30,7 @@ SCRIPTS;
 			$left = TRUE;
 
 		$onclick	= empty($all_box) ? '' : ' onchange="group_tick_2(this, \'_all\')" onclick="group_tick_2(this, \'_all\')"';
+		$check_it = '';
 		if(in_array('_all', $ticked_list))
 			$check_it	= 'checked="checked" ';
 

@@ -52,7 +52,7 @@ MSG;
 			$page_heading	= $chunk_title;	//the title shown at the top of the page
 		}
 		$page_scripts = '';
-		foreach($script_files as $file)
+		foreach(array_unique($script_files) as $file)
 			$page_scripts .= '<script type="text/javascript" src="'.$file.'"></script>';
 		if(!empty($script_code))
 			$page_scripts .= <<<PGSCRPT
