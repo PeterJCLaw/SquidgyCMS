@@ -5,6 +5,32 @@
  */
 
 /**
+ * Generate a URL-encoded query string.
+ * Values, but not keys, are encoded using urlencode.
+ * Uses http_build_query if available, does not accept input anywhere near as complex.
+ */
+function toQueryString($query_data, $arg_separator = '&')
+{
+	if (function_exists('http_build_query'))
+	{
+		return http_build_query($query_data, '', $arg_separator);
+	}
+
+	if (empty($query_data))
+	{
+		return '';
+	}
+
+	foreach ($query_data as $key => $value)
+	{
+		$pairs[] = $key.'='.urlencode($value);
+	}
+
+	$query = implode($arg_separator, $pairs);
+	return $query;
+}
+
+/**
  * Add a biit of JS to the page.
  */
 function add_script($type, $src) {
