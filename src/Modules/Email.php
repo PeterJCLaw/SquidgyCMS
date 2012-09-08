@@ -48,6 +48,15 @@ class Email {
 	}
 
 	/**
+	 * Set a Reply-To address.
+	 */
+	function set_replyTo($email, $name=FALSE) {
+		// only allow one reply-to address, so clear any previous ones
+		$this->replyTo = array();
+		$this->replyTo[$email] = $name;
+	}
+
+	/**
 	 * Add a single header line.
 	 */
 	function add_header($header) {
@@ -84,7 +93,13 @@ class Email {
 	function send() {
 		$to = $this->addresses_to_string($this->to);
 
-		foreach(array('cc'=>'CC', 'bcc'=>'BCC', 'from'=>'From') as $name => $label) {
+		$parts = array(
+			'cc'=>'CC',
+			'bcc'=>'BCC',
+			'from'=>'From',
+			'replyTo'=>'Reply-To',
+		);
+		foreach($parts as $name => $label) {
 			if(!empty($this->$name))
 			{
 				$this->add_headers($label.': '.$this->addresses_to_string($this->$name));
