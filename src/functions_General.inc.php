@@ -202,15 +202,31 @@ function get_next_id($where, $filter)
 }
 
 /**
- * This function sends emails to the appropriate recipient
- * @param to An array or string containing recipient identifiers.
- *  - full email address OR
- *  - short email that can be converted using $comm_email_prefix.email($recip).$comm_email_postfix.
+ * This function sends emails to the appropriate recipients.
+ * @param to An array or string containing recipient identifiers,
+ *            suitable for passing to convert_recipients
  * @param subject The message subject.
  * @param message The message to be sent.
  * @param headers Any additional message headers.
 */
 function send_mail($to, $subject, $message, $headers)
+{
+	list($_to_, $subjPrefix) = convert_recipients($to);
+	return mail($_to_, $subjPrefix.$subject, $message, $headers);
+}
+
+
+/**
+ * Convert an arbitrary recipient list into something that can be used to
+ *  actually send an email.
+ * @param to An array or string containing recipient identifiers, made up from:
+ *  - full email address OR
+ *  - short email that can be converted using $comm_email_prefix.email($recip).$comm_email_postfix.
+ * @returns An array containing
+ *  - [0] a string suitable for passing into mail().
+ *  - [1] a prefix for the subject line if needed.
+*/
+function convert_recipients($to)
 {
 	global $committee_email, $comm_email_postfix, $website_name;
 
@@ -237,18 +253,19 @@ function send_mail($to, $subject, $message, $headers)
 		array_push($to_list, $recip);	//make list of ppl to put in subj line
 	}
 
+	$subjectPrefix = '';
+	// Create a prefix for the subject if needed.
 	if($separate_emails)	//if separate emails
 		$_to_	= implode(", ", $to_list);
 	else {
 		$_to_	= $committee_email;
 		sort($to_list);
-		$subject	= "[FAO: ".implode(", ", $to_list)."]".$subject;
+		$subjectPrefix = "[FAO: ".implode(", ", $to_list)."]";
 	}
 
-	log_info('send_mail', array('to' => $to, 'to_string' => $to_string, '_to_' => $_to_, 'subject' => $subject,
-		'message' => $message, 'headers' => $headers, 'separate_emails' => $separate_emails));
+	log_info('send_mail', get_defined_vars());
 
-	return mail($_to_, $subject, $message, $headers);
+	return array($_to_, $subjectPrefix);
 }
 
 /**
