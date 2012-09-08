@@ -23,6 +23,7 @@ $data_root	= "$site_root/Data";
 require_once("functions_General.inc.php");	//contains my general functions - the file system gallery ones are now separate
 require_once($site_root."/config.inc.php");			//these files are now included in all the cathsoc pages since I'm using lots of functions
 /*load the required core modules*/
+require_once("Modules/Email.php");
 require_once("Modules/FileSystem.php");
 require_once("Modules/Inform.php");
 require_once("Modules/Module.php");
