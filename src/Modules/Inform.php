@@ -57,6 +57,21 @@ class Inform
 		return $out;
 	}
 
+	function asJSON()
+	{
+		$out = '{"result":' . ( count($this->errors) == 0 ? 'true' : 'false' );
+		foreach (array('infos', 'errors') as $type)
+		{
+			if (!empty($this->$type))
+			{
+				$out .= ',"' . $type . '":["' . implode('","', $this->$type) . '"]';
+			}
+		}
+		$out .= '}';
+		$this->reset();
+		return $out;
+	}
+
 	function reset()
 	{
 		$this->infos = $this->errors = array();
