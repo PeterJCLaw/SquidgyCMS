@@ -81,6 +81,7 @@ class Email {
 	 * Convert an array of addresses into a comma separated string ready for sending.
 	 */
 	function addresses_to_string($arr) {
+		$list = array();
 		foreach($arr as $email => $name) {
 			$list[] = (empty($name) ? '' : "$name ")."<$email>";
 		}
@@ -102,7 +103,7 @@ class Email {
 		foreach($parts as $name => $label) {
 			if(!empty($this->$name))
 			{
-				$this->add_headers($label.': '.$this->addresses_to_string($this->$name));
+				$this->add_header($label.': '.$this->addresses_to_string($this->$name));
 			}
 		}
 
