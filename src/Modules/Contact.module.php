@@ -1,6 +1,6 @@
 <?php
 #name = Contact
-#description = Shows a contact form capable of provising the right info for mail_handler.php
+#description = Creates a contact form & mechanisms to handle sending of emails.
 #package = Core - optional
 #type = content
 ###
@@ -58,11 +58,23 @@ SCRIPTS;
 		extract($args, EXTR_IF_EXISTS);
 
 		global $debug, $MailingList, $website_name_long, $website_name_short;
+
+
+		$queryParams = array('type' => 'block', 'module' => 'Contact');
+		if ($debug)
+		{
+			$queryParams['debug'] = $debug;
+		}
+
+		$actionUrl = 'ajax.php';
+		$query = toQueryString($queryParams);
+		$actionUrl .= '?'.$query;
+
 		$debug_link = $debug ? '?debug=1' : '';
 		$tickboxes = $this->get_tickboxes(Users::list_all(), 0, $all_label, $side);
 		$subject = empty($_GET['subject']) ? '' : 'value="'.$_GET['subject'].'"';
 		$out = <<<OUT
-<form method="post" action="mail_handler.php$debug_link" id="contact_form" onreset="init()" onsubmit="return Validate_On_Contact_Submit(this)">
+<form method="post" action="$actionUrl" id="contact_form" onreset="init()" onsubmit="return Validate_On_Contact_Submit(this)">
 <table id="contact_tbl">
 	<tr>
 		<td colspan="2" class="center">
@@ -102,5 +114,83 @@ OUTML;
 		</form>
 OUTEND;
 		return $out;
+	}
+
+	function ajax()
+	{
+		$this->handleSendEmail();
+		$inform = Inform::getInstance();
+		echo $inform->asJSON();
+	}
+
+	function callback()
+	{
+		$this->handleSendEmail();
+	}
+
+	function handleSendEmail()
+	{
+		$requiredVars = array(
+			'subject' => 'a subject',
+			'message' => 'a message',
+			'from_name' => 'your name',
+			'from_email' => 'your email address',
+			'target' => 'a recipient for your email'
+		);
+
+		$gotVars = array();
+		$inform = Inform::getInstance();
+		$error = False;
+
+		foreach ($requiredVars as $var => $niceName)
+		{
+			if (!empty($_POST[$var]))
+			{
+				$gotVars[$var] = $_POST[$var];
+			}
+			else
+			{
+				$error = True;
+				$inform->error("Please include $niceName.");
+			}
+		}
+
+		$to = array();
+		$target = array();
+		log_info('Contact->ajax; $gotVars:', $gotVars);
+		extract($gotVars, EXTR_OVERWRITE);
+		// Cycle through everyone they might want to send a mail to, to see if they do
+		foreach($target as $key => $val)
+		{
+			if ($val)
+			{
+				array_push($to, $key);
+			}
+		}
+
+		if(!$error)
+		{
+			global $website_form_email, $website_name_short;
+			// Add a mail signature, including php version
+			$message .= "\n\n-- \nX-Mailer: PHP/".phpversion();
+
+			$email = new Email();
+			$email->set_from($website_form_email, $website_name_short.' Web Form');
+			$email->set_replyTo($from_email, $from_name);
+			$email->set_body(stripslashes($message));
+			$email->set_subject(stripslashes($subject));
+
+			// send the mail, checking for errors
+			if(!$email->send())
+			{
+				// TODO: handle this better!
+				$inform->error('Sorry, your email failed to send');
+			}
+			else
+			{
+				log_info("Successfully sent email", $email);
+			}
+		}
+		log_info('Contact->ajax;', get_defined_vars());
 	}
 }
