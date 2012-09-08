@@ -213,7 +213,7 @@ class UserLogin extends User {
 			$type = 'new';
 		}
 
-		log_info('UserLogin', array('username' => $username));
+		@log_info('UserLogin', array('username' => $username));
 
 		//if the username is blank, or construction fails then bail
 		if(empty($username) || !parent::__construct($username))

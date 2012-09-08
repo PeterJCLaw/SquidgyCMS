@@ -100,7 +100,7 @@ HeadOne;
 
 class Site {
 	function get_requested_id_and_alias() {
-		list($page, $query) = explode('/',$_GET['s'],2);
+		@list($page, $query) = explode('/',$_GET['s'],2);
 
 		if(strtolower($page) == 'admin')	//the admin page
 			return array('alias' => $page, 'id' => 'admin');
